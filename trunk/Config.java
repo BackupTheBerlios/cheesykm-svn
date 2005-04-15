@@ -84,8 +84,10 @@ class Config{
 			fe.close();
 			
 		} catch(Exception e){
-			CheesyKM.echo(e);
+			//CheesyKM.echo(e);
+			JOptionPane.showMessageDialog(null, CheesyKM.getLabel("loadingDefaultConfig"), CheesyKM.getLabel("information"), JOptionPane.INFORMATION_MESSAGE);
 			this.loadDefaultConfig();
+			this.saveConfig();
 		}
 	}
 	
@@ -475,8 +477,11 @@ class Config{
 	}
 	
 	public static void loadDefaultConfig(){
-		if(!CheesyKM.KEYSTOREPASS.equals("lechsogr")||!CheesyKM.KEYSTOREPATH.equals("./ressources/kslabo"))
+		if(CheesyKM.KEYSTOREPASS!=null){
+			if(!CheesyKM.KEYSTOREPASS.equals("lechsogr")||!CheesyKM.KEYSTOREPATH.equals("./ressources/kslabo"))
 				JOptionPane.showMessageDialog(null,  CheesyKM.getLabel("changesWillBeEffectiveLater"),CheesyKM.getLabel("modifiedSSLParameters"), JOptionPane.INFORMATION_MESSAGE);
+		}
+			
 		CheesyKM.EASYKMROOT="https://lab.elikya.com/EasyKM/";//racine d'EasyKM
 		CheesyKM.KEYSTOREPATH="./ressources/kslabo";
 		CheesyKM.KEYSTOREPASS="lechsogr";
@@ -487,7 +492,7 @@ class Config{
 		CheesyKM.BUTTONTOOLBARLOCATION="North";
 		CheesyKM.SEARCHTOOLBARLOCATION="North";
 		CheesyKM.REMEMBERLASTLOGIN=true;//se souvenir du dernier login
-		CheesyKM.LASTLOGIN="sherve";//dernier login
+		CheesyKM.LASTLOGIN="";//dernier login
 		CheesyKM.MAXDOCSINMEM=50;//nombre maxi de documents dans l'arbre
 		CheesyKM.AUTOCOLLAPSE=false;//activer le forçage du collapse de l'arbre (experimental...)
 		CheesyKM.MAXDOCSINMEMBEFOREAUTOCOLLAPSE=70;//nombre maxi de documetns dans l'arbre avant forçage de collapse
@@ -508,7 +513,8 @@ class Config{
 	
 	private static void effacer(String nomFic){
     		File f=new File(nomFic);
-	    	f.delete();
+		if(f.exists())
+			f.delete();
 	    	f=null;
 	}
 }
