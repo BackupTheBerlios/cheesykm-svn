@@ -3,8 +3,13 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-
+/**
+*News List.
+*/
 class Nouveaute extends JList {
+	/**
+	*New news list, contains {@link CheesyKM#NOMBREDENOUVEAUTES} news.
+	*/
 	Nouveaute(){
 		super();
 		Vector docsH=CheesyKM.getLastDocs();
@@ -46,8 +51,8 @@ class Nouveaute extends JList {
 	}
 	
 	/**
-	*Override de la méthode getToolTipText de JList.<br>
-	*Appelée par le ToolTipManager pour déterminer le texte à afficher dans les info-bulles.
+	*Overrides JLists getToolTipText method.<br>
+	*Called by the ToolTipManager to display tooltips.
 	*/
 	public String getToolTipText(MouseEvent e) {
 		//this.getModel().getElementAt(this.locationToIndex(e.getPoint()))

@@ -7,9 +7,16 @@ import javax.swing.text.*;
 import javax.swing.text.html.*;
 import java.io.*;
 import java.net.*;
-
+/**
+*Displays a {@link Topic} in a <code>JPanel</code><br>
+*Can handle Topics type 'D' (Document), 'W' (Webpage), 'F' (Filetransfer)
+*/
 class TopicPane extends JPanel{
 	Topic topic;
+	/**
+	*New panel to display a {@link Topic}.
+	*@param topic {@link Topic} to display.
+	*/
 	TopicPane(Topic topic){
 		super();
 		this.topic=topic;
@@ -215,6 +222,9 @@ class TopicPane extends JPanel{
 		} catch(BadLocationException ble){CheesyKM.echo(ble);}
 	}
 	
+	/**
+	*Creates the styles used to display the various properties of a document.(Fonts size, color, style, button, etc...)
+	*/
 	protected void addStylesToDocument(StyledDocument doc) {
 		//Initialize some styles.
 		Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);

@@ -4,8 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
-
+/**
+*Search results tree, a reduced version of the topic tree view.
+*/
 class SearchResultTree extends JTree {
+	/**
+	*Builds a new search result tree, fully loaded in memory, fully expanded if {@link CheesyKM#EXPANDSEARCHRESULT} is <code>true</code>, fully collapsed else, and i'm fully fed up with that doc.
+	*/
 	SearchResultTree(Vector searchResult){
 		super();
 		if(searchResult.size()==0) searchResult=null;
@@ -140,7 +145,9 @@ class SearchResultTree extends JTree {
 		}
 		//CheesyKM.echo("resultat de recherche terminé");
 	}
-	
+	/**
+	*Overrides JTrees getToolTipText, and uses {@link Thematique}s one.
+	*/
 	public String getToolTipText(MouseEvent e) {
 		return new Thematique().getToolTipText(e);
 	}

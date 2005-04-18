@@ -4,7 +4,10 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-
+/**
+*Renderer for the news list.<br>
+*A renderer tells the L&F how to display a component, here it permits to set a custom icon, depending on the type of the document.
+*/
 class NouveauteListCellRenderer extends DefaultListCellRenderer{
 	
 	NouveauteListCellRenderer(){

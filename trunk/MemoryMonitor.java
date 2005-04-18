@@ -5,14 +5,14 @@ import java.awt.event.*;
 import javax.swing.tree.*;
 
 /**
-*Thread gérant le nombre maximum de documents en mémoire.<br>
-*Lancé au démarrage du programme, vérifie toutes les x sec. que le nombre de documents maxi (CheesyKM.MAXDOCSINMEM) n'est pas atteint.
-*Si il est atteint, on décharge les documents qui ne sont pas actuellement visibles dans l'arborescence thématique.
-*Si CheesyKM.MAXDOCSINMEMBEFOREAUTOCOLLAPSE est atteint et CheesyKM.AUTOCOLLAPSE est true, alors des documents seront déchargés de la mémoire, même si ils étaient visibles. (l'arborescence sera repliée).
+*Thread managing the number of docs loaded in memory.<br>
+*Launched at CheesyKMs start, check each 5sec. if {@link CheesyKM#MAXDOCSINMEM} is reached. 
+*It it is, Docs loaded in memory and not currently visible (part of an expanded path) are unloaded.
+*if CheesyKM.MAXDOCSINMEMBEFOREAUTOCOLLAPSE is reached and CheesyKM.AUTOCOLLAPSE is <code>true</code>, then the docs will be unloaded, even if they were displayed (topic tree view will collapse).
 */
 class MemoryMonitor extends Thread{
 	/**
-	*Initialise et lance un MemoryMonitor.
+	*Starts a MemoryMonitor.
 	*/
 	MemoryMonitor(){
 		start();

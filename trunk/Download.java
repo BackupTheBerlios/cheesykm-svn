@@ -2,12 +2,21 @@ import javax.swing.*;
 import java.io.*;
 import java.awt.*;
 import java.net.*;
-
+/**
+*CheesyKMs internal http download manager.
+*/
 class Download extends Thread{
+	/**path to the destination file.*/
 	String nomComplet;
+	/**source URL*/
 	String url;
+	/**Size of the file*/
 	long size;
+	
 	boolean stop;
+	/**
+	*Creates and starts a new Download Thread.
+	*/
 	Download(String nomComplet,String url,long size){
 		this.nomComplet=nomComplet;
 		this.url=url;
@@ -17,6 +26,10 @@ class Download extends Thread{
 		
 	}
 	
+	/**
+	*Creates a new {@link ProgressBarMonitor} and downloads the file.<br>
+	*Shows an error dialog if an execption occured during the transfer.
+	*/
 	public void run(){
 		try{	
 			ProgressBarMonitor pbm=new ProgressBarMonitor(new Long(size).intValue(),nomComplet,this);

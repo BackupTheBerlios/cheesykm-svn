@@ -4,9 +4,18 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
-
+/**
+*Popup menu (right click) over a Topic. used on news list, topic tree view, search resutl tree and right tabbed pane.
+*/
 class TopicPopupMenu extends JPopupMenu{
-	
+	/**
+	*Pops a new menu under the mouse.
+	*@param invoker Source component.
+	*@param x position of the mouse relative to <code>invoker</code>
+	*@param y position of the mouse relative to <code>invoker</code>
+	*@param ntopic {@link Topic} under the mouse.
+	*@param overTree <code>true</code> if the mouse is over a tree, <code>false</code> else.
+	*/
 	TopicPopupMenu(Component invoker,int x,int y,Topic ntopic,boolean overTree){
 		super(ntopic.toString());
 		final Topic topic=ntopic;

@@ -4,7 +4,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
-
+/**
+*Listens to right tabbed pane selection changes, and enables or disables the matching buttons/menu items.
+*/
 class JTPDChangeListener implements ChangeListener{
 	public void stateChanged(ChangeEvent e){
 		CheesyKM.api.menuOnglet.setEnabled(CheesyKM.api.jtpD.getSelectedComponent()!=null);

@@ -5,30 +5,30 @@ import java.awt.event.*;
 import javax.swing.tree.*;
 
 /**
-*Représente un document.<br>
-*Un document possède les propriétés suivantes:
-*id -> (int) document id#
-*topics -> (array of string) list of topic ids#
-*description -> (string) description#
-*author -> (string)#
-*creadate -> (string) if set, original document creation date#
-*title -> (string)#
-*kwords -> (string) whitespace or comma separated words#
-*user -> (string) full name of user who transmitted the document#
-*date -> (string) date of transmission#
-*editdate -> (string) if set, last modification date since creation#
-*editor -> (string) if set, full name of last editor#
-*url -> (string) if set, url associated with entry#
-*visits -> (int) if set, number of visits to url#
-*file -> (string) if set, id  of associated file#
-*size -> (int) if set, size of file in bytes#
-*ftype -> (string) if set, file type#
-*format -> (string) if set, file format#
-*downloads -> (int) if set, number of associated file downloads#
-*score -> (int) rating#
-*expires -> (string) expiration date or empty
-*version -> (int) edition if applicable#
-*ufnameX -> (string) user extended attribute name with X in [0,1,2] (maybe empty)
+*Represents a document.<br>
+*A document is made of:<br>
+*id -> (int) document id<br>
+*topics -> (array of string) list of topic ids<br>
+*description -> (string) description<br>
+*author -> (string)<br>
+*creadate -> (string) if set, original document creation date<br>
+*title -> (string)<br>
+*kwords -> (string) whitespace or comma separated words<br>
+*user -> (string) full name of user who transmitted the document<br>
+*date -> (string) date of transmission<br>
+*editdate -> (string) if set, last modification date since creation<br>
+*editor -> (string) if set, full name of last editor<br>
+*url -> (string) if set, url associated with entry<br>
+*visits -> (int) if set, number of visits to url<br>
+*file -> (string) if set, id  of associated file<br>
+*size -> (int) if set, size of file in bytes<br>
+*ftype -> (string) if set, file type<br>
+*format -> (string) if set, file format<br>
+*downloads -> (int) if set, number of associated file downloads<br>
+*score -> (int) rating<br>
+*expires -> (string) expiration date or empty<br>
+*version -> (int) edition if applicable<br>
+*ufnameX -> (string) user extended attribute name with X in [0,1,2] (maybe empty)<br>
 *ufvalueX ->(string) user extended attribute value with X in [0,1,2] (maybe empty)
 */
 public class Doc extends Topic{
@@ -44,9 +44,9 @@ public class Doc extends Topic{
 	}
 	
 	/**
-	*Construit un Doc.
-	*@param data Hashtable document résultat d'une requête RPC.
-	*@param parent Topic parent de ce doc dans l'arborescence thématique affichée.
+	*New Doc.
+	*@param data document <code>Hashtable</code>, result of a Doc related RPC method.
+	*@param parent parent {@link Topic} of this Doc in the displayed Topic tree view ({@link Thematique}).
 	*/
 	Doc(Hashtable data,Topic parent){
 		super(((Integer)data.get("id")).intValue());
@@ -77,19 +77,30 @@ public class Doc extends Topic{
 		uf.put(data.get("ufname1"),data.get("ufvalue1"));
 		uf.put(data.get("ufname2"),data.get("ufvalue2"));
 	}
-	
+	/**
+	*@return parent {@link Topic} of this Doc in the displayed Topic tree view ({@link Thematique}).
+	*/
 	public Topic getParent(){return this.parent;}
 	
+	/**
+	*Overrides Topics {@link Topic#docCount(boolean) docCount()}.
+	*@return always -1.
+	*/
 	public int docCount(boolean b){
 		return -1;
 	}
 	
+	/**
+	*@return the title of this Doc.
+	*/
 	public String toString(){
 		return title;
 	}
 	
 	/**
-	*Retourne le texte à afficher dans le tooltip (info-bulle) de ce document.
+	*Returns the <code>String</code> to display in this Docs ToolTip.<br>
+	*Contains, if set : editdate/creadate,user,author,downloads,format,score,version.
+	*@return the text to display in the ToolTip of this Doc.
 	*/
 	public String getToolTip(){
 		String resu=new String();
@@ -106,6 +117,10 @@ public class Doc extends Topic{
 	
 	public String getFType(){return this.ftype;}
 	
+	/**
+	*Return a Localized <code>String</code> representation of the size of this Docs file.
+	*@return xxMb/Kb/b
+	*/
 	public String getFSize(){
 		String taille;
 		if(size>1024*1024){
@@ -117,7 +132,10 @@ public class Doc extends Topic{
 		}
 		return taille;
 	}
-	
+	/**
+	*Overrides Topics {@link Topic#getNodeType() getNodeType()}.
+	*@return always 'D'.
+	*/
 	public char getNodeType(){
 		return 'D';
 	}

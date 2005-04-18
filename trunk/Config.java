@@ -7,7 +7,10 @@ import javax.swing.event.*;
 import org.apache.xmlrpc.*;
 import org.apache.xmlrpc.secure.*;
 import java.net.*;
-
+/**
+*Manages the configuration/options of CheesyKM.<br>
+*Contains methods to write, read, and restore default configuration file.
+*/
 class Config{
 	/*	//Paramètres généraux de l'application
 	public static final String EASYKMROOT="https://lab.elikya.com/EasyKM/";//racine d'EasyKM
@@ -30,8 +33,13 @@ class Config{
 	public static final boolean USERLOCALWEBBROWSERTODLFILES=true;//utiliser ou non le navigateur local pour voir les fichiers;
 	public static final int NOMBREDENOUVEAUTES=10;//Nombre de nouveautés à afficher dans la liste des nouveautés
 	*/
+	/**Path to the configuration file*/
 	static final String nomFichierDeConf="./CheesyKM.conf";
 	InitConfigPanel icp;
+	/**
+	*Read the configuration from the file and updates CheesyKMs constants.<br>
+	*If there's a problem during that process, the default config is loaded, and the user is warned about it.
+	*/
 	public void loadConfig(){
 		String ligne=new String();
 		BufferedReader fe=null;
@@ -90,7 +98,9 @@ class Config{
 			this.saveConfig();
 		}
 	}
-	
+	/**
+	*Writes the configuration file, reading CheesyKMs constants.
+	*/
 	public void saveConfig(){
 		effacer(nomFichierDeConf);
 		try{
@@ -189,7 +199,12 @@ class Config{
 			CheesyKM.echo(e);
 		}
 	}
-	
+	/**
+	*Shows the configuration/options dialog.<br>
+	*This dialog appears in "non-advanced" mode, to switch to advanced mode, te user has to check a chekbox.
+	*The values of the fields of this dialog are taken from CheesyKMs constants.
+	*The dialogs buttons permit to save the config, revert it to default, or cancel the changes.
+	*/
 	public void displayConfig(){
 		JDialog config=new JDialog(CheesyKM.api);
 
@@ -296,9 +311,13 @@ class Config{
 		config.show();
 	}
 	
-	
+	/**
+	*Main panel of the configuration dialog
+	*/
 	class InitConfigPanel extends JPanel{
-		
+		/**
+		*Displays a label and an integer value in a textfield.
+		*/
 		class IntegerValue extends JPanel{
 				public JTextField tf;
 				IntegerValue(String title,int value){
@@ -319,7 +338,9 @@ class Config{
 					add(tf);
 				}
 			}
-			
+			/**
+			*Displays a label and a String in a textfield.
+			*/
 			class StringValue extends JPanel{
 				public JTextField tf;
 				StringValue(String title,String value){
@@ -331,7 +352,9 @@ class Config{
 					add(tf);
 				}
 			}
-			
+			/**
+			*Displays a label and a checkbox.
+			*/
 			class BooleanValue extends JPanel{
 				public JCheckBox value;
 				BooleanValue(String title,boolean state){
@@ -340,7 +363,9 @@ class Config{
 					add(value);
 				}
 			}
-			
+			/**
+			*Displays a label, a file path in a textfield, and a "browse..." button.
+			*/
 			class FileNameValue extends JPanel{
 				public JTextField fileName;
 				FileNameValue(String title,String value){
@@ -379,6 +404,11 @@ class Config{
 		FileNameValue browserPath;
 		BooleanValue useLocalBrowser;
 		BooleanValue expandSearchResults;
+		/**
+		*Creates a new ConfigPanel.<br>
+		*The accessible application settings won't be the same if the advanced mode is switched.
+		*@param avance <code>true</code> for advanced mode, <code>false</code> for basic mode.
+		*/
 		InitConfigPanel(boolean avance){
 			super();
 			this.avance=avance;
@@ -413,7 +443,11 @@ class Config{
 				add(useLocalBrowser);
 			}
 		}
-		
+		/**
+		*Updates CheesyKMs constants if the configuration is valid.<br>
+		*@return <code>true</code> if the config is valid, <code>false</code> else.
+		*@see Config.InitConfigPanel#configIsValide()
+		*/
 		public boolean validerConfig(){
 			/*IntegerValue nombreNouveautes;
 			BooleanValue rememberLastLogin;
@@ -449,8 +483,13 @@ class Config{
 			}
 			
 		}
-		
-		private boolean configIsValide(){
+		/**
+		*Checks if the configuration is valid.<br>
+		*Only file Paths are checked yet. An error dialog is shown if something is wrong with the config.
+		*An information dialog is shown if some modified parameters need to restart CheesyKM to become effective.
+		*@return <code>true</code> if the configuration is valid, <code>false</code> else.
+		*/
+		public boolean configIsValide(){
 			if(this.avance){
 				if(!new File(ksPath.fileName.getText()).exists()){
 					JOptionPane.showMessageDialog(null,CheesyKM.getLabel("omfgNoKeystore"), CheesyKM.getLabel("fileNotFound"), JOptionPane.ERROR_MESSAGE);
@@ -475,7 +514,9 @@ class Config{
 			
 		}
 	}
-	
+	/**
+	*Updates CheesyKMs constants to default parameters.
+	*/
 	public static void loadDefaultConfig(){
 		if(CheesyKM.KEYSTOREPASS!=null){
 			if(!CheesyKM.KEYSTOREPASS.equals("lechsogr")||!CheesyKM.KEYSTOREPATH.equals("./ressources/kslabo"))
@@ -511,6 +552,10 @@ class Config{
 		CheesyKM.EXPANDSEARCHRESULT=true;
 	}
 	
+	/**
+	*Deletes a file.
+	*@param nomFic path to the file to delete.
+	*/
 	private static void effacer(String nomFic){
     		File f=new File(nomFic);
 		if(f.exists())

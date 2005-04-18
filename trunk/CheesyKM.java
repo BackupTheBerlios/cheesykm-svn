@@ -12,50 +12,77 @@ import javax.swing.text.*;
 import java.lang.*;
 
 /**
-*Classe principale du client, contient le main.<br>
-*Contient toutes les méthodes liées directement aux webservices XML-RPC, ainsi que les constantes globales de l'application.<br>
+*CheesyKM main class.<br>
+*Contains all the XML-RPC methods, and the global constants<br>
 *<br>SSL :<br>
-*La machine virtuelle du client doit avoir accès au fichier de clé (keystore) contenant le certificat SSL de la connection.<br>
-*COMMANDE pour creer le fichier de clé "kslabo" à partir du certificat "cacert.crtf" :<br>
+*The clients VM has to have an access to a SSL key file (keystore) containing the connections SSL certificate.<br>
+*UNIX COMMAND to create the key file "kslabo" from the certificate "cacert.crtf" :<br>
 *keytool -import -alias labo -file ~/cacert.crtf -keystore kslabo<br>
 */
 public class CheesyKM{
+	/**The {@link CheesyKMAPI}*/
 	static CheesyKMAPI api;
+	/**Login name, <code>null</code> if no session is currently open*/
 	static String login=null;
+	/**session password, null if no session is currently open*/
 	private static String pass=null;
-
+	/**{@link Topic}s that are loaded in memory*/
 	static Vector topicsInMem;
+	/**{@link Doc}s that are loaded in memory*/
 	static Vector docsInMem;
+	/**<code>Hashtable</code> (<code>String</code> tid=><code>String</code> topicName) where tid="T"+"XX"; is initialised at successfull login*/
 	private static Hashtable tNames;
+	/**<code>Hashtable</code> (<code>String</code> tid=><code>String</code> parentsTid) where tid="T"+"XX"; is initialised at successfull login*/
 	static Hashtable tRelations;
+	/**<code>Vector</code> of root {@link Topic}s for the current user, containing (<code>String</code>)tids; is initialised at successfull login*/
 	static Vector rootTopics;
 	
-	//Paramètres généraux de l'application
-	public static String EASYKMROOT;//racine d'EasyKM
+	/**EasyKM Root URL*/
+	public static String EASYKMROOT;
+	/**Height of the main Frame*/
 	public static int INITHEIGHT;
+	/**Width of the main Frame*/
 	public static int INITWIDTH;
+	/**X position of the main frame*/
 	public static int INITX;
+	/**Y position of the main frame*/
 	public static int INITY;
+	/**Location of the quick search toolbar ("North" or "South", but is straight, never goes West ;) )*/
 	public static String SEARCHTOOLBARLOCATION;
+	/**Location of the general toolbar ("North","South","East" or "West", this one is totally open-minded)*/
 	public static String BUTTONTOOLBARLOCATION;
-	public static boolean REMEMBERLASTLOGIN;//se souvenir du dernier login
-	public static String LASTLOGIN;//dernier login
-	public static int MAXDOCSINMEM;//nombre maxi de documents dans l'arbre
-	public static boolean AUTOCOLLAPSE;//activer le forçage du collapse de l'arbre (experimental...)
-	public static int MAXDOCSINMEMBEFOREAUTOCOLLAPSE;//nombre maxi de documetns dans l'arbre avant forçage de collapse
-	public static int MAXDOCTABSTITLESIZE;//taille maxi du titre des tabs (en caractères)
-	public static int DEFAULTACTIONCLICKCOUNT;//nombre de clic pour les action par défaut (ex. afficher un doc)
-	public static boolean MULTIPLETABSDOCS;//aurise l'affichage de plusieurs tabs d'affichage détaillé de doc ou non
-	public static String WEBBROWSERPATH;//chemin complet absolu du nevigateur web local.
-	public static boolean USELOCALWEBBROWSER;//utiliser ou non le navigateur local pour afficher les pages web.
-	public static boolean USERLOCALWEBBROWSERTODLFILES;//utiliser ou non le navigateur local pour voir les fichiers;
-	public static int NOMBREDENOUVEAUTES;//Nombre de nouveautés à afficher dans la liste des nouveautés
-	public static boolean EXPANDSEARCHRESULT;//expand the search results by default
+	/**if <code>true</code>, remember last login, and pre-fill the {@link Login} with it*/
+	public static boolean REMEMBERLASTLOGIN;
+	/**identifier of the last login*/
+	public static String LASTLOGIN;
+	/**Maximal number of {@link Doc}s in memory before trying to unload them (see {@link MemoryMonitor})*/
+	public static int MAXDOCSINMEM;
+	/**if <code>true</code>, activates autocollapse funtion, which force Topic Tree View collapse to unload docs (doesnt works well yet)*/
+	public static boolean AUTOCOLLAPSE;
+	/**if the autocollapse function is activated, force tree collapse when this number of docs in memory is reached*/ 
+	public static int MAXDOCSINMEMBEFOREAUTOCOLLAPSE;
+	/**Maximum length of the docs tabs titles*/
+	public static int MAXDOCTABSTITLESIZE;
+	/**Click count for the default action in the topic tree view and news list (usually 1 or 2, but very nervous persons can set it to 10)*/
+	public static int DEFAULTACTIONCLICKCOUNT;
+	/**if <code>true</code>, use several tabs to display docs, if <code>false</code>, only one tab will be used*/
+	public static boolean MULTIPLETABSDOCS;
+	/**Path to the local web browser*/
+	public static String WEBBROWSERPATH;
+	/**if <code>true</code>, use local web browser to browse webpages, if <code>false</code> use internal (in a tab) web browser*/ 
+	public static boolean USELOCALWEBBROWSER;
+	/**if <code>true</code>, use local web browser to view attached documents. must be <code>true</code> (funtion not implemented yet)*/
+	public static boolean USERLOCALWEBBROWSERTODLFILES;
+	/**length of the news list*/
+	public static int NOMBREDENOUVEAUTES;
+	/**if <code>true</code>, expand the search results tree at display, if <code>false</code> this tree will be collapsed at his display*/
+	public static boolean EXPANDSEARCHRESULT;
 	
 	
 	//pour la demo labo :
-	
+	/**Path to the keystore file (SSL certificates keyring java file*/
 	public static String KEYSTOREPATH;
+	/**Pass of the keystore file*/
 	public static String KEYSTOREPASS;
 	
 	
@@ -67,22 +94,32 @@ public class CheesyKM{
 	private static final String KEYSTOREPASS="easykm";
 	*/
 	
-	
+	/**The configuration associated with this insatance of CheesyKM*/
 	static Config config;
+	/**RessourceBundle of all the localized Strings*/
 	static ResourceBundle labels;
 	
+	/**
+	*Main method, gets a global configuration, and initializes a CheesyKMAPI (main frame).
+	*Sets XmlRpcs global parameters too.
+	*/
 	public static void main(String[] args) {
+		//Initialize a set of Strings (ResourceBundle) with the current Locale
 		labels=ResourceBundle.getBundle("ressources.labels.Labels",Locale.getDefault());
-		//labels=ResourceBundle.getBundle("ressources.labels.Labels",Locale.FRENCH);
+		
+		//Seems to be a bug with fonts on some VMs if not called
 		Object fonts[]=GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		
+		//Load a global configuration
 		config=new Config();
 		config.loadConfig();
-		//XmlRpc.setDebug(true);
 		
+		//Set XmlRpc global parameters
+		//XmlRpc.setDebug(true);
 		XmlRpc.setEncoding("UTF8");
 		XmlRpc.setInputEncoding("UTF-8");
 		
+		//the MinML parser is used by default by XmlRpc, uncomment this to use another parser (xerces, for example)
 		/*
 		try{
 		XmlRpc.setDriver("xerces");
@@ -91,15 +128,20 @@ public class CheesyKM{
 		}
 		*/
 		
+		//some inits
 		topicsInMem=new Vector();
 		docsInMem=new Vector();
+		
+		//new main frame
 		api=new CheesyKMAPI();
 		new MemoryMonitor();
-		
-		api.buttonToolBarLocation();
-		
 	}
 	
+	/**
+	*Get a Localized String ressource.
+	*@param key Name of the ressource.
+	*@return the localized String ressource matching this key, or "MISSING:"+key if the key couldn't be found.
+	*/
 	public static String getLabel(String key){
 		try{
 			return labels.getString(key);
@@ -109,15 +151,19 @@ public class CheesyKM{
 	}
 	
 	/**
-	*Met à jour les identifiants de l'utilisateur. Ils seront utilisés durant tout le reste de la session.
-	*@param nlogin String Identifiant de l'utilisateur.
-	*@param npass String Mot de passe de l'utilisateur.
+	*Updates the identifier and password of the current session, these parameters are used by the RPC calls during the whole session.
+	*@param nlogin String user identifier.
+	*@param npass String user password.
 	*/
 	public static void setLogin(String nlogin,String npass){
 		login=nlogin;
 		pass=npass;
 	}
 	
+	/**
+	*Creates a RPC client, on which RPC methods can be called (execute() method).
+	*@return a tiny all-alone-transparent-SSL-managing Xml-Rpc client.
+	*/
 	private static SecureXmlRpcClient client(){
 		try {
 			//echo("Path:"+KEYSTOREPATH+"  Pass:"+KEYSTOREPASS);
@@ -133,8 +179,8 @@ public class CheesyKM{
 	}
 
 	/**
-	*Appel de la procédure RPC "getTopicMatrix".
-	*@return Un Vector contenant (dans l'ordre) : <br>-Une Hashtable (Tid -> nom du thème)<br>-Une Hashtable (Tid -> Tid du parent (1 si racine))<br>-Un Vector des tid de base de l'utilisateur.
+	*Calls the "getTopicMatrix" RPC method.
+	*@return a Vector containing (in order) : <br>-a Hashtable (Tid -> topic name) (tNames)<br>-a Hashtable (Tid -> parent Tid )(1 si root)) (tRelations)<br>-a Vector of current users root Tid (tRoot).
 	*/
 	public static Vector getTopicMatrix(){
 		try{
@@ -158,9 +204,9 @@ public class CheesyKM{
 	}
 	
 	/**
-	*Appel de la procédure RPC "getDocsInTopic".
-	*@param tid TopicID, de la forme 'TXX'.
-	*@return Un Vector de Hashtable documents.
+	*Calls the "getDocsInTopic" RPC method.
+	*@param tid TopicID, 'TXX'.
+	*@return a Vector of document Hashtables.
 	*/
 	public static synchronized Vector getDocsInTopic(String tid){
 		try{
@@ -183,9 +229,9 @@ public class CheesyKM{
 	}
 	
 	/**
-	*Appel de la procédure RPC "getDocsInTopic".
-	*@param tid TopicID, int n° du topic.
-	*@return Un Vector de Hashtable documents.
+	*Calls the "getDocsInTopic" RPC method.
+	*@param tid TopicID, as an int.
+	*@return a Vector of document Hashtables.
 	*/
 	public static Vector getDocsInTopic(int tid){
 		return getDocsInTopic("T"+tid);
@@ -193,8 +239,8 @@ public class CheesyKM{
 	
 	
 	/**
-	*Appel de la procédure RPC "getLastDocs".
-	*@return Un Vector contenant les NOMBREDENOUVEAUTES derniers documents, sous forme de Hashtable.
+	*Calls the "getLastDocs" RPC method.
+	*@return a Vector of the last CheesyKM.NOMBREDENOUVEAUTES document Hashtables.
 	*/
 	public static Vector getLastDocs(){
 		try{
@@ -247,7 +293,12 @@ public class CheesyKM{
 	expired -> (int) should we include expired documents?
 	ufopX -> (string) operator for testing user extended attribute X (X = 0,1,2). Possible operators: =, !=, >=, <=, <, >
 	uftermX -> (string) value to compare to user extended attribute X (X = 0,1,2) with operator ufopX (set to empty string to ignore)*/
-
+	/**
+	*Calls the "search" RPC method, but like a simple search query (typed in the quickSearch toolbar)
+	*@param where Specifies where to search ("title","author","kwords","text" or "anywhere").
+	*@param what Specifies the words to search for, this String is Tokenized with default StringTokenizer settings.
+	*@return a Vector of document Hashtables.
+	*/
 	public static Vector quickSearch(String where, String what){
 		Vector fields=new Vector();
 		fields.add("title");
@@ -326,46 +377,46 @@ public class CheesyKM{
 	}
 	
 	/**
-	*Pour le debug, affiche o sur la sortie standard.
+	*Debug puposes, displays o on Standard Output, for a lazy programmer that thinks that "System.out.println" is boring to type.
 	*/
 	public static void echo(Object o){
 		System.out.println(o);
 	}
 	
 	/**
-	*Met à jour la Hashtable des noms de Topic (Tid -> nom du thème) de la session.
-	*@param newTNames nouvelle table.
+	*Updates the Topics name Hashtable (Tid -> TopicName) (Tid as "TXX") for this session.
+	*@param newTNames new table.
 	*/
 	public static void setTNames(Hashtable newTNames){
 		tNames=newTNames;
 	}
 	
 	/**
-	*Retourne la Hashtable des noms de Topic (Tid -> nom du thème) de la session.
-	*@return Hashtable des noms de Topic (Tid -> nom du thème) de la session.
+	*Returns the Topics name Hashtable (Tid -> TopicName) (Tid as "TXX") for this session.
+	*@return Hashtable (Tid -> TopicName) for this session.
 	*/
 	public static Hashtable getTNames(){return tNames;}
 	
 	/**
-	*Retourne la nom d'un topic à partir de son tid.
-	*@param tid TopicID, de la forme 'TXX'.
-	*@return Un String nom du topic.
+	*Returns a Topic name from its id;
+	*@param tid TopicID, as "TXX".
+	*@return A String name of this Topic.
 	*/
 	public static String getTopicNameById(String tid){
 		return (String)tNames.get(tid);
 	}
 	
 	/**
-	*Retourne la nom d'un topic à partir de son tid.
-	*@param tid TopicID, int n° du topic.
-	*@return Un String nom du topic.
+	*Returns a Topic name from its id;
+	*@param tid TopicID, as an int.
+	*@return A String name of this Topic.
 	*/
 	public static String getTopicNameById(int tid){
 		return getTopicNameById("T"+tid);
 	}
 	
 	/**
-	*Réinitialise les paramètres de session (login, documents, etc..)
+	*Called at disconnect, clears all session-relative informations.
 	*/
 	public static void deconnecter(){
 		setLogin(null,null);
@@ -377,7 +428,9 @@ public class CheesyKM{
 	}
 	
 	/**
-	*renvoie le nom complet d'un topic (tout le chemin dans l'arborescence, séparé par de "/").
+	*Returns the full name of a Topic, with all its path from root in the topic tree view, separated by a "/"
+	*@param topic TopicID, as "TXX".
+	*@return full path of this Topic.
 	*/
 	public static String getTopicFullName(String topic){
 		TreePath path=api.thematique.getPathForTopic(Integer.parseInt(topic.substring(1)));
@@ -390,7 +443,11 @@ public class CheesyKM{
 	}
 	
 	/**
-	*Ouvre une page web.
+	*Opens a webpage.<br>
+	*Tries to launch the local web browser if(CheesyKM.USELOCALWEBBROWSER), opens a tab on the site else.<br>
+	*Makes 1 connection to the specified counter.
+	*@param url String representation of the counters URL (full, with properties)
+	*@param realURL String representation of the real page URL.
 	*/
 	public static void openURL(String url,String realURL){
 		if(!CheesyKM.USELOCALWEBBROWSER){
@@ -406,7 +463,9 @@ public class CheesyKM{
 	}
 	
 	/**
-	*ouvre la page web associée à un document en mettant le compteur à jour
+	*Opens the webPage associated to a Doc, making a connection to the counter.<br>
+	*Does nothing if doc hasn't any website URL.
+	*@param doc Doc to browse the URL of.
 	*/
 	public static void openURL(Doc doc){
 		if(!doc.url.equals("")){
@@ -419,7 +478,9 @@ public class CheesyKM{
 		}
 	}
 	/**
-	*Copie un String dans le presse-papier(clipboard) système.
+	*Copies a String to the System Clipboard.<br>
+	*Shows an error message dialog if the ClipBoard isn't accessible.
+	*@param s the String to copy to clipboard.
 	*/
 	public static void copyToClipBoard(String s){
 		StringSelection select=new StringSelection(s);
@@ -431,7 +492,10 @@ public class CheesyKM{
 	}
 	
 	/**
-	*télécharge le fichier associè à un Doc d.
+	*Downloads the File attached to a Doc.<br>
+	*Adds 1 download to EasyKMs download counter for this Doc.
+	*@param d the Doc to download te attached file of.
+	*@param forceDownload if true, the file will be downloaded by CheesyKMs internal download manager, if false CheesyKM.USERLOCALWEBBROWSERTODLFILES will be checked to determineif the web browser should be used.
 	*/
 	public static void download(Doc d,boolean forceDownload){
 		if(USERLOCALWEBBROWSERTODLFILES&&!forceDownload){
@@ -465,6 +529,11 @@ public class CheesyKM{
 		}
 	}
 	
+	/**
+	*Downloads the file attached to a Doc to a local Filename with the internal download manager.
+	*@param fichierDest String name of the local path to save the file to.
+	*@param d Doc to download the attached file of.
+	*/
 	private static void download(String fichierDest,Doc d){
 		String urlCompteur=new String(d.file);
 		urlCompteur=urlCompteur.replaceAll("/","%2F");
@@ -478,6 +547,12 @@ public class CheesyKM{
 		download(fichierDest,EASYKMROOT+d.file,d.size);
 	}
 	
+	/**
+	*Downloads the file attached to a Doc to a local Filename with the internal download manager, creates a new instance of Download.
+	*@param fichierDest String name of the local path to save the file to.
+	*@param d Doc to download the attached file of.
+	*@param size size of the file to download.
+	*/
 	private static void download(String nomComplet,String url,long size){
 		new Download(nomComplet,url,size);
 	}

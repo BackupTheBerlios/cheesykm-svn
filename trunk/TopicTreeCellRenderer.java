@@ -6,8 +6,8 @@ import javax.swing.tree.*;
 
 
 /**
-*Spécifie comment afficher les Topics dans l'arborescence thématique.<br>
-*Utilisé directement par Swing.
+*Topic tree renderer, for the topic tree view and the search result tree.<br>
+*Called by the Swing manager to render the tree elements.
 */
 public class TopicTreeCellRenderer extends DefaultTreeCellRenderer {
 //"print", "image", "video", "sound", "act", "web", "note"

@@ -5,21 +5,30 @@ import java.awt.event.*;
 import javax.swing.tree.*;
 
 /**
-*Représente un Topic (thème) en mémoire.<br>
+*Represents a Topic.<br>
+*Can be of different types : 'T'=topic;'P'=topicPlus(topic with sub-topics);'D'=document;'W'=WebPage:'F'=Filetransfert
 */
 class Topic{
+	/**ID of this topic*/
 	int id;
+	/**<code>Vector</code> of Docs directly placed in this topic*/
 	Vector docs;
+	/**<code>Vector</code> of the nodes of the Docs directly placed in this topic*/
 	private Vector docsNodes;
+	/**tree node of this topic*/
 	private DefaultMutableTreeNode myNode;
+	/**Type of this Topic ('T'=topic;'P'=topicPlus;'D'=document;'W'=WebPage:'F'=Filetransfert)*/
 	private char nodeType;//'T'=topic;'P'=topicPlus;'D'=document;'W'=WebPage:'F'=Filetransfert
+	/**This topic has been count ?*/
 	boolean hasBeenCount=false;
+	/**This topic is counting*/
 	boolean isCounting=false;
+	/**This topic should display ?*/
 	boolean shouldDisplay=true;
 	
 	/**
-	*Construit un nouveau Topic.<br>
-	*@param id int n°de ce Topic.
+	*New Topic.<br>
+	*@param id Topic ID as an <code>int</code>.
 	*/
 	Topic(int id) {
 		this.id=id;
@@ -28,51 +37,54 @@ class Topic{
 	}
 	
 	/**
-	*Met à jour le noeud dans l'arbre "Thematique" correspondant à ce Topic.
-	*@param node DefaultMutableTreeNode, noeud correspondant à ce Topic.
+	*Updates this Topics tree node.
+	*@param node DefaultMutableTreeNode, Topics tree node.
 	*/
 	public void setNode(DefaultMutableTreeNode node){myNode=node;}
 	
 	/**
-	*Met à jour le type de ce Topic ('T'=topic;'P'=topicPlus;'D'=document).
-	*@param t nouveau type :('T'=topic;'P'=topicPlus;'D'=document).
+	*Updates this Topics type ('T'=topic;'P'=topicPlus;'D'=document;'W'=WebPage:'F'=Filetransfert).
+	*@param t nouveau type :('T'=topic;'P'=topicPlus;'D'=document;'W'=WebPage:'F'=Filetransfert).
 	*/
 	public void setNodeType(char t){nodeType=t;}
 	
 	/**
-	*Retourne le type de ce Topic ('T'=topic;'P'=topicPlus;'D'=document).
-	*@return type :('T'=topic;'P'=topicPlus;'D'=document).
+	*Returns this Topics type ('T'=topic;'P'=topicPlus;'D'=document;'W'=WebPage:'F'=Filetransfert).
+	*@return type :('T'=topic;'P'=topicPlus;'D'=document;'W'=WebPage:'F'=Filetransfert).
 	*/
 	public char getNodeType(){return nodeType;}
 	
 	
 	/**
-	*Construit un nouveau Topic.<br>
-	*@param id String n°de ce Topic sous la forme 'Txx'.
+	*New Topic.<br>
+	*@param id Topic ID as a <code>String</code>.
 	*/
 	Topic(String id){ this.id=Integer.parseInt(id.substring(1));}
-	
+	/**
+	*Returns the ID of this Topic
+	*@return this topics ID as an <code>int</code>.
+	*/
 	public int id() {return this.id;}
 	
 	/**
-	*Retourne le nom de ce Topic.
-	*@return String nom de ce Topic.
+	*Returns the name of this Topic.
+	*@return String name of this Topic.
 	*/
 	public String name() {return CheesyKM.getTopicNameById(this.id);}
 	
 	public DefaultMutableTreeNode getNode(){return this.myNode;}
 	
 	/**
-	*Retourne le nom de ce Topic.
-	*@return String nom de ce Topic.
+	*Returns the name of this Topic.
+	*@return String name of this Topic.
 	*/
 	public String toString() {
 		return name();
 	}
 	
 	/**
-	*Compte le nombre de documents directement situés dans ce topic, les demande au serveur, les stocke et les ajoute dans l'arborescence thématique.
-	*@return int nombre de documents directement situés dans ce topic.
+	*Counts the number of Docs directly located in this Topic, gets them from EasyKM, stores them and adds them to the topic tree view.
+	*@return int number of Docs directly located in this Topic.
 	*/
 	public int docCount(boolean expand){
 		if(this.docs==null){
@@ -110,8 +122,8 @@ class Topic{
 	}
 	
 	/**
-	*Décharge ce Topic ainsi que ses sous-topics et documents de la mémoire.<br>
-	*Utilisé par "MemoryMonitor"
+	*Unload this Topic, and all its sub-topics and documents from memory.<br>
+	*Called by {@link MemoryMonitor}.
 	*/
 	public void decharger(){
 		//CheesyKM.echo(((Topic)((DefaultMutableTreeNode)this.myNode.getParent()).getUserObject())+" should not display");
@@ -163,8 +175,8 @@ class Topic{
 	}
 	
 	/**
-	*override de equals de Object, teste l'égalité des topics sur leur tid.
-	*@return true si les tid sont égaux, false sinon.
+	*override Object equals, checks the IDs of two Topics
+	*@return <code>true</code> if the IDs are equal, <code>false</code> else.
 	*/
 	public boolean equals(Object o){
 		return this.id==((Topic)o).id&&this.toString().equals(o.toString());

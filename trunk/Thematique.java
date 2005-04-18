@@ -6,7 +6,7 @@ import javax.swing.tree.*;
 import javax.swing.event.*;
 
 /**
-*Composant de type JTree (arbre) représentant l'arborescence thématique globale visible par l'utilisateur courant.
+*Topic tree view component.
 */
 class Thematique extends JTree {
 	DefaultTreeModel thematiqueTreeModel;
@@ -17,8 +17,8 @@ class Thematique extends JTree {
 	}
 	
 	/**
-	*Crée un composant Thematique à partir du résultat d'une requête RPC "getTopicMatrix".
-	*@param topicMatrix Vector résultat d'une requête RPC "getTopicMatrix".
+	*Creates a Thematique component from the result of a "getTopicMatrix" request.
+	*@param topicMatrix Vector result of a "getTopicMatrix" RPC request.
 	*/
 	Thematique(Vector topicMatrix){
 		super();
@@ -126,8 +126,8 @@ class Thematique extends JTree {
 	
 	
 	/**
-	*Override de la méthode getToolTipText de JTree.<br>
-	*Appelée par le ToolTipManager pour déterminer le texte à afficher dans les info-bulles.
+	*Overrides JTrees getToolTipText method.<br>
+	*Called by the ToolTipManager.
 	*/
 	public String getToolTipText(MouseEvent e) {
 		JTree tree=(JTree)e.getComponent();
@@ -149,16 +149,29 @@ class Thematique extends JTree {
 		}
 	}
 	
-	
+	/**
+	*Returns the path for a Topic in this Tree.
+	*@param tid Topic ID as an <code>int</code>.
+	*@return Treepath for this Topic.
+	*/
 	public TreePath getPathForTopic(int tid){
 		DefaultMutableTreeNode t=(DefaultMutableTreeNode)topics.get(new Integer(tid));
 		return new TreePath(t.getPath());
 	}
 	
+	/**
+	*Returns the path for a Topic in this Tree.
+	*@param tid Topic ID as a String ("TXX").
+	*@return Treepath for this Topic.
+	*/
 	public TreePath getPathForTopic(String tid){
 		return getPathForTopic(Integer.parseInt(tid.substring(1)));
 	}
 	
+	/**
+	*Expands the path in this Tree to a {@link Topic}.
+	*@param tid Topic ID as a String ("TXX").
+	*/
 	public void expandPathToTopic(String tid){
 		new BGDocCount(((Topic)(((DefaultMutableTreeNode)(this.getPathForTopic(tid).getLastPathComponent())).getUserObject())),true);
 	}

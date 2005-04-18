@@ -4,13 +4,20 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
-
+/**
+*Search toolbar.
+*/
 class QuickSearchToolBar extends JToolBar{
+	/**Where to search ?*/
 	JComboBox where;
+	/**What to search ?*/
 	JTextField what;
 	JButton goForIt;
 	ProgBarDialog pbd;
 	Vector resu;
+	/**
+	*New search toolbar, all tiny and ready to serve you.
+	*/
 	QuickSearchToolBar(){
 		super();
 		setBorderPainted(false);
@@ -66,7 +73,10 @@ class QuickSearchToolBar extends JToolBar{
 		add(goForIt,"East");
 		this.setEnabled(false);
 	}
-	
+	/**
+	*Used to disable ("grey") the search bar when no session is open.
+	*@param b <code>false</code> to disable the bar, <code>true</code> to enable it.
+	*/
 	public void setEnabled(boolean b){
 		this.what.setEnabled(b);
 		this.where.setEnabled(b);
@@ -81,7 +91,9 @@ class QuickSearchToolBar extends JToolBar{
 			//pbd.dispose();
 		}
 	};
-	
+	/**
+	*Represents a search field (where to search)
+	*/
 	class Field {
 		String name;
 		String fullName;

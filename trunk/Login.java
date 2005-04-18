@@ -5,8 +5,8 @@ import java.awt.event.*;
 import javax.swing.text.*;
 
 /**
-*Boîte de dialogue du "sas d'identification".<br>
-*Teste si les identifiants sont corrects, et lance l'initialisation de la fenêtre principale, ou affiche un message d'erreur sinon.
+*Login prompt dialog.<br>
+*Checks if the identifier and password are OK and calls {@link CheesyKMAPI#initAtLogon(Vector)}, shows an error dialog else.
 */
 class Login extends JDialog{
 	private ProgBarDialog pbd;

@@ -6,12 +6,17 @@ import javax.swing.tree.*;
 import javax.swing.event.*;
 import java.lang.reflect.*;
 /**
-*Fenêtre principale de l'application.<br>
+*Application main Frame.<br>
+*Contains the two tabbed panes, the two toolbars, and a menuBar
 */
 class CheesyKMAPI extends JFrame{
+	/**{@link Login} prompt dialog*/
 	Login login;
+	/**Topic tree view ({@link Thematique})*/
 	static volatile Thematique thematique;
+	/**News list ({@link Nouveaute})*/
 	static Nouveaute nouveaute;
+	/**Search Toolbar ({@link QuickSearchToolBar})*/
 	static QuickSearchToolBar qstb;
 	//menu Connexion
 	JMenuItem menuDeconnecter;
@@ -40,11 +45,13 @@ class CheesyKMAPI extends JFrame{
 	JButton jtbFermerTousLesOnglets;
 	JPanel grandPanel;
 	JPanel petitPanel;
+	/**Left Tabbedpane*/
 	JTabbedPane jtpG;
+	/**Right tabbedpane*/
 	JTabbedPane jtpD;
 	private boolean nePasFermer=false;
 	/**
-	*Initialise la fenêtre principale et ses composants vides, et affiche le sas d'identification.
+	*Creates a new main frame, with empty tabbedpanes, and shows a modal {@link Login} prompt.
 	*/
 	public CheesyKMAPI() {
 		Container cp=(Container)this.getContentPane();
@@ -56,7 +63,6 @@ class CheesyKMAPI extends JFrame{
 		JMenu menuConnexion=new JMenu(CheesyKM.getLabel("connection"));
 		menuDeconnecter=new JMenuItem(CheesyKM.getLabel("disconnect"));
 		menuDeconnecter.setEnabled(false);
-		//menuDeconnecter.setIcon(new ImageIcon("./ressources/Stop16.gif"));
 		JMenuItem menuExit=new JMenuItem(CheesyKM.getLabel("quit"));
 		
 		
@@ -308,7 +314,11 @@ class CheesyKMAPI extends JFrame{
 		
 		login=new Login(this);
 	}
-	
+	/**
+	*Returns the location of the main Toolbar in the main Frame.<br>
+	*Returns "North" if the toolbar is floating (detached from the frame)
+	*@return String ("North","South","East","West").
+	*/
 	public String buttonToolBarLocation(){
 		BorderLayout layout = (BorderLayout)this.grandPanel.getLayout();// get layout somewhere;
 		Component west=null;
@@ -340,7 +350,11 @@ class CheesyKMAPI extends JFrame{
 			return "North";
 		}
 	}
-	
+	/**
+	*Returns the location of the search Toolbar in the main Frame.<br>
+	*Returns "North" if the toolbar is floating (detached from the frame)
+	*@return String ("North","South").
+	*/
 	public String searchToolBarLocation(){
 		BorderLayout layout = (BorderLayout)this.petitPanel.getLayout();// get layout somewhere;
 		Component north=null;
@@ -364,7 +378,7 @@ class CheesyKMAPI extends JFrame{
 	}
 	
 	/**
-	*Met à jour l'interface lors de la fermeture de session, et réaffiche le sas d'identification.
+	*Updates the GUI at disconnect, and shows the login prompt.
 	*/
 	void deconnecter(){
 		setTitle(CheesyKM.getLabel("titleDisconnected"));
@@ -379,7 +393,7 @@ class CheesyKMAPI extends JFrame{
 	}
 	
 	/**
-	*Override du setVisible de Frame, utilisé par le "voulez-vous vraiment quitter ?"
+	*Overrides JFrames <code>setVisible</code>, used by the "DoYouReallyWantToQuit" thing.
 	*/
 	public void setVisible(boolean b){
 		if(!nePasFermer){
@@ -389,8 +403,9 @@ class CheesyKMAPI extends JFrame{
 	}
 	
 	/**
-	*Initialisation de l'interface graphique quand l'utilisateur est correctement identifié.
-	*@param topicMatrix résultat de la requête RPC "getTopicMatrix"
+	*Fill the GUI at successfull logon.<br>
+	*Calls constructors of {@link Thematique} and {@link Nouveaute} and puts them in the Left tabbed pane.
+	*@param topicMatrix result of the "getTopicMatrix" RPC method.
 	*/
 	public void initAtLogon(Vector topicMatrix){
 		jtbStop.setEnabled(true);
@@ -406,9 +421,7 @@ class CheesyKMAPI extends JFrame{
 		JButton reloadNews=new JButton(CheesyKM.getLabel("reloadNews"));
 		class reloadNewsButtonListener implements ActionListener{
 			public void actionPerformed(ActionEvent e){
-				//CheesyKM.echo("Composant0:"+((JPanel)CheesyKM.api.jtpG.getComponent(0)).getComponent(0));
 				((JPanel)CheesyKM.api.jtpG.getComponent(0)).remove(1);
-				
 				((JPanel)CheesyKM.api.jtpG.getComponent(0)).add(new JScrollPane(new Nouveaute()),"Center");
 			}
 		}
@@ -426,7 +439,11 @@ class CheesyKMAPI extends JFrame{
 		
 		
 	}
-	
+	/**
+	*Return the index in the right tabbed pane for a {@link Topic}.
+	*@param tid topicID as an <code>int</code>.
+	*@return index of the tab, or -1 if the {@link Topic} is not in the TabbedPane.
+	*/
 	public int getIndexForDisplayedTopic(int tid){
 		boolean trouve=false;
 		int i=0;
@@ -442,7 +459,11 @@ class CheesyKMAPI extends JFrame{
 	}
 	
 	/**
-	*Affiche un Topic
+	*Displays a {@link Topic} in a tab in the right TabbedPane.<br>
+	*If the topic is already displayed, no new tabs will be created and this Topics tab will become selected.
+	*If a new Tab is created, its title length will be shortened if necessary (see {@link CheesyKM#MAXDOCTABSTITLESIZE CheesyKM.MAXDOCTABSTITLESIZE}),
+	*and a new Menu Item in the "Tab" menu will be added.
+	*@param topic {@link Topic} to display.
 	*/
 	public void displayTopic(Topic topic){
 		int i=isAffiche(topic);
@@ -465,7 +486,13 @@ class CheesyKMAPI extends JFrame{
 			jtpD.setSelectedIndex(i);
 		}
 	}
-	
+	/**
+	*Removes a Topics tab from the right TabbedPane.<br>
+	*If a tab is removed from the TabbedPane, the matching menu item will be removed from the "Tabs" menu.
+	*@param index index in the right TabbedPane of the tab to remove.
+	*@see CheesyKMAPI#getIndexForDisplayedTopic(int)
+	*@see CheesyKMAPI#isAffiche(Topic)
+	*/
 	public void hideTopic(int index){
 		String cle=""+((TopicPane)jtpD.getComponent(index)).topic.getNodeType()+((TopicPane)jtpD.getComponent(index)).topic.id;
 		boolean trouve=false;
@@ -477,15 +504,14 @@ class CheesyKMAPI extends JFrame{
 			}
 			i++;
 		}
-		
 		jtpD.removeTabAt(index);
 	}
 	
 	
 	/**
-	*Specifie si un document est affiché ou non dans les tabs de Droite (affichage détaillé).
-	*@param topic Topic à tester.
-	*@return int, -1 si le topic n'est pas affiché, indice dans jtpD(JTabbedPane) sinon.
+	*Return the index in the right tabbed pane for a {@link Topic}.
+	*@param topic the topic to get the index from.
+	*@return index of the tab, or -1 if the {@link Topic} is not in the TabbedPane.
 	*/
 	public int isAffiche(Topic topic){
 		if(topic.id==-1) return -1;
@@ -504,18 +530,29 @@ class CheesyKMAPI extends JFrame{
 		}
 	}
 	
+	/**
+	*Removes a Topics tab from the right TabbedPane.<br>
+	*If a tab is removed from the TabbedPane, the matching menu item will be removed from the "Tabs" menu.
+	*@param topic {@link Topic} to remove.
+	*/
 	public void hideTopic(Topic topic){
 		int i=isAffiche(topic);
 		if(i!=-1) hideTopic(i);
 	}
 	
+	/**
+	*Removes all tabs from the right TabbedPane, and all matching "Tabs" menu items.
+	*/
 	public void hideAllTopics(){
 		for(int i=3;i<3+jtpD.getTabCount();i++){
 			this.menuOnglet.remove(3);
 		}
 		jtpD.removeAll();
 	}
-	
+	/**
+	*Return the {@link Topic} for the currently selected Tab in the right TabbedPane.
+	*@return selected {@link Topic}, or <code>null</code> if no Topic is selected.
+	*/
 	public Topic getDisplayedTopic(){
 		if(jtpD.getSelectedComponent()!=null){
 			return ((TopicPane)(jtpD.getSelectedComponent())).topic;
@@ -524,6 +561,11 @@ class CheesyKMAPI extends JFrame{
 		}
 	}
 	
+	/**
+	*Check if a file transfer Tab is showing or not.<br>
+	*Used to enable or disable the "Close all tabs" function.
+	*@return <code>true</code> if one ore more file transfer tabs are displayed, <code>false</code> else.
+	*/
 	public boolean runningFileTransferIsDisplayed(){
 		for(int i=0;i<jtpD.getTabCount();i++){
 			if(((TopicPane)jtpD.getComponent(i)).topic.getNodeType()=='F'){

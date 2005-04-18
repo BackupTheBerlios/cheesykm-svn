@@ -1,15 +1,16 @@
 import java.util.*;
 
 /**
-*Thread lançant en tâche de fond des requêtes RPC "getDocsInTopic".<br>
-*Utilisé par l'arbre thématique global, pour ne pas bloquer le programme lors de l'affichage dans l'arbre de topics simples (sans sous-topics).
+*Thread to launch the RPC method "getDocsInTopic" in background.<br>
+*Called by the Topic tree View, to get the content of simple topics (type='T')
 */
 class BGDocCount extends Thread {
 	private Vector toCount;
 	private boolean expand;
 	/**
-	*Initialise et lance un Thread BGDocCount.
-	*@param toCount Vector de Topics à récupérer.
+	*Initialize and launch a BGDocCount Thread.
+	*@param toCount <code>Vector</code> of {@link Topic} to fill the content of (from EasyKM).
+	*@param expand <code>boolean</code> expand the Topics in the Topic tree view if true.
 	*/
 	BGDocCount(Vector toCount,boolean expand){
 		this.toCount=toCount;
@@ -18,8 +19,9 @@ class BGDocCount extends Thread {
 	}
 	
 	/**
-	*Initialise et lance un Thread BGDocCount.
-	*@param topic Topic à récupérer.
+	*Initialize and launch a BGDocCount Thread.
+	*@param topic {@link Topic} to fill the content of (from EasyKM).
+	*@param expand <code>boolean</code> expand the Topics in the Topic tree view if true.
 	*/
 	BGDocCount(Topic topic,boolean expand){
 		this.toCount=new Vector();
@@ -28,6 +30,9 @@ class BGDocCount extends Thread {
 		start();
 	}
 	
+	/**
+	*fills the content of this BGDocCounts Topics.
+	*/
 	public void run(){
 		for(int i=0;i<toCount.size();i++){
 			if(!((Topic)(toCount.get(i))).isCounting){
