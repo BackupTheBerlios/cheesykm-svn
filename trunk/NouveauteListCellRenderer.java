@@ -16,7 +16,7 @@ class NouveauteListCellRenderer extends DefaultListCellRenderer{
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus){
 		super.getListCellRendererComponent(list,value,index,isSelected,cellHasFocus);
 		Doc doc=(Doc)value;
-		setIcon(new ImageIcon("./ressources/m"+doc.ftype+".png"));
+		setIcon(CheesyKM.loadIcon("./ressources/m"+doc.ftype+".png"));
 		this.setFont(this.getFont().deriveFont(Font.PLAIN));
 		return this;
 	}

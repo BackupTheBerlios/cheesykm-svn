@@ -27,11 +27,11 @@ public class TopicTreeCellRenderer extends DefaultTreeCellRenderer {
 	
 	
 	public TopicTreeCellRenderer() {
-		topicI=new ImageIcon("./ressources/mtopic.png");
-		greytopicI=new ImageIcon("./ressources/mgreytopic.png");
-		opentopicI=new ImageIcon("./ressources/mopentopic.png");
-		topicPI=new ImageIcon("./ressources/mtopic+.png");
-		opentopicPI=new ImageIcon("./ressources/mopentopic+.png");
+		topicI=CheesyKM.loadIcon("./ressources/mtopic.png");
+		greytopicI=CheesyKM.loadIcon("./ressources/mgreytopic.png");
+		opentopicI=CheesyKM.loadIcon("./ressources/mopentopic.png");
+		topicPI=CheesyKM.loadIcon("./ressources/mtopic+.png");
+		opentopicPI=CheesyKM.loadIcon("./ressources/mopentopic+.png");
 	}
 	
 	public Component getTreeCellRendererComponent(JTree tree,Object node,boolean sel,boolean expanded,boolean leaf,int row,boolean hasFocus) {
@@ -41,7 +41,7 @@ public class TopicTreeCellRenderer extends DefaultTreeCellRenderer {
 		if(type=='D'){
 			//"print", "image", "video", "sound", "act", "web", "note"
 			Doc doc=(Doc)topic;
-			setIcon(new ImageIcon("./ressources/m"+doc.ftype+".png"));
+			setIcon(CheesyKM.loadIcon("./ressources/m"+doc.ftype+".png"));
 		} else {
 			if(expanded){
 				if(type=='T'){

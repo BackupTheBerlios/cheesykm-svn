@@ -58,6 +58,7 @@ class CheesyKMAPI extends JFrame{
 		cp.setLayout(new BorderLayout());
 		setBounds(CheesyKM.INITX,CheesyKM.INITY,CheesyKM.INITWIDTH,CheesyKM.INITHEIGHT);
 		
+		this.setIconImage(CheesyKM.loadIcon("./ressources/EasyKMTreeIcon.png").getImage());
 		
 		JMenuBar menuBar=new JMenuBar();
 		JMenu menuConnexion=new JMenu(CheesyKM.getLabel("connection"));
@@ -207,26 +208,26 @@ class CheesyKMAPI extends JFrame{
 		
 		JToolBar jtb=new JToolBar();
 		
-		jtbStop=new JButton(new ImageIcon("./ressources/UnPlug.gif"));
+		jtbStop=new JButton(CheesyKM.loadIcon("./ressources/UnPlug.gif"));
 		jtbStop.addActionListener(new menuDeconnecterListener());
 		jtbStop.setEnabled(false);
 		jtbStop.setToolTipText(CheesyKM.getLabel("disconnect"));
 		jtb.add(jtbStop);
 
-		jtbQuitter=new JButton(new ImageIcon("./ressources/Delete.gif"));
+		jtbQuitter=new JButton(CheesyKM.loadIcon("./ressources/Delete.gif"));
 		jtbQuitter.addActionListener(new menuExitListener());
 		jtbQuitter.setToolTipText(CheesyKM.getLabel("quit"));
 		jtb.add(jtbQuitter);
 		
 		jtb.addSeparator();
 		
-		jtbVoirDocument=new JButton(new ImageIcon("./ressources/Sheet.gif"));
+		jtbVoirDocument=new JButton(CheesyKM.loadIcon("./ressources/Sheet.gif"));
 		jtbVoirDocument.addActionListener(new MenuVoirDocumentListener());
 		jtbVoirDocument.setEnabled(false);
 		jtbVoirDocument.setToolTipText(CheesyKM.getLabel("seeDocument"));
 		jtb.add(jtbVoirDocument);
 		
-		jtbTelechargerDocument=new JButton(new ImageIcon("./ressources/DocToFolder.gif"));
+		jtbTelechargerDocument=new JButton(CheesyKM.loadIcon("./ressources/DocToFolder.gif"));
 		jtbTelechargerDocument.addActionListener(new MenuTelechargerDocumentListener());
 		jtbTelechargerDocument.setEnabled(false);
 		jtbTelechargerDocument.setToolTipText(CheesyKM.getLabel("downloadDocument"));
@@ -234,13 +235,13 @@ class CheesyKMAPI extends JFrame{
 		
 		jtb.addSeparator();
 		
-		jtbVoirSiteWeb=new JButton(new ImageIcon("./ressources/web32.png"));
+		jtbVoirSiteWeb=new JButton(CheesyKM.loadIcon("./ressources/web32.png"));
 		jtbVoirSiteWeb.addActionListener(new MenuVoirSiteWebListener());
 		jtbVoirSiteWeb.setEnabled(false);
 		jtbVoirSiteWeb.setToolTipText(CheesyKM.getLabel("visitSite"));
 		jtb.add(jtbVoirSiteWeb);
 		
-		jtbCopierAddresseWeb=new JButton(new ImageIcon("./ressources/Copy0.gif"));
+		jtbCopierAddresseWeb=new JButton(CheesyKM.loadIcon("./ressources/Copy0.gif"));
 		jtbCopierAddresseWeb.addActionListener(new MenuCopierAdresseWebListener());
 		jtbCopierAddresseWeb.setEnabled(false);
 		jtbCopierAddresseWeb.setToolTipText(CheesyKM.getLabel("copySiteURL"));
@@ -248,13 +249,13 @@ class CheesyKMAPI extends JFrame{
 		
 		jtb.addSeparator();
 		
-		jtbFermerOnglet=new JButton(new ImageIcon("./ressources/NewProj.gif"));
+		jtbFermerOnglet=new JButton(CheesyKM.loadIcon("./ressources/NewProj.gif"));
 		jtbFermerOnglet.addActionListener(new MenuFermerOngletListener());
 		jtbFermerOnglet.setEnabled(false);
 		jtbFermerOnglet.setToolTipText(CheesyKM.getLabel("closeTab"));
 		jtb.add(jtbFermerOnglet);
 		
-		jtbFermerTousLesOnglets=new JButton(new ImageIcon("./ressources/Folder2bliz.gif"));
+		jtbFermerTousLesOnglets=new JButton(CheesyKM.loadIcon("./ressources/Folder2bliz.gif"));
 		jtbFermerTousLesOnglets.addActionListener(new MenuFermerTousLesOngletsListener());
 		jtbFermerTousLesOnglets.setEnabled(false);
 		jtbFermerTousLesOnglets.setToolTipText(CheesyKM.getLabel("closeAllTabs"));
@@ -262,7 +263,7 @@ class CheesyKMAPI extends JFrame{
 		
 		jtb.addSeparator();
 		
-		JButton jtbConfig=new JButton(new ImageIcon("./ressources/Hammer.gif"));
+		JButton jtbConfig=new JButton(CheesyKM.loadIcon("./ressources/Hammer.gif"));
 		jtbConfig.addActionListener(new MenuConfigListener());
 		jtbConfig.setToolTipText(CheesyKM.getLabel("viewConfig"));
 		jtb.add(jtbConfig);

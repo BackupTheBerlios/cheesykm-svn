@@ -14,7 +14,7 @@ import java.net.*;
 class Config{
 	/*	//Paramètres généraux de l'application
 	public static final String EASYKMROOT="https://lab.elikya.com/EasyKM/";//racine d'EasyKM
-	private static final String KEYSTOREPATH="./ressources/kslabo";
+	private static final String KEYSTOREPATH=CheesyKM.getInstallationPath()+System.getProperty("file.separator")+"keystores"+System.getProperty("file.separator")+"kslabo";
 	private static final String KEYSTOREPASS="lechsogr";
 	public static final int INITHEIGHT=768;
 	public static final int INITWIDTH=1024;
@@ -34,7 +34,7 @@ class Config{
 	public static final int NOMBREDENOUVEAUTES=10;//Nombre de nouveautés à afficher dans la liste des nouveautés
 	*/
 	/**Path to the configuration file*/
-	static final String nomFichierDeConf="./CheesyKM.conf";
+	static final String nomFichierDeConf=System.getProperty("user.home")+System.getProperty("file.separator")+".CheesyKM.conf";
 	InitConfigPanel icp;
 	/**
 	*Read the configuration from the file and updates CheesyKMs constants.<br>
@@ -196,7 +196,7 @@ class Config{
 			if(CheesyKM.EXPANDSEARCHRESULT) bw.write("true"); else bw.write("false");
 			bw.flush();
 		} catch(Exception e){
-			CheesyKM.echo(e);
+			JOptionPane.showMessageDialog(null, CheesyKM.getLabel("errorSavingConfig"), CheesyKM.getLabel("error"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	/**
@@ -519,12 +519,12 @@ class Config{
 	*/
 	public static void loadDefaultConfig(){
 		if(CheesyKM.KEYSTOREPASS!=null){
-			if(!CheesyKM.KEYSTOREPASS.equals("lechsogr")||!CheesyKM.KEYSTOREPATH.equals("./ressources/kslabo"))
+			if(!CheesyKM.KEYSTOREPASS.equals("lechsogr")||!CheesyKM.KEYSTOREPATH.equals(CheesyKM.getInstallationPath()+System.getProperty("file.separator")+"keystores"+System.getProperty("file.separator")+"kslabo"))
 				JOptionPane.showMessageDialog(null,  CheesyKM.getLabel("changesWillBeEffectiveLater"),CheesyKM.getLabel("modifiedSSLParameters"), JOptionPane.INFORMATION_MESSAGE);
 		}
 			
 		CheesyKM.EASYKMROOT="https://lab.elikya.com/EasyKM/";//racine d'EasyKM
-		CheesyKM.KEYSTOREPATH="./ressources/kslabo";
+		CheesyKM.KEYSTOREPATH=CheesyKM.getInstallationPath()+System.getProperty("file.separator")+"keystores"+System.getProperty("file.separator")+"kslabo";
 		CheesyKM.KEYSTOREPASS="lechsogr";
 		CheesyKM.INITHEIGHT=768;
 		CheesyKM.INITWIDTH=1024;

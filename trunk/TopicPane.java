@@ -283,7 +283,7 @@ class TopicPane extends JPanel{
 		StyleConstants.setFontSize(s,11);
 		StyleConstants.setAlignment(s,StyleConstants.ALIGN_LEFT);
 		JButton wwwButton = new JButton();
-		wwwButton.setIcon(new ImageIcon("./ressources/WebComponent16.gif"));
+		wwwButton.setIcon(CheesyKM.loadIcon("./ressources/WebComponent16.gif"));
 		wwwButton.setText(CheesyKM.getLabel("visitSite"));
 		wwwButton.setToolTipText(CheesyKM.getLabel("visitSite"));
 		class wwwButtonActionListener implements ActionListener {
@@ -302,7 +302,7 @@ class TopicPane extends JPanel{
 		StyleConstants.setFontSize(s,11);
 		StyleConstants.setAlignment(s,StyleConstants.ALIGN_LEFT);
 		JButton wwwToClipBoardButton = new JButton();
-		wwwToClipBoardButton.setIcon(new ImageIcon("./ressources/Copy16.gif"));
+		wwwToClipBoardButton.setIcon(CheesyKM.loadIcon("./ressources/Copy16.gif"));
 		wwwToClipBoardButton.setText(CheesyKM.getLabel("copyURL"));
 		wwwToClipBoardButton.setToolTipText(CheesyKM.getLabel("copyURLToSystemClipboard"));
 		class wwwToClipBoardButtonActionListener implements ActionListener {
@@ -323,7 +323,7 @@ class TopicPane extends JPanel{
 		StyleConstants.setFontSize(s,11);
 		StyleConstants.setAlignment(s,StyleConstants.ALIGN_LEFT);
 		JButton dlButton = new JButton();
-		dlButton.setIcon(new ImageIcon("./ressources/Import16.gif"));
+		dlButton.setIcon(CheesyKM.loadIcon("./ressources/Import16.gif"));
 		dlButton.setText(CheesyKM.getLabel("download"));
 		dlButton.setToolTipText(CheesyKM.getLabel("downloadDocument"));
 		class dlButtonActionListener implements ActionListener {
@@ -344,7 +344,7 @@ class TopicPane extends JPanel{
 		JButton viewFileButton = new JButton();
 		
 		
-		viewFileButton.setIcon(new ImageIcon("./ressources/m"+((Doc)this.topic).ftype+".png"));
+		viewFileButton.setIcon(CheesyKM.loadIcon("./ressources/m"+((Doc)this.topic).ftype+".png"));
 		
 		
 		viewFileButton.setText(CheesyKM.getLabel("display"));
@@ -364,14 +364,14 @@ class TopicPane extends JPanel{
 		for(int i=1;i<6;i++){
 			s = doc.addStyle("iconF"+i, regular);
 			StyleConstants.setAlignment(s, StyleConstants.ALIGN_LEFT);
-			StyleConstants.setIcon(s,new ImageIcon("./ressources/etoile-foncee.png"));
+			StyleConstants.setIcon(s,CheesyKM.loadIcon("./ressources/etoile-foncee.png"));
 		}
 		
 		//Icone etoile claire
 		for(int i=1;i<6;i++){
 			s = doc.addStyle("iconC"+i, regular);
 			StyleConstants.setAlignment(s, StyleConstants.ALIGN_LEFT);
-			StyleConstants.setIcon(s,new ImageIcon("./ressources/etoile-claire.png"));
+			StyleConstants.setIcon(s,CheesyKM.loadIcon("./ressources/etoile-claire.png"));
 		}
 		
 		//boutons voir themes
@@ -382,7 +382,7 @@ class TopicPane extends JPanel{
 				StyleConstants.setFontSize(s,11);
 				StyleConstants.setAlignment(s,StyleConstants.ALIGN_LEFT);
 				JButton themeButton = new JButton();
-				themeButton.setIcon(new ImageIcon("./ressources/ZoomIn16.gif"));
+				themeButton.setIcon(CheesyKM.loadIcon("./ressources/ZoomIn16.gif"));
 				themeButton.setText("");
 				themeButton.setToolTipText(CheesyKM.getLabel("openTopic")+" "+CheesyKM.getTopicFullName(((Doc)(topic)).topicList.get(i).toString())+" "+CheesyKM.getLabel("inTopicTreeView"));
 				class themeButtonActionListener implements ActionListener {

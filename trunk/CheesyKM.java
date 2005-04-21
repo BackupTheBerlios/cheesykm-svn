@@ -138,6 +138,51 @@ public class CheesyKM{
 	}
 	
 	/**
+	*Returns the full absolute path where CheesyKM has been installed.<br>
+	*ASSUMING THAT CHEESYKM IS IN A DIRECT SUBDIRECTORY OF THE INSTALLATION DIRECTORY.
+	*@return String representation of CheesyKMs installation absolute path.
+	*/
+	public static String getInstallationPath(){
+		ClassLoader loader=CheesyKM.class.getClassLoader().getSystemClassLoader();
+		URL url=null;
+		try {
+			url=loader.getResource("ressources/Hammer.gif");
+		} catch(Exception e) {echo(e);}
+		String path=url.getPath();
+		path=path.replace('\u002F',System.getProperty("file.separator").charAt(0));
+		path=path.substring(5,path.length()-23);//path of the jar
+		path=toUnicode(path);
+		if(path.charAt(0)=='\\'){
+			path=path.substring(1);
+		}
+		StringTokenizer stk=new StringTokenizer(path,System.getProperty("file.separator"),true);
+		String resu=new String();
+		for(int i=0;i<stk.countTokens()+1;i++){
+			resu=resu+stk.nextToken();
+		}
+		return resu;
+	}
+	
+	/**
+	*Converts a "%c3%20xx" String to "\u00c3\u0020xx" String.
+	*@param toConvert String to convert.
+	*@return converted String.
+	*/
+	public static String toUnicode(String toConvert){
+		String temp=new String(toConvert);
+		int i=temp.indexOf("%");
+		while(i!=-1){
+			String twoChars="00"+temp.substring(i+1,i+3);
+			try{
+				char newChar=(char)Integer.parseInt(twoChars,16);
+				temp=temp.substring(0,i)+newChar+temp.substring(i+3);
+			}catch(Exception e){echo(e);break;}
+			i=temp.indexOf("%");
+		}
+		return temp;
+	}
+	
+	/**
 	*Get a Localized String ressource.
 	*@param key Name of the ressource.
 	*@return the localized String ressource matching this key, or "MISSING:"+key if the key couldn't be found.
@@ -149,7 +194,23 @@ public class CheesyKM{
 			return "MISSING:"+key;
 		}
 	}
-	
+	/**
+	*Returns an ImageIcon from the <code>location</code> specified image file.<br>
+	*Necessary to acces image resources within the jar file.
+	*@param location path to the image file.
+	*@return an ImageIcon from the specified image file.
+	*/
+	public static ImageIcon loadIcon(String location){
+		//echo("Try to load icon at location:"+location);
+		ClassLoader loader=CheesyKM.class.getClassLoader().getSystemClassLoader();
+		URL url=null;
+		try {
+			url=loader.getResource(location.substring(2));
+		} catch(Exception e) {echo(e);}
+		//echo("Found URL:"+url);
+		ImageIcon ic=new ImageIcon(Toolkit.getDefaultToolkit().createImage(url));
+		return ic;
+	}
 	/**
 	*Updates the identifier and password of the current session, these parameters are used by the RPC calls during the whole session.
 	*@param nlogin String user identifier.

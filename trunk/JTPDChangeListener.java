@@ -20,7 +20,7 @@ class JTPDChangeListener implements ChangeListener{
 			CheesyKM.api.menuVoirDocument.setEnabled(false);
 			CheesyKM.api.menuTelechargerDocument.setEnabled(false);
 			CheesyKM.api.jtbVoirDocument.setEnabled(false);
-			CheesyKM.api.jtbVoirDocument.setIcon(new ImageIcon("./ressources/Sheet.gif"));
+			CheesyKM.api.jtbVoirDocument.setIcon(CheesyKM.loadIcon("./ressources/Sheet.gif"));
 			CheesyKM.api.jtbVoirDocument.setToolTipText(CheesyKM.getLabel("seeDocument"));
 			CheesyKM.api.jtbTelechargerDocument.setEnabled(false);
 			CheesyKM.api.jtbTelechargerDocument.setToolTipText(CheesyKM.getLabel("downloadDocument"));
@@ -38,7 +38,7 @@ class JTPDChangeListener implements ChangeListener{
 			CheesyKM.api.jtbTelechargerDocument.setEnabled(!d.file.equals(""));
 			CheesyKM.api.menuDocument.setEnabled(!d.file.equals(""));
 			if(!d.file.equals("")){
-				CheesyKM.api.jtbVoirDocument.setIcon(new ImageIcon("./ressources/"+d.ftype+"32.png"));
+				CheesyKM.api.jtbVoirDocument.setIcon(CheesyKM.loadIcon("./ressources/"+d.ftype+"32.png"));
 				CheesyKM.api.jtbVoirDocument.setToolTipText(CheesyKM.getLabel("seeDocument")+" : "+d.format+" - "+d.getFSize());
 				CheesyKM.api.jtbTelechargerDocument.setToolTipText(CheesyKM.getLabel("downloadDocument")+" : "+d.format+" - "+d.getFSize());
 			}
@@ -55,7 +55,7 @@ class JTPDChangeListener implements ChangeListener{
 			CheesyKM.api.menuVoirDocument.setEnabled(false);
 			CheesyKM.api.menuTelechargerDocument.setEnabled(false);
 			CheesyKM.api.jtbVoirDocument.setEnabled(false);
-			CheesyKM.api.jtbVoirDocument.setIcon(new ImageIcon("./ressources/Sheet.gif"));
+			CheesyKM.api.jtbVoirDocument.setIcon(CheesyKM.loadIcon("./ressources/Sheet.gif"));
 			CheesyKM.api.jtbVoirDocument.setToolTipText(CheesyKM.getLabel("seeDocument"));
 			CheesyKM.api.jtbTelechargerDocument.setEnabled(false);
 			CheesyKM.api.jtbTelechargerDocument.setToolTipText(CheesyKM.getLabel("downloadDocument"));
