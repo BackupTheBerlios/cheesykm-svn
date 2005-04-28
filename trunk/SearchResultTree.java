@@ -13,6 +13,7 @@ class SearchResultTree extends JTree {
 	*/
 	SearchResultTree(Vector searchResult){
 		super();
+		//CheesyKM.echo("SR:"+searchResult);
 		if(searchResult.size()==0) searchResult=null;
 		if(searchResult!=null){
 			Vector docs=new Vector();

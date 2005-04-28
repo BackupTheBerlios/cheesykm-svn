@@ -10,6 +10,8 @@ import javax.swing.tree.*;
 import java.awt.datatransfer.*;
 import javax.swing.text.*;
 import java.lang.*;
+import java.text.*;
+import com.enterprisedt.net.ftp.*;
 
 /**
 *CheesyKM main class.<br>
@@ -34,8 +36,12 @@ public class CheesyKM{
 	private static Hashtable tNames;
 	/**<code>Hashtable</code> (<code>String</code> tid=><code>String</code> parentsTid) where tid="T"+"XX"; is initialised at successfull login*/
 	static Hashtable tRelations;
+	/**<code>Hashtable</code> (<code>String</code> tid=><code>Integer</code> flag) where flag represents the rights that the current user has on the tid Topic*/
+	static Hashtable tRights;
 	/**<code>Vector</code> of root {@link Topic}s for the current user, containing (<code>String</code>)tids; is initialised at successfull login*/
 	static Vector rootTopics;
+	/**EasyKM configuration Hashtable */
+	static Hashtable easyKMConfig;
 	
 	/**EasyKM Root URL*/
 	public static String EASYKMROOT;
@@ -77,16 +83,18 @@ public class CheesyKM{
 	public static int NOMBREDENOUVEAUTES;
 	/**if <code>true</code>, expand the search results tree at display, if <code>false</code> this tree will be collapsed at his display*/
 	public static boolean EXPANDSEARCHRESULT;
-	
-	
-	//pour la demo labo :
 	/**Path to the keystore file (SSL certificates keyring java file*/
 	public static String KEYSTOREPATH;
 	/**Pass of the keystore file*/
 	public static String KEYSTOREPASS;
+	/**FTP server hostname*/
+	public static String FTPHOST;
+	/**FTP server userName*/
+	public static String FTPUSERNAME;
+	/**FTP server pass*/
+	public static String FTPPASS;
 	
-	
-	
+	public static final int UFNUMBER=3;
 	//pour la demo web :
 	/*
 	private static final String addresseWebservices=EASYKMROOT+"webservices.php";
@@ -99,11 +107,12 @@ public class CheesyKM{
 	/**RessourceBundle of all the localized Strings*/
 	static ResourceBundle labels;
 	
+	
 	/**
 	*Main method, gets a global configuration, and initializes a CheesyKMAPI (main frame).
 	*Sets XmlRpcs global parameters too.
 	*/
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		//Initialize a set of Strings (ResourceBundle) with the current Locale
 		labels=ResourceBundle.getBundle("ressources.labels.Labels",Locale.getDefault());
 		
@@ -113,13 +122,18 @@ public class CheesyKM{
 		//Load a global configuration
 		config=new Config();
 		config.loadConfig();
-		
+		/*
+		EASYKMROOT="https://www.easy-km.net/demo/";
+		KEYSTOREPATH="./ressources/ksweb";
+		KEYSTOREPASS="easykm";
+		*/
 		//Set XmlRpc global parameters
 		//XmlRpc.setDebug(true);
 		XmlRpc.setEncoding("UTF8");
 		XmlRpc.setInputEncoding("UTF-8");
 		
 		//the MinML parser is used by default by XmlRpc, uncomment this to use another parser (xerces, for example)
+		//Parser has to be a SAX implementation
 		/*
 		try{
 		XmlRpc.setDriver("xerces");
@@ -132,9 +146,23 @@ public class CheesyKM{
 		topicsInMem=new Vector();
 		docsInMem=new Vector();
 		
+		
 		//new main frame
 		api=new CheesyKMAPI();
 		new MemoryMonitor();
+		
+		/*
+		setLogin("sherve","sh");
+		Vector topicMatrix=getTopicMatrix();
+		tNames=(Hashtable)topicMatrix.get(0);
+		tRelations=(Hashtable)topicMatrix.get(1);
+		rootTopics=(Vector)topicMatrix.get(2);
+		JDialog d=new JDialog();
+		d.getContentPane().add(new JScrollPane(new TopicSelectionTree(true)));
+		d.pack();
+		d.show();*/
+		
+		//CheesyKM.upload("/home/samuel/Desktop/Downloads/jedit42install.jar","jedit.jar");
 	}
 	
 	/**
@@ -232,8 +260,13 @@ public class CheesyKM{
 			System.setProperty("javax.net.ssl.keyStorePassword",KEYSTOREPASS);
 			System.setProperty("javax.net.ssl.trustStore",KEYSTOREPATH);
 			System.setProperty("javax.net.ssl.trustStorePassword",KEYSTOREPASS);
-			return new SecureXmlRpcClient(EASYKMROOT+"webservices.php");
+			System.setProperty("http.agent","CheesyKM"+" on "+System.getProperty("os.name"));
+			SecureXmlRpcClient client = new SecureXmlRpcClient(EASYKMROOT+"webservices.php");
+			return client;
 		}catch(MalformedURLException mue){
+			JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}catch(IOException mue){
 			JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
@@ -250,8 +283,12 @@ public class CheesyKM{
 			Vector params=new Vector();
 			params.add(login);
 			params.add(pass);
-			Vector resu;
-			return (Vector)client().execute("getTopicMatrix",params);
+			Vector resu=(Vector)client().execute("getTopicMatrix",params);
+			if(resu!=null){
+				CheesyKM.easyKMConfig=(Hashtable)client().execute("getConfig",params);
+				//echo(easyKMConfig);
+			}
+			return resu;
 		}catch(MalformedURLException mue){
 			JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
 			return null;
@@ -275,7 +312,6 @@ public class CheesyKM{
 			params.add(login);
 			params.add(pass);
 			params.add(tid);
-			Vector resu;
 			return (Vector)client().execute("getDocsInTopic",params);
 		}catch(MalformedURLException mue){
 			JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
@@ -298,6 +334,54 @@ public class CheesyKM{
 		return getDocsInTopic("T"+tid);
 	}
 	
+	/**
+	*Calls the "registerDoc" RPC method.
+	*@param metadata documents metadata;
+	*@return a Vector [(struct) document, (int) indexed] where indexed == 1 if the document has been indexed, 0 else.
+	*	or a list of already existing identical documents
+	*/
+	public static synchronized Vector registerDoc(Hashtable metadata){
+		try{
+			Vector params=new Vector();
+			params.add(login);
+			params.add(pass);
+			params.add(metadata);
+			return (Vector)client().execute("registerDoc",params);
+		}catch(MalformedURLException mue){
+			JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}catch(XmlRpcException xre){
+			JOptionPane.showMessageDialog(null, getLabel("error")+xre, getLabel("errorXMLRPC"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}catch(IOException ioe){
+			JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorIO"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+	}
+	
+	/**
+	*Calls the "updateDoc" RPC method.
+	*@param metadata documents metadata;
+	*@return an Integer==0 if the update failed, a document Hashtable else.
+	*/
+	public static synchronized Object updateDoc(Hashtable metadata){
+		try{
+			Vector params=new Vector();
+			params.add(login);
+			params.add(pass);
+			params.add(metadata);
+			return client().execute("updateDoc",params);
+		}catch(MalformedURLException mue){
+			JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}catch(XmlRpcException xre){
+			JOptionPane.showMessageDialog(null, getLabel("error")+xre, getLabel("errorXMLRPC"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}catch(IOException ioe){
+			JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorIO"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+	}
 	
 	/**
 	*Calls the "getLastDocs" RPC method.
@@ -309,7 +393,6 @@ public class CheesyKM{
 			params.add(login);
 			params.add(pass);
 			params.add(new Integer(CheesyKM.NOMBREDENOUVEAUTES));
-			Vector resu;
 			return (Vector)client().execute("getLastDocs",params);
 		}catch(MalformedURLException mue){
 			JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
@@ -473,7 +556,11 @@ public class CheesyKM{
 	*@return A String name of this Topic.
 	*/
 	public static String getTopicNameById(int tid){
-		return getTopicNameById("T"+tid);
+		if(tid==1){
+			return CheesyKM.getLabel("root");
+		} else {
+			return getTopicNameById("T"+tid);
+		}
 	}
 	
 	/**
@@ -482,9 +569,12 @@ public class CheesyKM{
 	public static void deconnecter(){
 		setLogin(null,null);
 		tNames=null;
+		tRelations=null;
+		tRights=null;
 		rootTopics=null;
 		topicsInMem=new Vector();
 		docsInMem=new Vector();
+		easyKMConfig=null;
 		System.gc();
 	}
 	
@@ -618,4 +708,183 @@ public class CheesyKM{
 		new Download(nomComplet,url,size);
 	}
 	
+	static Vector topicMatrix(){
+		Vector v=new Vector();
+		v.add(CheesyKM.getTNames());
+		v.add(CheesyKM.tRelations);
+		v.add(CheesyKM.tRights);
+		v.add(CheesyKM.rootTopics);
+		return v;
+	}
+	
+	
+	/**
+	*Returns todays date as a localized String.
+	*@return todays date as a localized String.
+	*/
+	public static String today(){
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+		return sdf.format(Calendar.getInstance().getTime());
+	}
+	
+	/**
+	*Checks if a String represents a "dd-MM-yyyy" date or not.
+	*@param date the <code>String</code> to check.
+	*@return <code>true</code> if date is a date, <code>false</code> else.
+	*/
+	public static boolean isDate(String date){
+		return date.matches("\\d\\d-\\d\\d-\\d\\d\\d\\d");
+	}
+	
+	/**
+	*@param date "dd-MM-yyyy" date to convert
+	*@return "yyyy-MM-dd" date.
+	*/
+	public static String dateToEasyKM(String date){
+		if(date.equals("")) return "";
+		return date.substring(6)+"-"+date.substring(3,5)+"-"+date.substring(0,2);
+	}
+	
+	/**
+	*@param date "yyyy-MM-dd hh:mm:ss" date to convert
+	*@return "dd-MM-yyyy" date.
+	*/
+	public static String dateFromEasyKM(String date){
+		if(date.equals("")) return "";
+		return date.substring(8,10)+"-"+date.substring(5,7)+"-"+date.substring(0,4);
+	}
+	
+	/**
+	*Uploads a file on the specified FTP server, in remote folder "/incoming"
+	*@param localFilename path to the file to upload.
+	*@param remoteFilename name of the file on the remote FTP server. (will be "/incoming/remoteFilename").
+	*@return <code>true</code> if the uipload successed, <code>false</code> else.
+	*/
+	public static boolean upload(String localFilename,String remoteFilename){
+		
+		class Runner extends Thread{
+			FTPUploadMonitor monitor;
+			String localFilename,remoteFilename;
+			boolean success;
+			Runner(FTPUploadMonitor monitor,String localFilename,String remoteFilename){
+				this.monitor=monitor;
+				this.localFilename=localFilename;
+				this.remoteFilename=remoteFilename;
+			}
+			public void run(){
+				try{
+					echo("FTP UPLOAD FILE:"+localFilename+" AS REMOTE:"+remoteFilename);
+					FTPClient ftpClient=new FTPClient();
+					ftpClient.setProgressMonitor(monitor);
+					ftpClient.setRemoteHost(CheesyKM.FTPHOST);
+					ftpClient.setControlPort(21);
+					ftpClient.connect();
+					ftpClient.login(CheesyKM.FTPUSERNAME,CheesyKM.FTPPASS);
+					ftpClient.setType(FTPTransferType.BINARY);
+					ftpClient.chdir("incoming");
+					echo("put start");
+					ftpClient.put(localFilename,remoteFilename);
+					echo("put end");
+					ftpClient.quit();
+					success=true;
+					monitor.dispose();
+				} catch(IOException ioe){
+					success=false;
+					JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorIO"), JOptionPane.ERROR_MESSAGE);
+					monitor.dispose();
+				} catch(FTPException ioe){
+					success=false;
+					JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorFTP"), JOptionPane.ERROR_MESSAGE);
+					monitor.dispose();
+				}
+			}
+			
+		}
+		FTPUploadMonitor monitor=new FTPUploadMonitor(new File(localFilename).length());
+		Runner runner=new Runner(monitor,localFilename,remoteFilename);
+		runner.start();
+		monitor.show();
+		return runner.success;
+		
+	}
+		
+		
+	/**
+	*Calls the "deleteDoc" RPC method.
+	*@param doc the doc to delete.
+	*/
+	public static void deleteDoc(Doc doc){
+		if(JOptionPane.showConfirmDialog(CheesyKM.api,CheesyKM.getLabel("doYouReallyWannaDelete")+"\n"+doc.title, CheesyKM.getLabel("confirmDelete"), JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+			if(deleteDocRPC(doc)){
+				JOptionPane.showMessageDialog(null, getLabel("docDeleted"), getLabel("success"), JOptionPane.INFORMATION_MESSAGE);
+				//doc.getParent().getNode().remove(doc.getNode());
+				
+				CheesyKM.api.thematique.repaint();
+				if(CheesyKM.api.isAffiche(doc)!=-1)
+					CheesyKM.api.hideTopic(doc);
+			} else {
+				JOptionPane.showMessageDialog(null, getLabel("errorDeleting"), getLabel("error"), JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+	
+	/**
+	*Calls the "deleteDoc" RPC method.
+	*@param doc the doc to delete.
+	*@return <code>true</code> if the Doc has successfully been deleted, <code>false</code> else.
+	*/
+	public static synchronized boolean deleteDocRPC(final Doc doc){
+		class Runner extends Thread{
+			boolean status;
+			Vector params;
+			ProgBarDialog pbd;
+			Runner(Vector params,ProgBarDialog pbd){
+				this.params=params;
+				this.pbd=pbd;
+				this.start();
+			}
+			public void run(){
+				try{	
+					
+					//status=((Integer)((Hashtable)client().execute("deleteDocs",params)).get(new Integer(doc.id))).intValue()>0;
+					Hashtable resu=(Hashtable)client().execute("deleteDocs",params);
+					status=Integer.parseInt(resu.get("Doc "+doc.id).toString())>0;
+					//status=true;
+					
+					
+					if(status){
+						Vector toUpdate=new Vector();
+						for(int i=0;i<doc.topicList.size();i++){
+							toUpdate.add(new Integer(doc.topicList.get(i).toString().substring(1)));
+						}
+						api.modifiedTopics(toUpdate,doc.id);
+					}
+				}catch(MalformedURLException mue){
+					JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
+					status=false;
+				}catch(XmlRpcException xre){
+					JOptionPane.showMessageDialog(null, getLabel("error")+xre, getLabel("errorXMLRPC"), JOptionPane.ERROR_MESSAGE);
+					status=false;
+				}catch(IOException ioe){
+					JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorIO"), JOptionPane.ERROR_MESSAGE);
+					status=false;
+				}
+				pbd.dispose();
+			}
+		}
+		
+		
+		Vector params=new Vector();
+		params.add(login);
+		params.add(pass);
+		Vector docIDs=new Vector();
+		docIDs.add(new Integer(doc.id));
+		params.add(docIDs);
+		ProgBarDialog pbd=new ProgBarDialog(api);
+		pbd.setModal(true);
+		Runner runner=new Runner(params,pbd);
+		pbd.show();
+		return runner.status;
+		
+	}
 }

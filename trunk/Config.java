@@ -36,6 +36,7 @@ class Config{
 	/**Path to the configuration file*/
 	static final String nomFichierDeConf=System.getProperty("user.home")+System.getProperty("file.separator")+".CheesyKM.conf";
 	InitConfigPanel icp;
+	JButton bValider;
 	/**
 	*Read the configuration from the file and updates CheesyKMs constants.<br>
 	*If there's a problem during that process, the default config is loaded, and the user is warned about it.
@@ -89,6 +90,12 @@ class Config{
 			CheesyKM.SEARCHTOOLBARLOCATION=fe.readLine();
 			fe.readLine();
 			CheesyKM.EXPANDSEARCHRESULT=fe.readLine().equals("true");
+			fe.readLine();
+			CheesyKM.FTPHOST=fe.readLine();
+			fe.readLine();
+			CheesyKM.FTPPASS=fe.readLine();
+			fe.readLine();
+			CheesyKM.FTPUSERNAME=fe.readLine();
 			fe.close();
 			
 		} catch(Exception e){
@@ -194,6 +201,18 @@ class Config{
 			bw.write("[Expand search results by default ? (true/false)]");
 			bw.newLine();
 			if(CheesyKM.EXPANDSEARCHRESULT) bw.write("true"); else bw.write("false");
+			bw.newLine();
+			bw.write("[FTP hostname]");
+			bw.newLine();
+			bw.write(CheesyKM.FTPHOST);
+			bw.newLine();
+			bw.write("[FTP password]");
+			bw.newLine();
+			bw.write(CheesyKM.FTPPASS);
+			bw.newLine();
+			bw.write("[FTP username]");
+			bw.newLine();
+			bw.write(CheesyKM.FTPUSERNAME);
 			bw.flush();
 		} catch(Exception e){
 			JOptionPane.showMessageDialog(null, CheesyKM.getLabel("errorSavingConfig"), CheesyKM.getLabel("error"), JOptionPane.ERROR_MESSAGE);
@@ -219,11 +238,7 @@ class Config{
 		
 		
 		JPanel sud=new JPanel();
-		sud.setLayout(new GridLayout(1,0));
-		
-		sud.add(new JLabel(" "));
-		sud.add(new JLabel(" "));
-		sud.add(new JLabel(" "));
+		sud.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
 		
 		JCheckBox bAvance=new JCheckBox(CheesyKM.getLabel("advanced"),false);
@@ -248,7 +263,8 @@ class Config{
 		
 		
 		
-		JButton bValider=new JButton(CheesyKM.getLabel("saveChanges"));
+		bValider=new JButton(CheesyKM.getLabel("saveChanges"));
+		bValider.setIcon(CheesyKM.loadIcon("./ressources/Check.gif"));
 		class BValiderActionListener implements ActionListener {
 			JDialog d;
 			BValiderActionListener(JDialog d){
@@ -266,6 +282,7 @@ class Config{
 		sud.add(bValider);
 		//sud.add(new JLabel(" "));
 		JButton bDefault=new JButton(CheesyKM.getLabel("default"));
+		bDefault.setIcon(CheesyKM.loadIcon("./ressources/RotCWLeft.gif"));
 		class BDefaultActionListener implements ActionListener {
 			JDialog d;
 			BDefaultActionListener(JDialog d){
@@ -291,6 +308,7 @@ class Config{
 		sud.add(bDefault);
 		//sud.add(new JLabel(" "));
 		JButton bAnnuler=new JButton(CheesyKM.getLabel("cancel"));
+		bAnnuler.setIcon(CheesyKM.loadIcon("./ressources/Delete20.gif"));
 		class BAnnulerActionListener implements ActionListener {
 			JDialog d;
 			BAnnulerActionListener(JDialog d){
@@ -314,83 +332,7 @@ class Config{
 	/**
 	*Main panel of the configuration dialog
 	*/
-	class InitConfigPanel extends JPanel{
-		/**
-		*Displays a label and an integer value in a textfield.
-		*/
-		class IntegerValue extends JPanel{
-				public JTextField tf;
-				IntegerValue(String title,int value){
-					super();
-					add(new JLabel(title));
-					tf=new JTextField();
-					tf.setText(new Integer(value).toString());
-					tf.addKeyListener(new KeyAdapter() {
-						public void keyTyped(KeyEvent e) {
-							char c = e.getKeyChar();      
-							if (!((Character.isDigit(c) ||(c == KeyEvent.VK_BACK_SPACE) ||(c == KeyEvent.VK_DELETE)))) {
-								e.getComponent().getToolkit().beep();
-								e.consume();
-							}
-						}
-					});
-					tf.setColumns(5);
-					add(tf);
-				}
-			}
-			/**
-			*Displays a label and a String in a textfield.
-			*/
-			class StringValue extends JPanel{
-				public JTextField tf;
-				StringValue(String title,String value){
-					super();
-					add(new JLabel(title));
-					tf=new JTextField();
-					tf.setText(value);
-					tf.setColumns(20);
-					add(tf);
-				}
-			}
-			/**
-			*Displays a label and a checkbox.
-			*/
-			class BooleanValue extends JPanel{
-				public JCheckBox value;
-				BooleanValue(String title,boolean state){
-					super();
-					value=new JCheckBox(title,state);
-					add(value);
-				}
-			}
-			/**
-			*Displays a label, a file path in a textfield, and a "browse..." button.
-			*/
-			class FileNameValue extends JPanel{
-				public JTextField fileName;
-				FileNameValue(String title,String value){
-					super();
-					add(new JLabel(title));
-					fileName=new JTextField();
-					fileName.setColumns(20);
-					fileName.setText(value);
-					add(fileName);
-					JButton browse=new JButton("...");
-					class BrowseButtonListener implements ActionListener {
-						JTextField fileName;
-						BrowseButtonListener(JTextField tf){
-							this.fileName=tf;
-						}
-						public void actionPerformed(ActionEvent e){
-							//showChooser(JFrame parent,String title,FileFilter filtre,boolean enregistrer,String nomSuggere){
-								fileName.setText(FileChooserDialog.showChooser(CheesyKM.api,CheesyKM.getLabel("selectFile"),null,false,null));
-						}
-					}
-					browse.addActionListener(new BrowseButtonListener(fileName));
-					add(browse);
-				}
-			}
-		
+	class InitConfigPanel extends EditableFieldGroup{
 		boolean avance;
 		IntegerValue nombreNouveautes;
 		BooleanValue rememberLastLogin;
@@ -398,49 +340,52 @@ class Config{
 		IntegerValue titlesSize;
 		IntegerValue clics;
 		StringValue easyKM;
-		FileNameValue ksPath;
+		OpenFileNameValue ksPath;
 		StringValue ksPass;
 		IntegerValue docsInMem;
-		FileNameValue browserPath;
+		OpenFileNameValue browserPath;
 		BooleanValue useLocalBrowser;
 		BooleanValue expandSearchResults;
+		StringValue ftpHost,ftpPass,ftpUserName;
 		/**
 		*Creates a new ConfigPanel.<br>
 		*The accessible application settings won't be the same if the advanced mode is switched.
 		*@param avance <code>true</code> for advanced mode, <code>false</code> for basic mode.
 		*/
 		InitConfigPanel(boolean avance){
-			super();
+			super(Config.this.bValider);
 			this.avance=avance;
-			setLayout(new GridLayout(0,1));
-			
-			
-			
 			nombreNouveautes=new IntegerValue(CheesyKM.getLabel("howManyNews"),CheesyKM.NOMBREDENOUVEAUTES);
-			add(nombreNouveautes);
+			addEditableField(nombreNouveautes,true);
 			rememberLastLogin=new BooleanValue(CheesyKM.getLabel("rememberLastLogin"),CheesyKM.REMEMBERLASTLOGIN);
-			add(rememberLastLogin);
+			addEditableField(rememberLastLogin);
 			useManyTabs=new BooleanValue(CheesyKM.getLabel("useSeveralTabs"),CheesyKM.MULTIPLETABSDOCS);
-			add(useManyTabs);
+			addEditableField(useManyTabs);
 			titlesSize=new IntegerValue(CheesyKM.getLabel("tabsTitleLength"),CheesyKM.MAXDOCTABSTITLESIZE);
-			add(titlesSize);
+			addEditableField(titlesSize,true);
 			clics=new IntegerValue(CheesyKM.getLabel("defaultActionClickCount"),CheesyKM.DEFAULTACTIONCLICKCOUNT);
-			add(clics);
+			addEditableField(clics,true);
 			expandSearchResults=new BooleanValue(CheesyKM.getLabel("expandSearchResult"),CheesyKM.EXPANDSEARCHRESULT);
-			add(expandSearchResults);
+			addEditableField(expandSearchResults);
 			if(avance){
 				easyKM=new StringValue(CheesyKM.getLabel("easyKMRoot"),CheesyKM.EASYKMROOT);
-				add(easyKM);
-				ksPath=new FileNameValue(CheesyKM.getLabel("keystorePath"),CheesyKM.KEYSTOREPATH);
-				add(ksPath);
+				addEditableField(easyKM,true);
+				ksPath=new OpenFileNameValue(CheesyKM.getLabel("keystorePath"),CheesyKM.KEYSTOREPATH);
+				addEditableField(ksPath,true);
 				ksPass=new StringValue(CheesyKM.getLabel("keystorePass"),CheesyKM.KEYSTOREPASS);
-				add(ksPass);
+				addEditableField(ksPass,true);
 				docsInMem=new IntegerValue(CheesyKM.getLabel("maxDocsInMem"),CheesyKM.MAXDOCSINMEM);
-				add(docsInMem);
-				browserPath=new FileNameValue(CheesyKM.getLabel("webBrowserPath"),CheesyKM.WEBBROWSERPATH);
-				add(browserPath);
+				addEditableField(docsInMem,true);
+				browserPath=new OpenFileNameValue(CheesyKM.getLabel("webBrowserPath"),CheesyKM.WEBBROWSERPATH);
+				addEditableField(browserPath,true);
 				useLocalBrowser=new BooleanValue(CheesyKM.getLabel("useLocalBrowserToBrowse"),CheesyKM.USELOCALWEBBROWSER);
-				add(useLocalBrowser);
+				addEditableField(useLocalBrowser);
+				ftpHost=new StringValue(CheesyKM.getLabel("FTPHost"),CheesyKM.FTPHOST);
+				addEditableField(ftpHost,true);
+				ftpPass=new StringValue(CheesyKM.getLabel("FTPPass"),CheesyKM.FTPPASS);
+				addEditableField(ftpPass,true);
+				ftpUserName=new StringValue(CheesyKM.getLabel("FTPUserName"),CheesyKM.FTPUSERNAME);
+				addEditableField(ftpUserName,true);
 			}
 		}
 		/**
@@ -455,10 +400,10 @@ class Config{
 			IntegerValue titlesSize;
 			IntegerValue clics;
 			StringValue easyKM;
-			FileNameValue ksPath;
+			OpenFileNameValue ksPath;
 			StringValue ksPass;
 			IntegerValue docsInMem;
-			FileNameValue browserPath;
+			OpenFileNameValue browserPath;
 			BooleanValue useLocalBrowser;*/
 			
 			if(configIsValide()){
@@ -475,6 +420,9 @@ class Config{
 					CheesyKM.MAXDOCSINMEM=Integer.parseInt(docsInMem.tf.getText());
 					CheesyKM.WEBBROWSERPATH=browserPath.fileName.getText();
 					CheesyKM.USELOCALWEBBROWSER=useLocalBrowser.value.isSelected();
+					CheesyKM.FTPHOST=ftpHost.value().toString();
+					CheesyKM.FTPPASS=ftpPass.value().toString();
+					CheesyKM.FTPUSERNAME=ftpUserName.value().toString();
 				}
 				
 				return true;
@@ -534,7 +482,7 @@ class Config{
 		CheesyKM.SEARCHTOOLBARLOCATION="North";
 		CheesyKM.REMEMBERLASTLOGIN=true;//se souvenir du dernier login
 		CheesyKM.LASTLOGIN="";//dernier login
-		CheesyKM.MAXDOCSINMEM=50;//nombre maxi de documents dans l'arbre
+		CheesyKM.MAXDOCSINMEM=500;//nombre maxi de documents dans l'arbre
 		CheesyKM.AUTOCOLLAPSE=false;//activer le forçage du collapse de l'arbre (experimental...)
 		CheesyKM.MAXDOCSINMEMBEFOREAUTOCOLLAPSE=70;//nombre maxi de documetns dans l'arbre avant forçage de collapse
 		CheesyKM.MAXDOCTABSTITLESIZE=30;//taille maxi du titre des tabs (en caractères)
@@ -550,6 +498,9 @@ class Config{
 		CheesyKM.USERLOCALWEBBROWSERTODLFILES=true;//utiliser ou non le navigateur local pour voir les fichiers;
 		CheesyKM.NOMBREDENOUVEAUTES=10;//Nombre de nouveautés à afficher dans la liste des nouveautés
 		CheesyKM.EXPANDSEARCHRESULT=true;
+		CheesyKM.FTPHOST="lab.elikya.com";
+		CheesyKM.FTPPASS="anonymous";
+		CheesyKM.FTPUSERNAME="anonymous";
 	}
 	
 	/**

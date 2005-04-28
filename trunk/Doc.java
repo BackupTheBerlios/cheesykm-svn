@@ -32,7 +32,7 @@ import javax.swing.tree.*;
 *ufvalueX ->(string) user extended attribute value with X in [0,1,2] (maybe empty)
 */
 public class Doc extends Topic{
-	public String description,author,creadate,title,kwords,user,date,editdate,editor,url,file,ftype,format,expires;
+	public String description,author,creadate,title,kwords,user,date,editdate,editor,url,file,ftype,format,expires,userid,editorid;
 	public Hashtable uf;
 	public Vector topicList;
 	public int visits,size,downloads, score, version;
@@ -72,10 +72,14 @@ public class Doc extends Topic{
 		score=((Integer)data.get("score")).intValue();
 		expires=(String)data.get("expires");
 		version=(new Integer((String)data.get("version"))).intValue();
+		userid=(String)data.get("userid");
+		editorid=(String)data.get("editorid");
 		uf=new Hashtable();
-		uf.put(data.get("ufname0"),data.get("ufvalue0"));
-		uf.put(data.get("ufname1"),data.get("ufvalue1"));
-		uf.put(data.get("ufname2"),data.get("ufvalue2"));
+		for(int i=0;i<CheesyKM.UFNUMBER;i++){
+			if((((Hashtable)CheesyKM.easyKMConfig.get("ext"+i))!=null)){
+				uf.put(data.get("ufname"+i),data.get("ufvalue"+i));
+			}
+		}
 	}
 	/**
 	*@return parent {@link Topic} of this Doc in the displayed Topic tree view ({@link Thematique}).
@@ -138,5 +142,12 @@ public class Doc extends Topic{
 	*/
 	public char getNodeType(){
 		return 'D';
+	}
+	/**
+	*Checks if the current user is the owner of this Doc.
+	*@return <code>true</code> if the cuurent registered this Doc, <code>false</code> else;
+	*/
+	public boolean isOwner(){
+		return this.userid.equals(CheesyKM.login);
 	}
 }

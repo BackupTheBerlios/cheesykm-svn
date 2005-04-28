@@ -8,6 +8,7 @@ import javax.swing.event.*;
 *Popup menu (right click) over a Topic. used on news list, topic tree view, search resutl tree and right tabbed pane.
 */
 class TopicPopupMenu extends JPopupMenu{
+	
 	/**
 	*Pops a new menu under the mouse.
 	*@param invoker Source component.
@@ -17,6 +18,19 @@ class TopicPopupMenu extends JPopupMenu{
 	*@param overTree <code>true</code> if the mouse is over a tree, <code>false</code> else.
 	*/
 	TopicPopupMenu(Component invoker,int x,int y,Topic ntopic,boolean overTree){
+		this(invoker,x,y,ntopic,overTree,false);
+	}
+	
+	/**
+	*Pops a new menu under the mouse.
+	*@param invoker Source component.
+	*@param x position of the mouse relative to <code>invoker</code>
+	*@param y position of the mouse relative to <code>invoker</code>
+	*@param ntopic {@link Topic} under the mouse.
+	*@param overTree <code>true</code> if the mouse is over a tree, <code>false</code> else.
+	*@param overNouveaute <code>true</code> if the mouse is over the news list, <code>false</code> else.
+	*/
+	TopicPopupMenu(Component invoker,int x,int y,Topic ntopic,boolean overTree,boolean overNouveaute){
 		super(ntopic.toString());
 		final Topic topic=ntopic;
 		if(topic.getNodeType()=='D'){
@@ -78,6 +92,64 @@ class TopicPopupMenu extends JPopupMenu{
 				JMenuItem fileView=add(CheesyKM.getLabel("display")+" ("+((Doc)topic).format+"-"+((Doc)topic).getFSize()+")");
 				fileView.addActionListener(new TopicPopupFileViewListener());
 			}
+			
+			if(overNouveaute){
+				if(((Doc)topic).getParent().rights>=Topic.RIGHT_RWM||((Doc)topic).isOwner()){
+					this.addSeparator();
+					class TopicPopupUpdateDocListener implements ActionListener{
+						public void actionPerformed(ActionEvent e){
+							new RegisterDocWizard((Doc)topic);
+						}
+					}
+					JMenuItem updateDoc=add(CheesyKM.getLabel("updateThisDoc"));
+					updateDoc.addActionListener(new TopicPopupUpdateDocListener());
+				
+					class TopicPopupEditDocListener implements ActionListener{
+						public void actionPerformed(ActionEvent e){
+							new RegisterDocWizard((Doc)topic,true);
+						}
+					}
+					JMenuItem editDoc=add(CheesyKM.getLabel("editDocument"));
+					editDoc.addActionListener(new TopicPopupEditDocListener());
+				
+				
+					class TopicPopupDeleteDocListener implements ActionListener{
+						public void actionPerformed(ActionEvent e){
+							CheesyKM.deleteDoc((Doc)topic);
+						}
+					}
+					JMenuItem deleteDoc=add(CheesyKM.getLabel("deleteDocument"));
+					deleteDoc.addActionListener(new TopicPopupDeleteDocListener());
+				}
+			} else {
+				if(((Doc)topic).isOwner()){
+					this.addSeparator();
+					class TopicPopupUpdateDocListener implements ActionListener{
+						public void actionPerformed(ActionEvent e){
+							new RegisterDocWizard((Doc)topic);
+						}
+					}
+					JMenuItem updateDoc=add(CheesyKM.getLabel("updateThisDoc"));
+					updateDoc.addActionListener(new TopicPopupUpdateDocListener());
+				
+					class TopicPopupEditDocListener implements ActionListener{
+						public void actionPerformed(ActionEvent e){
+							new RegisterDocWizard((Doc)topic,true);
+						}
+					}
+					JMenuItem editDoc=add(CheesyKM.getLabel("editDocument"));
+					editDoc.addActionListener(new TopicPopupEditDocListener());
+				
+					class TopicPopupDeleteDocListener implements ActionListener{
+						public void actionPerformed(ActionEvent e){
+							CheesyKM.deleteDoc((Doc)topic);
+						}
+					}
+					JMenuItem deleteDoc=add(CheesyKM.getLabel("deleteDocument"));
+					deleteDoc.addActionListener(new TopicPopupDeleteDocListener());
+				}
+			}
+			
 		} else if(topic.getNodeType()=='W'){
 			class TopicPopupFermerListener implements ActionListener{
 				public void actionPerformed(ActionEvent e){
@@ -105,6 +177,20 @@ class TopicPopupMenu extends JPopupMenu{
 				JMenuItem fermer=add(CheesyKM.getLabel("closeTab"));
 				fermer.addActionListener(new TopicPopupFermerListener());
 			}
+		} else if(topic.getNodeType()=='T'||topic.getNodeType()=='P'){
+			
+			if(topic.rights>=Topic.RIGHT_RW){
+				class TopicPopupDeposerDocIciListener implements ActionListener{
+					public void actionPerformed(ActionEvent e){
+						Vector tids=new Vector();
+						tids.add(new Integer(topic.id));
+						new RegisterDocWizard(null,tids,false);
+					}
+				}
+				JMenuItem deposerDocIci=add(CheesyKM.getLabel("registerADocHere"));
+				deposerDocIci.addActionListener(new TopicPopupDeposerDocIciListener());
+			}
+			
 		}
 		
 		//CheesyKM.echo("Tabruncount:"+CheesyKM.api.jtpD.getTabRunCount());

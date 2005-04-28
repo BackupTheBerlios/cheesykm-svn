@@ -57,7 +57,7 @@ class QuickSearchToolBar extends JToolBar{
 					pbd.show();
 					//CheesyKM.echo(resu);
 					JScrollPane jsp=new JScrollPane(new SearchResultTree(resu));
-					if(CheesyKM.api.jtpG.getTabCount()==3) CheesyKM.api.jtpG.removeTabAt(2);
+					if(CheesyKM.api.jtpG.getTabCount()==3) CheesyKM.api.jtpG.removeTabAt(2);    
 					CheesyKM.api.jtpG.addTab(CheesyKM.getLabel("results"),null,jsp,CheesyKM.getLabel("lastSearchResults"));
 					CheesyKM.api.jtpG.setSelectedIndex(2);
 				}

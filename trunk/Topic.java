@@ -9,6 +9,10 @@ import javax.swing.tree.*;
 *Can be of different types : 'T'=topic;'P'=topicPlus(topic with sub-topics);'D'=document;'W'=WebPage:'F'=Filetransfert
 */
 class Topic{
+	
+	public static final int RIGHT_R=1;
+	public static final int RIGHT_RW=2;
+	public static final int RIGHT_RWM=3;
 	/**ID of this topic*/
 	int id;
 	/**<code>Vector</code> of Docs directly placed in this topic*/
@@ -25,6 +29,8 @@ class Topic{
 	boolean isCounting=false;
 	/**This topic should display ?*/
 	boolean shouldDisplay=true;
+	/**Rights that the current user has on this Topic (Topic.RIGHT_R,Topic.RIGHT_RW,Topic.RIGHT_RWM)*/
+	int rights;
 	
 	/**
 	*New Topic.<br>
@@ -34,6 +40,12 @@ class Topic{
 		this.id=id;
 		this.docs=null;
 		docsNodes=new Vector();
+	}
+	/**
+	*New Topic, with id=-1;
+	*/
+	Topic(){
+		this(-1);
 	}
 	
 	/**
@@ -132,7 +144,14 @@ class Topic{
 		((Topic)((DefaultMutableTreeNode)this.myNode.getParent()).getUserObject()).dechargerTypeP();
 		System.gc();
 	}
-	
+	/*
+	public void dechargerIci(){
+		TreePath path=new TreePath(((DefaultMutableTreeNode)myNode.getParent()).getPath());
+		CheesyKM.api.thematique.collapseRow(CheesyKM.api.thematique.getRowForPath(path));
+		((Topic)this.myNode.getUserObject()).dechargerTypeP();
+		System.gc();
+	}
+	*/
 	private void dechargerTypeT(){
 		//CheesyKM.echo("decharge (T) de "+this);
 		this.hasBeenCount=false;
@@ -152,10 +171,15 @@ class Topic{
 		this.shouldDisplay=false;
 		this.hasBeenCount=false;
 		this.isCounting=false;
+		Vector childrenV=new Vector();
 		Enumeration children=myNode.children();
 		while(children.hasMoreElements()){
-			DefaultMutableTreeNode nChild=(DefaultMutableTreeNode)children.nextElement();
+			childrenV.add(children.nextElement());
+		}
+		for(int i=0;i<childrenV.size();i++){
+			DefaultMutableTreeNode nChild=(DefaultMutableTreeNode)childrenV.get(i);
 			Topic tChild=(Topic)nChild.getUserObject();
+			//CheesyKM.echo("CHILD:"+tChild);
 			if(tChild.getNodeType()=='P'){
 				CheesyKM.api.thematique.collapseRow(CheesyKM.api.thematique.getRowForPath(new TreePath(nChild.getPath())));
 				tChild.dechargerTypeP();
@@ -163,10 +187,11 @@ class Topic{
 				CheesyKM.api.thematique.collapseRow(CheesyKM.api.thematique.getRowForPath(new TreePath(nChild.getPath())));
 				tChild.dechargerTypeT();
 			} else {
-				CheesyKM.echo("decharge (D) de "+tChild);
+				//CheesyKM.echo("decharge (D) de "+tChild);
 				CheesyKM.docsInMem.remove(nChild);
-				tChild=null;
+				//nChild.removeFromParent();
 				((DefaultTreeModel)CheesyKMAPI.thematique.getModel()).removeNodeFromParent(nChild);
+				//CheesyKM.echo(tChild+" dechargé");
 			}
 		}
 		this.docsNodes=new Vector();

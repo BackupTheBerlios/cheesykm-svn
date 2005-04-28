@@ -23,12 +23,21 @@ class CheesyKMAPI extends JFrame{
 	JButton jtbStop;
 	JButton jtbQuitter;
 	
+	
+	
 	//menu Document/Fichier attaché
 	JMenu menuDocument;
 	JMenuItem menuVoirDocument;
 	JButton jtbVoirDocument;
 	JMenuItem menuTelechargerDocument;
 	JButton jtbTelechargerDocument;
+	JMenuItem menuDeposerDocument;
+	JMenuItem menuMettreAJourDocument;
+	JButton jtbMettreAJourDocument;
+	JMenuItem menuModifierDocument;
+	JButton jtbModifierDocument;
+	JMenuItem menuSupprimerDocument;
+	JButton jtbSupprimerDocument;
 	
 	//menu Site Web
 	JMenu menuWeb;
@@ -124,6 +133,14 @@ class CheesyKMAPI extends JFrame{
 		menuVoirDocument.setEnabled(false);
 		menuTelechargerDocument=new JMenuItem(CheesyKM.getLabel("downloadDocument"));
 		menuTelechargerDocument.setEnabled(false);
+		menuDeposerDocument=new JMenuItem(CheesyKM.getLabel("registerNewDoc"));
+		menuMettreAJourDocument=new JMenuItem(CheesyKM.getLabel("updateThisDoc"));
+		menuMettreAJourDocument.setEnabled(false);
+		menuModifierDocument=new JMenuItem(CheesyKM.getLabel("editDocument"));
+		menuModifierDocument.setEnabled(false);
+		menuSupprimerDocument=new JMenuItem(CheesyKM.getLabel("deleteDocument"));
+		menuSupprimerDocument.setEnabled(false);
+		
 		class MenuVoirDocumentListener implements ActionListener{
 			public void actionPerformed(ActionEvent ae){
 				CheesyKM.download((Doc)getDisplayedTopic(),false);
@@ -137,8 +154,42 @@ class CheesyKMAPI extends JFrame{
 			}
 		}
 		menuTelechargerDocument.addActionListener(new MenuTelechargerDocumentListener());
+		
+		class MenuDeposerDocumentListener implements ActionListener{
+			public void actionPerformed(ActionEvent ae){
+				new RegisterDocWizard(null);
+			}
+		}
+		menuDeposerDocument.addActionListener(new MenuDeposerDocumentListener());
+		
+		class MenuMettreAJourDocumentListener implements ActionListener{
+			public void actionPerformed(ActionEvent ae){
+				new RegisterDocWizard((Doc)getDisplayedTopic());
+			}
+		}
+		menuMettreAJourDocument.addActionListener(new MenuMettreAJourDocumentListener());
+		
+		class MenuModifierDocumentListener implements ActionListener{
+			public void actionPerformed(ActionEvent ae){
+				new RegisterDocWizard((Doc)getDisplayedTopic(),true);
+			}
+		}
+		menuModifierDocument.addActionListener(new MenuModifierDocumentListener());
+		
+		class MenuSupprimerDocumentListener implements ActionListener{
+			public void actionPerformed(ActionEvent ae){
+				CheesyKM.deleteDoc((Doc)getDisplayedTopic());
+			}
+		}
+		menuSupprimerDocument.addActionListener(new MenuSupprimerDocumentListener());
+		
 		menuDocument.add(menuVoirDocument);
 		menuDocument.add(menuTelechargerDocument);
+		menuDocument.add(menuMettreAJourDocument);
+		menuDocument.add(menuModifierDocument);
+		menuDocument.add(menuSupprimerDocument);
+		menuDocument.addSeparator();
+		menuDocument.add(menuDeposerDocument);
 		menuBar.add(menuDocument);
 		
 		menuWeb=new JMenu(CheesyKM.getLabel("webSite"));
@@ -232,6 +283,24 @@ class CheesyKMAPI extends JFrame{
 		jtbTelechargerDocument.setEnabled(false);
 		jtbTelechargerDocument.setToolTipText(CheesyKM.getLabel("downloadDocument"));
 		jtb.add(jtbTelechargerDocument);
+		
+		jtbMettreAJourDocument=new JButton(CheesyKM.loadIcon("./ressources/PlusPlus.gif"));
+		jtbMettreAJourDocument.addActionListener(new MenuMettreAJourDocumentListener());
+		jtbMettreAJourDocument.setEnabled(false);
+		jtbMettreAJourDocument.setToolTipText(CheesyKM.getLabel("updateThisDoc"));
+		jtb.add(jtbMettreAJourDocument);
+		
+		jtbModifierDocument=new JButton(CheesyKM.loadIcon("./ressources/EditComp.gif"));
+		jtbModifierDocument.addActionListener(new MenuModifierDocumentListener());
+		jtbModifierDocument.setEnabled(false);
+		jtbModifierDocument.setToolTipText(CheesyKM.getLabel("editDocument"));
+		jtb.add(jtbModifierDocument);
+		
+		jtbSupprimerDocument=new JButton(CheesyKM.loadIcon("./ressources/DeleteSheet.gif"));
+		jtbSupprimerDocument.addActionListener(new MenuSupprimerDocumentListener());
+		jtbSupprimerDocument.setEnabled(false);
+		jtbSupprimerDocument.setToolTipText(CheesyKM.getLabel("deleteDocument"));
+		jtb.add(jtbSupprimerDocument);
 		
 		jtb.addSeparator();
 		
@@ -385,6 +454,7 @@ class CheesyKMAPI extends JFrame{
 		setTitle(CheesyKM.getLabel("titleDisconnected"));
 		qstb.setEnabled(false);
 		menuDeconnecter.setEnabled(false);
+		menuDocument.setEnabled(false);
 		jtbStop.setEnabled(false);
 		jtpG.removeAll();
 		hideAllTopics();
@@ -408,12 +478,11 @@ class CheesyKMAPI extends JFrame{
 	*Calls constructors of {@link Thematique} and {@link Nouveaute} and puts them in the Left tabbed pane.
 	*@param topicMatrix result of the "getTopicMatrix" RPC method.
 	*/
-	public void initAtLogon(Vector topicMatrix){
+	public void initAtLogon(){
 		jtbStop.setEnabled(true);
 		qstb.setEnabled(true);
-		setTitle(CheesyKM.getLabel("titleConnected")+CheesyKM.login);
-		CheesyKM.setTNames((Hashtable)topicMatrix.get(0));
-		CheesyKM.rootTopics=(Vector)topicMatrix.get(2);
+		menuDocument.setEnabled(true);
+		setTitle(CheesyKM.getLabel("titleConnected")+" "+CheesyKM.easyKMConfig.get("title")+" : "+CheesyKM.login);
 		
 		nouveaute=new Nouveaute();
 		JScrollPane scrollNouveaute=new JScrollPane(nouveaute);
@@ -424,6 +493,7 @@ class CheesyKMAPI extends JFrame{
 			public void actionPerformed(ActionEvent e){
 				((JPanel)CheesyKM.api.jtpG.getComponent(0)).remove(1);
 				((JPanel)CheesyKM.api.jtpG.getComponent(0)).add(new JScrollPane(new Nouveaute()),"Center");
+				CheesyKM.api.jtpG.repaint();
 			}
 		}
 		reloadNews.addActionListener(new reloadNewsButtonListener());
@@ -431,7 +501,7 @@ class CheesyKMAPI extends JFrame{
 		leftPanel.add(scrollNouveaute,"Center");
 		this.jtpG.addTab(CheesyKM.getLabel("news"),null,leftPanel,CheesyKM.NOMBREDENOUVEAUTES+CheesyKM.getLabel("lastNews"));
 		
-		thematique=new Thematique(topicMatrix);
+		thematique=new Thematique();
 		JScrollPane scrollThematique = new JScrollPane(thematique);
 		this.jtpG.addTab(CheesyKM.getLabel("topics"),null,scrollThematique,CheesyKM.getLabel("topicTreeView"));
 		
@@ -576,5 +646,17 @@ class CheesyKMAPI extends JFrame{
 			}
 		}
 		return false;
+	}
+	
+	public void modifiedTopics(Vector topics,int docID){
+		((JPanel)CheesyKM.api.jtpG.getComponent(0)).remove(1);
+		((JPanel)CheesyKM.api.jtpG.getComponent(0)).add(new JScrollPane(new Nouveaute()),"Center");
+		((JPanel)CheesyKM.api.jtpG.getComponent(0)).getComponent(1).repaint();
+		for(int i=0;i<topics.size();i++){
+			((Topic)((DefaultMutableTreeNode)thematique.topics.get(topics.get(i))).getUserObject()).decharger();
+		}
+		int i=this.getIndexForDisplayedTopic(docID);
+		if(i!=-1) this.hideTopic(i);
+		if(CheesyKM.api.jtpG.getTabCount()==3) CheesyKM.api.jtpG.removeTabAt(2);    
 	}
 }

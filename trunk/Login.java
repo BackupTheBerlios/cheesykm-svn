@@ -86,7 +86,11 @@ class Login extends JDialog{
 						//JOptionPane.showMessageDialog(Login.this, "Login ok", "login OK", JOptionPane.ERROR_MESSAGE);
 						Login.this.dispose();
 						((CheesyKMAPI)(Login.this.getParent())).menuDeconnecter.setEnabled(true);
-						((CheesyKMAPI)(Login.this.getParent())).initAtLogon(topicMatrix);
+						CheesyKM.tRelations=(Hashtable)topicMatrix.get(1);
+						CheesyKM.setTNames((Hashtable)topicMatrix.get(0));
+						CheesyKM.tRights=(Hashtable)topicMatrix.get(2);
+						CheesyKM.rootTopics=(Vector)topicMatrix.get(3);
+						((CheesyKMAPI)(Login.this.getParent())).initAtLogon();
 						CheesyKM.LASTLOGIN=CheesyKM.login;
 					}
 				}

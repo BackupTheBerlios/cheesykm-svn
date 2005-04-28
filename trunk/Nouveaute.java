@@ -41,7 +41,7 @@ class Nouveaute extends JList {
 					if(resultByCellBounds.contains(e.getPoint())){
 						Doc doc=(Doc)Nouveaute.this.getModel().getElementAt(indexByLocation);
 						Nouveaute.this.setSelectedIndex(Nouveaute.this.locationToIndex(e.getPoint()));
-						new TopicPopupMenu(e.getComponent(),e.getX(),e.getY(),doc,true);
+						new TopicPopupMenu(e.getComponent(),e.getX(),e.getY(),doc,true,false);
 					}
 				}
 			}

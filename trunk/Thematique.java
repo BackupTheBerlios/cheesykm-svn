@@ -10,23 +10,24 @@ import javax.swing.event.*;
 */
 class Thematique extends JTree {
 	DefaultTreeModel thematiqueTreeModel;
+	/**(TID as an Integer ==> DefaulMutableTreeNode)*/
 	Hashtable topics;
-	
-	Thematique(){
-		super();
-	}
-	
+
 	/**
 	*Creates a Thematique component from the result of a "getTopicMatrix" request.
 	*@param topicMatrix Vector result of a "getTopicMatrix" RPC request.
+	*@param topicToUse Class of topics to use. Will panic if this class doesn't extends Topic. ('panic':Exceptions are catched, but only stdouted)
+	"@param toSelect IDs of topics to select
 	*/
-	Thematique(Vector topicMatrix){
+	Thematique(Class topicToUse,Vector toSelect){
 		super();
-		Hashtable tRelations=(Hashtable)topicMatrix.get(1);
-		CheesyKM.tRelations=tRelations;
-		//CheesyKM.echo(tRelations);
-		Vector tRoot=(Vector)topicMatrix.get(2);
-		Topic racineT=new Topic(1);
+		try{
+		Hashtable tRelations=CheesyKM.tRelations;
+		
+		Vector tRoot=CheesyKM.rootTopics;
+		Topic racineT=(Topic)topicToUse.newInstance();
+		racineT.id=1;
+		//Topic racineT=new Topic(1);
 		DefaultMutableTreeNode racine= new DefaultMutableTreeNode(racineT);
 		racineT.setNode(racine);
 		topics=new Hashtable();
@@ -34,11 +35,19 @@ class Thematique extends JTree {
 		Enumeration numsTopics=CheesyKM.getTNames().keys();
 		while(numsTopics.hasMoreElements()){
 			int tid=Integer.parseInt(((String)(numsTopics.nextElement())).substring(1));
-			Topic t=new Topic(tid);
+			//Topic t=new Topic(tid);
+			Topic t=(Topic)topicToUse.newInstance();
+			t.id=tid;
+			t.rights=((Integer)CheesyKM.tRights.get("T"+tid)).intValue();
 			DefaultMutableTreeNode n=new DefaultMutableTreeNode(t);
 			t.setNodeType('T');
 			t.setNode(n);
 			topics.put(new Integer(tid),n);
+			if(toSelect!=null){
+				if(toSelect.contains("T"+tid)){
+					((SelectionTopic)t).selected=true;
+				}
+			}
 		}
 		Enumeration numsTids=tRelations.keys();
 		while(numsTids.hasMoreElements()){
@@ -111,7 +120,6 @@ class Thematique extends JTree {
 			public void mouseClicked(MouseEvent e){
 				int selRow = Thematique.this.getRowForLocation(e.getX(), e.getY());
 				TreePath selPath = Thematique.this.getPathForLocation(e.getX(), e.getY());
-				
 				if(selRow != -1&&e.getButton()==MouseEvent.BUTTON3) {
 					DefaultMutableTreeNode node=(DefaultMutableTreeNode)selPath.getLastPathComponent();
 					Topic topic=(Topic)node.getUserObject();
@@ -120,10 +128,23 @@ class Thematique extends JTree {
 					new TopicPopupMenu(e.getComponent(),e.getX(),e.getY(),topic,true);
 				}
 			}
+			
 		};
 		addMouseListener(ml);
+		} catch(java.lang.InstantiationException ie){
+			CheesyKM.echo("InstantiationException:"+ie);
+		} catch(java.lang.IllegalAccessException iae){
+			CheesyKM.echo("IllegalAccessException:"+iae);
+		}
 	}
 	
+	/**
+	*Creates a Thematique component from the result of a "getTopicMatrix" request.
+	*@param topicMatrix Vector result of a "getTopicMatrix" RPC request.
+	*/
+	Thematique(){
+		this(Topic.class,null);
+	}
 	
 	/**
 	*Overrides JTrees getToolTipText method.<br>

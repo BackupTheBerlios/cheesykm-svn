@@ -110,11 +110,12 @@ class TopicPane extends JPanel{
 					document.insertString(document.getLength(),"rien",document.getStyle("wwwToClipBoardButton"));
 					newLine(document);
 				}
+				
 				Enumeration keys=doc.uf.keys();
 				Vector nomsAttribs=new Vector();
 				while(keys.hasMoreElements())nomsAttribs.add(keys.nextElement());
 				for(int i=0;i<nomsAttribs.size();i++){
-					if(!((String)nomsAttribs.get(i)).equals("")){
+					if(!((String)doc.uf.get(nomsAttribs.get(i))).equals("")){
 						document.insertString(document.getLength(),nomsAttribs.get(i)+" : ",document.getStyle("propriete"));
 						document.insertString(document.getLength(),doc.uf.get(nomsAttribs.get(i)).toString(),document.getStyle("valeur"));
 						newLine(document);
@@ -128,7 +129,7 @@ class TopicPane extends JPanel{
 				
 				if(!doc.editdate.equals("")){
 					document.insertString(document.getLength(),CheesyKM.getLabel("modifiedAt"),document.getStyle("propriete"));
-					document.insertString(document.getLength(),doc.date.substring(0,10),document.getStyle("valeur"));
+					document.insertString(document.getLength(),doc.editdate.substring(0,10),document.getStyle("valeur"));
 					if(!doc.editor.equals("")){
 						document.insertString(document.getLength()," "+CheesyKM.getLabel("by")+" ",document.getStyle("valeur"));
 						document.insertString(document.getLength(),doc.editor+".",document.getStyle("valeurBleue"));
