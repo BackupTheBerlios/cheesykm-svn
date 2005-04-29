@@ -18,6 +18,8 @@ class CheesyKMAPI extends JFrame{
 	static Nouveaute nouveaute;
 	/**Search Toolbar ({@link QuickSearchToolBar})*/
 	static QuickSearchToolBar qstb;
+	
+	static int tabIndex=-2;
 	//menu Connexion
 	JMenuItem menuDeconnecter;
 	JButton jtbStop;

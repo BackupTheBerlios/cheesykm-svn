@@ -8,12 +8,12 @@ class WebPageTopic extends Topic{
 	/**URL of the page to browse*/
 	String realURL;
 	/**
-	*Creates a new WebPageTopic (id = -1,node type = 'W')
+	*Creates a new WebPageTopic (id = -x,node type = 'W')
 	*@param counterURL URL of the counter for this page.
 	*@param realURL URL of the page to browse.
 	*/
 	WebPageTopic(String counterURL,String realURL){
-		super(-1);
+		super(CheesyKM.api.tabIndex--);
 		this.counterURL=counterURL;
 		this.realURL=realURL;
 		this.setNodeType('W');

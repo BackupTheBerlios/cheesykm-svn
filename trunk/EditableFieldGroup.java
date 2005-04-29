@@ -5,7 +5,11 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class EditableFieldGroup extends JPanel{
+interface Wuffable {
+	public void sayWuff();
+}
+
+public class EditableFieldGroup extends JPanel implements Wuffable{
 	Vector fields;
 	JComponent toEnable=null;
 	
@@ -36,7 +40,7 @@ public class EditableFieldGroup extends JPanel{
 		return true;
 	}
 	
-	void sayWuff(){
+	public void sayWuff(){
 		//CheesyKM.echo("WUFF!");
 		if(toEnable!=null){
 			toEnable.setEnabled(fieldsAreValid());

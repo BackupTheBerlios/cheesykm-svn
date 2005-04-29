@@ -15,7 +15,7 @@ class TopicSelectionTree extends Thematique{
 	int minimumRightsLevel;
 	/**
 	*Builds a topic selection tree from the topics that are accessible to the current session.
-	*@param selectedTids Vector of tids to select in the tree.
+	*@param selectedTids Vector of tids to select in the tree as Strings ("TXX").
 	*@param childrenFollow if <code>true</code>, children will be (de)selected when (de)selecting a node.
 	*@param toActivate JComponent to <code>setEnabled(true)</code> if something is selected in the tree.
 	*@param minimumRightsLevel right level (Topic.RIGHT_X), when a topic has a inferior right level, it is disabled (unselectable)

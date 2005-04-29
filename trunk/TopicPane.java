@@ -212,6 +212,8 @@ class TopicPane extends JPanel{
 			buttonPanel.add(annuler,"North");
 			add(buttonPanel,"Center");
 			ftt.button=annuler;
+		} else if(topic.getNodeType()=='A'){
+			add(new JScrollPane(new AdvancedSearchForm(CheesyKM.DEFAULTSEARCHFIELDNUMBER)));
 		}
 		
 		setMinimumSize(new Dimension(100,100));

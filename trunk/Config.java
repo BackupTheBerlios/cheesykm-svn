@@ -12,27 +12,6 @@ import java.net.*;
 *Contains methods to write, read, and restore default configuration file.
 */
 class Config{
-	/*	//Paramètres généraux de l'application
-	public static final String EASYKMROOT="https://lab.elikya.com/EasyKM/";//racine d'EasyKM
-	private static final String KEYSTOREPATH=CheesyKM.getInstallationPath()+System.getProperty("file.separator")+"keystores"+System.getProperty("file.separator")+"kslabo";
-	private static final String KEYSTOREPASS="lechsogr";
-	public static final int INITHEIGHT=768;
-	public static final int INITWIDTH=1024;
-	public static final int INITX=0;
-	public static final int INITY=0;
-	public static final boolean REMEMBERLASTLOGIN=true;//se souvenir du dernier login
-	public static String LASTLOGIN="sherve";//dernier login
-	public static final int MAXDOCSINMEM=50;//nombre maxi de documents dans l'arbre
-	public static final boolean AUTOCOLLAPSE=false;//activer le forçage du collapse de l'arbre (experimental...)
-	public static final int MAXDOCSINMEMBEFOREAUTOCOLLAPSE=70;//nombre maxi de documetns dans l'arbre avant forçage de collapse
-	public static final int MAXDOCTABSTITLESIZE=30;//taille maxi du titre des tabs (en caractères)
-	public static final int DEFAULTACTIONCLICKCOUNT=1;//nombre de clic pour les action par défaut (ex. afficher un doc)
-	public static final boolean MULTIPLETABSDOCS=true;//aurise l'affichage de plusieurs tabs d'affichage détaillé de doc ou non
-	public static final String WEBBROWSERPATH="/usr/bin/firefox";//chemin complet absolu du nevigateur web local.
-	public static final boolean USELOCALWEBBROWSER=true;//utiliser ou non le navigateur local pour afficher les pages web.
-	public static final boolean USERLOCALWEBBROWSERTODLFILES=true;//utiliser ou non le navigateur local pour voir les fichiers;
-	public static final int NOMBREDENOUVEAUTES=10;//Nombre de nouveautés à afficher dans la liste des nouveautés
-	*/
 	/**Path to the configuration file*/
 	static final String nomFichierDeConf=System.getProperty("user.home")+System.getProperty("file.separator")+".CheesyKM.conf";
 	InitConfigPanel icp;
@@ -96,10 +75,11 @@ class Config{
 			CheesyKM.FTPPASS=fe.readLine();
 			fe.readLine();
 			CheesyKM.FTPUSERNAME=fe.readLine();
+			fe.readLine();
+			CheesyKM.DEFAULTSEARCHFIELDNUMBER=Integer.parseInt(fe.readLine());
 			fe.close();
 			
 		} catch(Exception e){
-			//CheesyKM.echo(e);
 			JOptionPane.showMessageDialog(null, CheesyKM.getLabel("loadingDefaultConfig"), CheesyKM.getLabel("information"), JOptionPane.INFORMATION_MESSAGE);
 			this.loadDefaultConfig();
 			this.saveConfig();
@@ -213,6 +193,10 @@ class Config{
 			bw.write("[FTP username]");
 			bw.newLine();
 			bw.write(CheesyKM.FTPUSERNAME);
+			bw.newLine();
+			bw.write("[default search fields number]");
+			bw.newLine();
+			bw.write(new Integer(CheesyKM.DEFAULTSEARCHFIELDNUMBER).toString());
 			bw.flush();
 		} catch(Exception e){
 			JOptionPane.showMessageDialog(null, CheesyKM.getLabel("errorSavingConfig"), CheesyKM.getLabel("error"), JOptionPane.ERROR_MESSAGE);
@@ -280,7 +264,6 @@ class Config{
 		}
 		bValider.addActionListener(new BValiderActionListener(config));
 		sud.add(bValider);
-		//sud.add(new JLabel(" "));
 		JButton bDefault=new JButton(CheesyKM.getLabel("default"));
 		bDefault.setIcon(CheesyKM.loadIcon("./ressources/RotCWLeft.gif"));
 		class BDefaultActionListener implements ActionListener {
@@ -342,7 +325,7 @@ class Config{
 		StringValue easyKM;
 		OpenFileNameValue ksPath;
 		StringValue ksPass;
-		IntegerValue docsInMem;
+		IntegerValue docsInMem,defaultSearchFields;
 		OpenFileNameValue browserPath;
 		BooleanValue useLocalBrowser;
 		BooleanValue expandSearchResults;
@@ -367,6 +350,8 @@ class Config{
 			addEditableField(clics,true);
 			expandSearchResults=new BooleanValue(CheesyKM.getLabel("expandSearchResult"),CheesyKM.EXPANDSEARCHRESULT);
 			addEditableField(expandSearchResults);
+			defaultSearchFields=new IntegerValue(CheesyKM.getLabel("defaultSearchFields"),CheesyKM.DEFAULTSEARCHFIELDNUMBER);
+			addEditableField(defaultSearchFields,true);
 			if(avance){
 				easyKM=new StringValue(CheesyKM.getLabel("easyKMRoot"),CheesyKM.EASYKMROOT);
 				addEditableField(easyKM,true);
@@ -394,18 +379,6 @@ class Config{
 		*@see Config.InitConfigPanel#configIsValide()
 		*/
 		public boolean validerConfig(){
-			/*IntegerValue nombreNouveautes;
-			BooleanValue rememberLastLogin;
-			BooleanValue useManyTabs;
-			IntegerValue titlesSize;
-			IntegerValue clics;
-			StringValue easyKM;
-			OpenFileNameValue ksPath;
-			StringValue ksPass;
-			IntegerValue docsInMem;
-			OpenFileNameValue browserPath;
-			BooleanValue useLocalBrowser;*/
-			
 			if(configIsValide()){
 				CheesyKM.NOMBREDENOUVEAUTES=Integer.parseInt(nombreNouveautes.tf.getText());
 				CheesyKM.REMEMBERLASTLOGIN=rememberLastLogin.value.isSelected();
@@ -413,6 +386,7 @@ class Config{
 				CheesyKM.MAXDOCTABSTITLESIZE=Integer.parseInt(titlesSize.tf.getText());
 				CheesyKM.DEFAULTACTIONCLICKCOUNT=Integer.parseInt(clics.tf.getText());
 				CheesyKM.EXPANDSEARCHRESULT=expandSearchResults.value.isSelected();
+				CheesyKM.DEFAULTSEARCHFIELDNUMBER=((Integer)defaultSearchFields.value()).intValue();
 				if(this.avance){
 					CheesyKM.EASYKMROOT=easyKM.tf.getText();
 					CheesyKM.KEYSTOREPATH=ksPath.fileName.getText();
@@ -478,6 +452,7 @@ class Config{
 		CheesyKM.INITWIDTH=1024;
 		CheesyKM.INITX=0;
 		CheesyKM.INITY=0;
+		CheesyKM.DEFAULTSEARCHFIELDNUMBER=1;
 		CheesyKM.BUTTONTOOLBARLOCATION="North";
 		CheesyKM.SEARCHTOOLBARLOCATION="North";
 		CheesyKM.REMEMBERLASTLOGIN=true;//se souvenir du dernier login

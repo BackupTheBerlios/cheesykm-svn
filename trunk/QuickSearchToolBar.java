@@ -12,7 +12,7 @@ class QuickSearchToolBar extends JToolBar{
 	JComboBox where;
 	/**What to search ?*/
 	JTextField what;
-	JButton goForIt;
+	JButton goForIt,advancedSearch;
 	ProgBarDialog pbd;
 	Vector resu;
 	/**
@@ -68,9 +68,22 @@ class QuickSearchToolBar extends JToolBar{
 		what.addActionListener(new GoForItListener(what,where));
 		
 		
-		add(where,"West");
+		class AdvancedSearchListener implements ActionListener{
+			public void actionPerformed(ActionEvent e){
+				CheesyKM.api.displayTopic(new AdvancedSearchTopic());
+			}
+		}
+		advancedSearch=new JButton(CheesyKM.getLabel("advancedSearch"));
+		advancedSearch.addActionListener(new AdvancedSearchListener());
+		advancedSearch.setEnabled(false);
+		JPanel east=new JPanel(new FlowLayout(FlowLayout.LEFT,5,0));
+		JPanel west=new JPanel(new FlowLayout(FlowLayout.LEFT,5,0));
+		east.add(goForIt);
+		east.add(advancedSearch);
+		west.add(where);
+		add(west,"West");
 		add(what,"Center");
-		add(goForIt,"East");
+		add(east,"East");
 		this.setEnabled(false);
 	}
 	/**
@@ -81,6 +94,7 @@ class QuickSearchToolBar extends JToolBar{
 		this.what.setEnabled(b);
 		this.where.setEnabled(b);
 		this.goForIt.setEnabled(b);
+		this.advancedSearch.setEnabled(b);
 	}
 	
 	private Runnable showFrame = new Runnable() {

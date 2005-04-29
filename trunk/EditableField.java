@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 public abstract class EditableField extends JPanel{
 	boolean hasToBeSet=false;
-	EditableFieldGroup efg=null;
+	Wuffable efg=null;
 	
 	EditableField(LayoutManager m){
 		super(m);
@@ -21,7 +21,7 @@ public abstract class EditableField extends JPanel{
 	}
 	public abstract boolean isValid();
 	public abstract Object value();
-	public void registerForGroup(EditableFieldGroup efg){
+	public void registerForGroup(Wuffable efg){
 		this.efg=efg;
 	}
 }

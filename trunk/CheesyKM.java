@@ -93,8 +93,12 @@ public class CheesyKM{
 	public static String FTPUSERNAME;
 	/**FTP server pass*/
 	public static String FTPPASS;
+	/**Default number of search field in the advanced search form*/
+	public static int DEFAULTSEARCHFIELDNUMBER;
+	
 	
 	public static final int UFNUMBER=3;
+	
 	//pour la demo web :
 	/*
 	private static final String addresseWebservices=EASYKMROOT+"webservices.php";
@@ -151,14 +155,14 @@ public class CheesyKM{
 		api=new CheesyKMAPI();
 		new MemoryMonitor();
 		
-		/*
-		setLogin("sherve","sh");
+		
+		/*setLogin("sherve","sh");
 		Vector topicMatrix=getTopicMatrix();
 		tNames=(Hashtable)topicMatrix.get(0);
 		tRelations=(Hashtable)topicMatrix.get(1);
-		rootTopics=(Vector)topicMatrix.get(2);
+		rootTopics=(Vector)topicMatrix.get(3);
 		JDialog d=new JDialog();
-		d.getContentPane().add(new JScrollPane(new TopicSelectionTree(true)));
+		d.getContentPane().add(new JScrollPane(new AdvancedSearchForm(CheesyKM.DEFAULTSEARCHFIELDNUMBER)));
 		d.pack();
 		d.show();*/
 		
@@ -324,6 +328,31 @@ public class CheesyKM{
 			return null;
 		}
 	}
+	
+	/**
+	*Calls the "search" RPC method.
+	*@param query search query
+	*@return a Vector of document Hashtables.
+	*/
+	public static synchronized Vector search(Hashtable query){
+		try{
+			Vector params=new Vector();
+			params.add(login);
+			params.add(pass);
+			params.add(query);
+			return (Vector)client().execute("search",params);
+		}catch(MalformedURLException mue){
+			JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}catch(XmlRpcException xre){
+			JOptionPane.showMessageDialog(null, getLabel("error")+xre, getLabel("errorXMLRPC"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}catch(IOException ioe){
+			JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorIO"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+	}
+	
 	
 	/**
 	*Calls the "getDocsInTopic" RPC method.
@@ -719,12 +748,23 @@ public class CheesyKM{
 	
 	
 	/**
-	*Returns todays date as a localized String.
-	*@return todays date as a localized String.
+	*Returns todays date as a "dd-MM-yyyy" String.
+	*@return todays date as a "dd-MM-yyyy" String.
 	*/
 	public static String today(){
 		SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 		return sdf.format(Calendar.getInstance().getTime());
+	}
+	
+	/**
+	*Returns the date x month beefore today as a "yyyy-MM-dd" String.
+	*@return the date x month beefore today as a "yyyy-MM-dd" String.
+	*/
+	public static String sinceXMonth(int x){
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		Calendar today=Calendar.getInstance();
+		today.add(Calendar.MONTH,-x);
+		return sdf.format(today.getTime());
 	}
 	
 	/**

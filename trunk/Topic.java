@@ -21,8 +21,8 @@ class Topic{
 	private Vector docsNodes;
 	/**tree node of this topic*/
 	private DefaultMutableTreeNode myNode;
-	/**Type of this Topic ('T'=topic;'P'=topicPlus;'D'=document;'W'=WebPage:'F'=Filetransfert)*/
-	private char nodeType;//'T'=topic;'P'=topicPlus;'D'=document;'W'=WebPage:'F'=Filetransfert
+	/**Type of this Topic ('T'=topic;'P'=topicPlus;'D'=document;'W'=WebPage:'F'=Filetransfert;'A'=AdvancedSearchTopic)*/
+	private char nodeType;
 	/**This topic has been count ?*/
 	boolean hasBeenCount=false;
 	/**This topic is counting*/
