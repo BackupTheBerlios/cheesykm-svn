@@ -15,7 +15,6 @@ class Thematique extends JTree {
 
 	/**
 	*Creates a Thematique component from the result of a "getTopicMatrix" request.
-	*@param topicMatrix Vector result of a "getTopicMatrix" RPC request.
 	*@param topicToUse Class of topics to use. Will panic if this class doesn't extends Topic. ('panic':Exceptions are catched, but only stdouted)
 	"@param toSelect IDs of topics to select as Strings ("TXX")
 	*/
@@ -140,7 +139,6 @@ class Thematique extends JTree {
 	
 	/**
 	*Creates a Thematique component from the result of a "getTopicMatrix" request.
-	*@param topicMatrix Vector result of a "getTopicMatrix" RPC request.
 	*/
 	Thematique(){
 		this(Topic.class,null);

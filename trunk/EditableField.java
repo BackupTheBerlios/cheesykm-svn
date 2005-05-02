@@ -305,7 +305,7 @@ class OpenFileNameValue extends EditableField{
 	}
 }
 /**
-*Displays a date field, {@link CheesyKM#isdate(String)} is called to check if the date is valid.
+*Displays a date field, {@link CheesyKM#isDate(String)} is called to check if the date is valid.
 */
 class DateValue extends EditableField{
 	JTextField tf;

@@ -478,7 +478,6 @@ class CheesyKMAPI extends JFrame{
 	/**
 	*Fill the GUI at successfull logon.<br>
 	*Calls constructors of {@link Thematique} and {@link Nouveaute} and puts them in the Left tabbed pane.
-	*@param topicMatrix result of the "getTopicMatrix" RPC method.
 	*/
 	public void initAtLogon(){
 		jtbStop.setEnabled(true);

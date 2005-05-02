@@ -6,7 +6,7 @@ import javax.swing.text.*;
 
 /**
 *Login prompt dialog.<br>
-*Checks if the identifier and password are OK and calls {@link CheesyKMAPI#initAtLogon(Vector)}, shows an error dialog else.
+*Checks if the identifier and password are OK and calls {@link CheesyKMAPI#initAtLogon()}, shows an error dialog else.
 */
 class Login extends JDialog{
 	private ProgBarDialog pbd;

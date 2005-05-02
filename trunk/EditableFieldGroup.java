@@ -30,7 +30,7 @@ public class EditableFieldGroup extends JPanel implements Wuffable{
 	}
 	/**
 	*Adds an {@link EditableField} to this group and calls its {@link EditableField#registerForGroup(Wuffable)} method.
-	*@param field, the {@link EditableField} to add to this group.
+	*@param field the {@link EditableField} to add to this group.
 	*/
 	void addEditableField(EditableField field){
 		field.registerForGroup(this);
@@ -40,7 +40,7 @@ public class EditableFieldGroup extends JPanel implements Wuffable{
 	
 	/**
 	*Adds an {@link EditableField} to this group, and calls its {@link EditableField#registerForGroup(Wuffable)} and {@link EditableField#setHasToBeSet(boolean)} methods.
-	*@param field, the {@link EditableField} to add to this group.
+	*@param field the {@link EditableField} to add to this group.
 	*@param hasToBeSet true if field has to be set to be valid, false else.
 	*/
 	void addEditableField(EditableField field,boolean hasToBeSet){

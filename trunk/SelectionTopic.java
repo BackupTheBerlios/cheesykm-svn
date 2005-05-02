@@ -15,7 +15,7 @@ class SelectionTopic extends Topic{
 	
 	/**
 	*New SelectionTopic.<br>
-	*@param id Topic ID as an <code>int</code>.
+	*@param i Topic ID as an <code>int</code>.
 	*/
 	SelectionTopic(int i){
 		super(i);
