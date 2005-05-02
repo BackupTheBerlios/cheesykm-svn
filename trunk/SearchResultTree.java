@@ -13,7 +13,6 @@ class SearchResultTree extends JTree {
 	*/
 	SearchResultTree(Vector searchResult){
 		super();
-		//CheesyKM.echo("SR:"+searchResult);
 		if(searchResult!=null){
 			if(searchResult.size()==0) searchResult=null;
 		}
@@ -28,13 +27,8 @@ class SearchResultTree extends JTree {
 			topicsToDisplay.put(new Integer(1),racineT);
 			for(int i=0;i<searchResult.size();i++){
 				Doc d=new Doc((Hashtable)searchResult.get(i),null);
-				//CheesyKM.echo("Traitement du DOC:"+d);
-				//DefaultMutableTreeNode n=new DefaultMutableTreeNode();
-				//d.setNode(n);
-				//n.setUserObject(d);
 				docs.add(d);
 				for(int k=0;k<d.topicList.size();k++){
-					//CheesyKM.echo("Traitement de son theme:"+CheesyKM.getTopicNameById(d.topicList.get(k).toString()));
 					if(!topicsToDisplay.containsKey(new Integer(((String)d.topicList.get(k)).replaceAll("T","")))){
 						SearchResultTopic srt=new SearchResultTopic(Integer.parseInt(((String)d.topicList.get(k)).replaceAll("T","")));
 						srt.setNodeType('T');
@@ -44,7 +38,6 @@ class SearchResultTree extends JTree {
 						tn.setUserObject(srt);
 						DefaultMutableTreeNode n=new DefaultMutableTreeNode(d);
 						nodes.add(n);
-					//	CheesyKM.echo("ajout de "+n+" à "+tn+"+CREATION");
 						tn.add(n);
 						topicsToDisplay.put(new Integer(((String)d.topicList.get(k)).replaceAll("T","")),srt);
 					} else {
@@ -52,18 +45,15 @@ class SearchResultTree extends JTree {
 						DefaultMutableTreeNode newNode=new DefaultMutableTreeNode(d);
 						nodes.add(newNode);
 						parent.getNode().add(newNode);
-					//	CheesyKM.echo("ajout de "+newNode+" à "+parent+"+AJOUT SIMPLE");
 					}
 				}
 			}
 			Enumeration keys=topicsToDisplay.keys();
 			while(keys.hasMoreElements()){
 				Integer topicID=(Integer)keys.nextElement();
-				//CheesyKM.echo("Traitement du topic:"+CheesyKM.getTopicNameById(topicID.intValue()));
 				boolean linked=false;
 				while(!linked&&!(topicID.equals(new Integer(0))||topicID.equals(new Integer(1)))){
 					Integer parentTopicID=new Integer((CheesyKM.tRelations.get("T"+topicID)).toString().replaceAll("T",""));
-				//	CheesyKM.echo("Traitement du topic parent:"+CheesyKM.getTopicNameById(parentTopicID.intValue()));
 					if(parentTopicID.equals(new Integer(0))) parentTopicID=new Integer(1);
 					if(!topicsToDisplay.containsKey(parentTopicID)){
 						SearchResultTopic srt=new SearchResultTopic(parentTopicID.intValue());
@@ -73,14 +63,12 @@ class SearchResultTree extends JTree {
 						srt.setNode(node);
 						node.setUserObject(srt);
 						topicsToDisplay.put(parentTopicID,srt);
-				//		CheesyKM.echo("ajout de "+((SearchResultTopic)topicsToDisplay.get(topicID)).getNode()+" à "+node);
 						node.add(((SearchResultTopic)topicsToDisplay.get(topicID)).getNode());
 					} else {
 						SearchResultTopic parent=(SearchResultTopic)topicsToDisplay.get(parentTopicID);
 						SearchResultTopic child=(SearchResultTopic)topicsToDisplay.get(topicID);
 						parent.getNode().add(child.getNode());
 						parent.setNodeType('P');
-				//		CheesyKM.echo("ajout de  "+child+" à "+parent);
 						linked=true;
 					}
 					topicID=parentTopicID;
@@ -122,7 +110,6 @@ class SearchResultTree extends JTree {
 					if(selRow != -1&&e.getButton()==MouseEvent.BUTTON3) {
 						DefaultMutableTreeNode node=(DefaultMutableTreeNode)selPath.getLastPathComponent();
 						Topic topic=(Topic)node.getUserObject();
-						//CheesyKM.echo(topic);
 						SearchResultTree.this.setSelectionPath(selPath);
 						new TopicPopupMenu(e.getComponent(),e.getX(),e.getY(),topic,true);
 					}
@@ -146,7 +133,6 @@ class SearchResultTree extends JTree {
 			DefaultTreeModel treeModel=new DefaultTreeModel(empty);
 			setModel(treeModel);
 		}
-		//CheesyKM.echo("resultat de recherche terminé");
 	}
 	/**
 	*Overrides JTrees getToolTipText, and uses {@link Thematique}s one.

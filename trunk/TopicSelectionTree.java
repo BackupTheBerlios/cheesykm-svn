@@ -86,7 +86,10 @@ class TopicSelectionTree extends Thematique{
 		
 	}
 	
-	
+	/**
+	*Expand the path to some Topics in this tree (so that they become visible).
+	*@param tids Vector of TopicIDs as Strings ("TXX").
+	*/
 	public void expandPathToTopics(Vector tids){
 		for(int i=0;i<tids.size();i++){
 			this.expandPath(this.getPathForTopic(tids.get(i).toString()).getParentPath());

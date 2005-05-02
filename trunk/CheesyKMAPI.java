@@ -650,6 +650,11 @@ class CheesyKMAPI extends JFrame{
 		return false;
 	}
 	
+	/**
+	*Used to tell the UI that something has been modified within a topic, and hides it if it was displayed.
+	*@param topics Vector of modified Topics TIDs as Integers.
+	*@param docID docID of a modified Doc, as an int.
+	*/
 	public void modifiedTopics(Vector topics,int docID){
 		((JPanel)CheesyKM.api.jtpG.getComponent(0)).remove(1);
 		((JPanel)CheesyKM.api.jtpG.getComponent(0)).add(new JScrollPane(new Nouveaute()),"Center");

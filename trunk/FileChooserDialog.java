@@ -16,7 +16,6 @@ class FileChooserDialog {
 	*@return String representation of the full path to the selected file.
 	*/
 	public static String showChooser(JFrame parent,String title,FileFilter filtre,boolean enregistrer,String nomSuggere){
-		//FileChooserDialog fcd=new FileChooserDialog(parent,title,filtre,enregistrer,nomSuggere);
 		JFileChooser jfc=new JFileChooser();
 		if(filtre!=null)jfc.addChoosableFileFilter(filtre);
 		if(nomSuggere!=null)jfc.setSelectedFile(new File(nomSuggere));

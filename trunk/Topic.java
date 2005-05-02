@@ -119,7 +119,6 @@ class Topic{
 				CheesyKM.docsInMem.add(n);
 			}
 			if(this.nodeType=='T'){
-				//CheesyKM.echo("j'ai chargé "+this.toString());
 				CheesyKM.topicsInMem.add(this.myNode);
 			}
 			this.hasBeenCount=true;
@@ -138,22 +137,13 @@ class Topic{
 	*Called by {@link MemoryMonitor}.
 	*/
 	public void decharger(){
-		//CheesyKM.echo(((Topic)((DefaultMutableTreeNode)this.myNode.getParent()).getUserObject())+" should not display");
 		TreePath path=new TreePath(((DefaultMutableTreeNode)myNode.getParent()).getPath());
 		CheesyKM.api.thematique.collapseRow(CheesyKM.api.thematique.getRowForPath(path));
 		((Topic)((DefaultMutableTreeNode)this.myNode.getParent()).getUserObject()).dechargerTypeP();
 		System.gc();
 	}
-	/*
-	public void dechargerIci(){
-		TreePath path=new TreePath(((DefaultMutableTreeNode)myNode.getParent()).getPath());
-		CheesyKM.api.thematique.collapseRow(CheesyKM.api.thematique.getRowForPath(path));
-		((Topic)this.myNode.getUserObject()).dechargerTypeP();
-		System.gc();
-	}
-	*/
+	
 	private void dechargerTypeT(){
-		//CheesyKM.echo("decharge (T) de "+this);
 		this.hasBeenCount=false;
 		this.isCounting=false;
 		for(int i=0;i<this.docsNodes.size();i++){
@@ -167,7 +157,6 @@ class Topic{
 	}
 	
 	private void dechargerTypeP(){
-		//CheesyKM.echo("decharge (P) de "+this);
 		this.shouldDisplay=false;
 		this.hasBeenCount=false;
 		this.isCounting=false;
@@ -179,7 +168,6 @@ class Topic{
 		for(int i=0;i<childrenV.size();i++){
 			DefaultMutableTreeNode nChild=(DefaultMutableTreeNode)childrenV.get(i);
 			Topic tChild=(Topic)nChild.getUserObject();
-			//CheesyKM.echo("CHILD:"+tChild);
 			if(tChild.getNodeType()=='P'){
 				CheesyKM.api.thematique.collapseRow(CheesyKM.api.thematique.getRowForPath(new TreePath(nChild.getPath())));
 				tChild.dechargerTypeP();
@@ -187,11 +175,8 @@ class Topic{
 				CheesyKM.api.thematique.collapseRow(CheesyKM.api.thematique.getRowForPath(new TreePath(nChild.getPath())));
 				tChild.dechargerTypeT();
 			} else {
-				//CheesyKM.echo("decharge (D) de "+tChild);
 				CheesyKM.docsInMem.remove(nChild);
-				//nChild.removeFromParent();
 				((DefaultTreeModel)CheesyKMAPI.thematique.getModel()).removeNodeFromParent(nChild);
-				//CheesyKM.echo(tChild+" dechargé");
 			}
 		}
 		this.docsNodes=new Vector();

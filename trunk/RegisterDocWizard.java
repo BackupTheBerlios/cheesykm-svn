@@ -3,7 +3,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-
+/**
+*JDialog with all the fields necessary to register/edit/update a document.
+*/
 class RegisterDocWizard extends JDialog{
 	int docID,score,currentPanel;
 	Vector topics,ufEditable;
@@ -15,14 +17,28 @@ class RegisterDocWizard extends JDialog{
 	JButton previous,next;
 	Hashtable uf;
 	ProgBarDialog pbd;
+	/**
+	*Updates (registers a new version of) a document.
+	*@param doc the Document to update.
+	*/
 	RegisterDocWizard(Doc doc){
 		this(doc,new Vector(),false);
 	}
-	
+	/**
+	*Updates (registers a new version of) or edits a document.
+	*@param doc the Document to update.
+	*@param edit if true edits doc, if false updates doc.
+	*/
 	RegisterDocWizard(Doc doc,boolean edit){
 		this(doc,new Vector(),edit);
 	}
 	
+	/**
+	*Updates (registers a new version of) or edits or creates a document, specifying the topics in which the new Document will be.
+	*@param doc the Document to update.
+	*@param inTids TopicIDs of the topics in which the new Document will be, as Strings ("TXX").
+	*@param edit if true edits doc, if false updates doc.
+	*/
 	RegisterDocWizard(Doc doc,Vector inTids,final boolean edit){
 		super(CheesyKM.api);
 		Container gc=this.getContentPane();
@@ -163,7 +179,11 @@ class RegisterDocWizard extends JDialog{
 		this.setBounds(CheesyKM.api.getX()+((CheesyKM.api.getWidth()-this.getWidth())/2),CheesyKM.api.getY()+((CheesyKM.api.getHeight()-this.getHeight())/2),this.getWidth(),this.getHeight());
 		this.show();
 	}
-	
+	/**
+	*Returns the panel with number "num" in the registration process.
+	*@param num the number of the desired panel.
+	*@return the matching JPanel.
+	*/
 	private JPanel createPanel(int num){
 		switch(num){
 			case 1:
@@ -178,7 +198,9 @@ class RegisterDocWizard extends JDialog{
 			return null;
 		}
 	}
-	
+	/**
+	*Called once at RegisterDocWizrd construction, initializes the differents panels of the registration process.
+	*/
 	private void initPanels(boolean edit){
 		panel1=new EditableFieldGroup(this.next);
 		StringValue titleS=new StringValue(CheesyKM.getLabel("title")+" :",title);
@@ -258,33 +280,10 @@ class RegisterDocWizard extends JDialog{
 		}
 	}
 	
-	class RegisterPanel extends JPanel{
-		int num;
-		Vector components;
-		RegisterPanel(int num){
-			super();
-			this.num=num;
-			components=new Vector();
-		}
-	}
-	/*
-	7 registerDoc
-	Déposer un document ou une nouvelle version.
-	Paramètres : (string) user, (string) password, (struct) document metadata
-	Où document metadata est défini comme suit :
-	docid -> (int) when creating a new version of a document, docid of that document, else 0
-	topics -> (array of string) list of topic ids
-	description -> (string) description
-	author -> (string) or empty
-	creadate -> (string) original document creation date "YYYY-MM-DD" or empty
-	title -> (string)
-	kwords -> (string) whitespace or comma separated words
-	url -> (string) fully qualified uri associated with entry or empty
-	file -> (string) uploaded file name or empty
-	score -> (int) rating (in %)
-	expires -> (string) expiration date or empty
-	ufX ->(string) user extended attribute value with X in [0,1,2] (maybe empty, but must be set)*/
-	
+	/**
+	*Builds a registerDoc request Hashtable, and calls the "registerDoc"  or "updateDoc" RPC method.
+	*@param edit true if it is an edition of a document, false if it is a registration/update of a document.
+	*/
 	private void registerDoc(boolean edit){
 		Hashtable metadata=new Hashtable();
 		metadata.put("docid",new Integer(this.docID));
@@ -318,7 +317,6 @@ class RegisterDocWizard extends JDialog{
 				metadata.put("uf"+i,"");
 			}
 		}
-		//CheesyKM.echo("META:"+metadata);
 		boolean ok=false;
 		if(!edit){
 			boolean resuOkiFTP=true;
@@ -346,12 +344,6 @@ class RegisterDocWizard extends JDialog{
 					public void run(){
 						
 						resu=CheesyKM.registerDoc(metadata);
-						/*resu=new Vector();
-						CheesyKM.echo("REGISTER DE:"+metadata);
-						try{
-						Thread.sleep(3000);} catch(Exception e){}*/
-						
-						
 						if(pbd!=null) pbd.dispose();
 					}
 				}

@@ -46,21 +46,16 @@ class Download extends Thread{
 				bif.read(bskip,0,2048);
 				bof.write(bskip,0,2048);
 				pbm.setValue(pbm.actuel+2048);
-				//CheesyKM.echo("2048 octet");
-				//CheesyKM.echo(pbm.actuel+"/"+size+"[++]");
 			}
 			
 			byte[] b=new byte[1];
 			int j=0;
 			while(bif.read(b,0,1)!=-1&&!stop){
-			//for(int k=toskip*65536;k<size;k++){
-			//	bif.read(b,0,1);
 				j++;
 				bof.write(b,0,1);
 				if(j==100){
 					j=0;
 					pbm.setValue(pbm.actuel+100);
-					//CheesyKM.echo(pbm.actuel+"/"+size+"[]");
 				}
 			}
 			
@@ -70,7 +65,6 @@ class Download extends Thread{
 			fos.close();
 			bif.close();
 			pbm.setValue(new Long(size).intValue());
-			//echo("DL fini: toskip="+toskip+"  lefttoskip="+lefttoskip);
 			if(!stop){
 				JOptionPane.showMessageDialog(CheesyKM.api,CheesyKM.getLabel("downloadOf")+nomComplet+CheesyKM.getLabel("successFullyDone"),CheesyKM.getLabel("downloadComplete"), JOptionPane.INFORMATION_MESSAGE);
 			} else {

@@ -13,8 +13,6 @@ class Login extends JDialog{
 	Vector topicMatrix;
 	Login(Frame parent){
 		super(parent);
-		//this.setUndecorated(true);
-		//this.setModal(true);
 		int maHauteur=220;
 		int maLargeur=300;
 		this.setBounds(parent.getX()+((parent.getWidth()-maLargeur)/2),parent.getY()+((parent.getHeight()-maHauteur)/2),maLargeur,maHauteur);
@@ -75,7 +73,6 @@ class Login extends JDialog{
 					pbd.show();
 					if(topicMatrix==null){
 						CheesyKM.setLogin(null,null);
-						//id.setText("");
 						pw.setText("");
 						JOptionPane.showMessageDialog(Login.this, CheesyKM.getLabel("youHaventSaidTheMagicWord"), CheesyKM.getLabel("wrongPass"), JOptionPane.ERROR_MESSAGE);
 						id.setEnabled(true);
@@ -83,7 +80,6 @@ class Login extends JDialog{
 						bValider.setEnabled(true);
 						id.requestFocus();
 					} else {
-						//JOptionPane.showMessageDialog(Login.this, "Login ok", "login OK", JOptionPane.ERROR_MESSAGE);
 						Login.this.dispose();
 						((CheesyKMAPI)(Login.this.getParent())).menuDeconnecter.setEnabled(true);
 						CheesyKM.tRelations=(Hashtable)topicMatrix.get(1);

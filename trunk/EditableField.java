@@ -4,28 +4,57 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+/**
+*An EditableField is used, within an {@link EditableFieldGroup} to build forms.<br>
+*The EditableField combines a JLabel (usually the name of the property) and a user-editable component (JTextField, etc...).
+*It is possible to specify that a field has to be set. If a field is invalid (ex:invalid date format, or blank&&hatToBeSet), its
+*background becomes red and the {@link EditableFieldGroup} it belongs to is not valid().
+*/
 public abstract class EditableField extends JPanel{
 	boolean hasToBeSet=false;
 	Wuffable efg=null;
-	
+	/**Default constructor, calls JPanels constructor.*/
 	EditableField(LayoutManager m){
 		super(m);
 	}
-	
+	/**Default constructor, calls JPanels constructor.*/
 	EditableField(){
 		super();
 	}
+	/**
+	*Specify that this field has to be set to be valid.
+	*@param hasToBeSet boolean, true if the field has to be set, false else.
+	*/
 	public abstract void setHasToBeSet(boolean hasToBeSet);
+	
+	/**
+	*Check if this field has to be set to be valid.
+	*@return true if this field has to be set.
+	*/
 	public boolean getHasToBeSet(){
 		return this.hasToBeSet;
 	}
+	/**
+	*Checks if this field content is valid
+	*@return true if this field is valid, false else.
+	*/
 	public abstract boolean isValid();
+	/**
+	*Returns the value of this field.
+	*@return the value of this field, as an Object.
+	*/
 	public abstract Object value();
+	/**
+	*Register this field as member of an {@link EditableFieldGroup}.
+	*@param efg {@link Wuffable}, usually an {@link EditableFieldGroup} to register this EditableField to.
+	*/
 	public void registerForGroup(Wuffable efg){
 		this.efg=efg;
 	}
 }
-
+/**
+*Displays an JLabel and a JTextField, only Integers can be typed in the JTextField.
+*/
 class IntegerValue extends EditableField{
 	public JTextField tf;
 	IntegerValue(String title,int value){
@@ -276,7 +305,7 @@ class OpenFileNameValue extends EditableField{
 	}
 }
 /**
-*Displays a date field.
+*Displays a date field, {@link CheesyKM#isdate(String)} is called to check if the date is valid.
 */
 class DateValue extends EditableField{
 	JTextField tf;

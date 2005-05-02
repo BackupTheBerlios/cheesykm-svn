@@ -16,7 +16,6 @@ class JTPDChangeListener implements ChangeListener{
 		CheesyKM.api.jtbFermerTousLesOnglets.setEnabled(CheesyKM.api.jtpD.getSelectedComponent()!=null&&!CheesyKM.api.runningFileTransferIsDisplayed());
 		Topic t=CheesyKM.api.getDisplayedTopic();
 		if(t==null){
-			//CheesyKM.api.menuDocument.setEnabled(false);
 			CheesyKM.api.menuVoirDocument.setEnabled(false);
 			CheesyKM.api.menuTelechargerDocument.setEnabled(false);
 			CheesyKM.api.jtbVoirDocument.setEnabled(false);
@@ -61,7 +60,6 @@ class JTPDChangeListener implements ChangeListener{
 			CheesyKM.api.menuTelechargerDocument.setEnabled(!d.file.equals(""));
 			CheesyKM.api.jtbVoirDocument.setEnabled(!d.file.equals(""));
 			CheesyKM.api.jtbTelechargerDocument.setEnabled(!d.file.equals(""));
-			//CheesyKM.api.menuDocument.setEnabled(!d.file.equals(""));
 			if(!d.file.equals("")){
 				CheesyKM.api.jtbVoirDocument.setIcon(CheesyKM.loadIcon("./ressources/"+d.ftype+"32.png"));
 				CheesyKM.api.jtbVoirDocument.setToolTipText(CheesyKM.getLabel("seeDocument")+" : "+d.format+" - "+d.getFSize());

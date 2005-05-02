@@ -2,20 +2,27 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
-
+/**
+*Advanced search form.
+*/
 class AdvancedSearchForm extends JPanel{
+	/**Number of fields (typed-in text search criterias).*/
 	int nbChamps;
+	/**Where is it possible to search a word ?*/
 	Object fields[] ={new Field(CheesyKM.getLabel("anywhere"),"anywhere"),
 		new Field(CheesyKM.getLabel("inTitle"),"title"),
 		new Field(CheesyKM.getLabel("inAuthor"),"author"),
 		new Field(CheesyKM.getLabel("inKeywords"),"kwords"),
 		new Field(CheesyKM.getLabel("inText"),"text")};
+	/**Condition applied to the words.*/
 	Object conditions[] ={new Field(CheesyKM.getLabel("may"),"may"),
 		new Field(CheesyKM.getLabel("must"),"must"),
 		new Field(CheesyKM.getLabel("mustnot"),"mustnot"),
 		new Field(CheesyKM.getLabel("phrases"),"phrases")};
+	/**Comparators (for comparable user-extended attributes)*/
 	Object comparateurs[] ={"=","!=",">",">=","<","<="};
 	//"print", "image", "video", "sound", "act", "web", "note"
+	/**Available types of documents.*/
 	Object type[] ={new Field(CheesyKM.getLabel("print"),"print"),
 		new Field(CheesyKM.getLabel("image"),"image"),
 		new Field(CheesyKM.getLabel("video"),"video"),
@@ -24,6 +31,7 @@ class AdvancedSearchForm extends JPanel{
 		new Field(CheesyKM.getLabel("web"),"web"),
 		new Field(CheesyKM.getLabel("thread"),"thread"),
 		new Field(CheesyKM.getLabel("note"),"note")};
+	/**Available formats of documents.*/
 	Object format[] ={
 		new Field(CheesyKM.getLabel("anyFormat"),"any"),
 		new Field("Adobe PDF","pdf"),
@@ -49,20 +57,24 @@ class AdvancedSearchForm extends JPanel{
 		new Field("WMF","wmf"),
 		new Field("Flash","swf")
 	};
+	/**Comparators for the file size.*/
 	Object tailleComp[]={
 		new Field(CheesyKM.getLabel("sizeGreater"),">"),
 		new Field(CheesyKM.getLabel("sizeEquals"),"="),
 		new Field(CheesyKM.getLabel("sizeSmaller"),"<")
 	};
+	/**File size units.*/
 	Object tailleUnit[]={
 		new Field("Ko","1024"),
 		new Field("Mo","1048576")
 	};
+	/**Comparators for the creation date.*/
 	Object dateComp[]={
 		new Field(CheesyKM.getLabel("dateAfter"),">"),
 		new Field(CheesyKM.getLabel("dateEquals"),"="),
 		new Field(CheesyKM.getLabel("dateBefore"),"<")
 	};
+	/**Comparators for the modification date.*/
 	Object dateModif[]={
 		new Field(CheesyKM.getLabel("sinceEver"),"ever"),
 		new Field(CheesyKM.getLabel("since1Month"),CheesyKM.sinceXMonth(1)),
@@ -84,6 +96,10 @@ class AdvancedSearchForm extends JPanel{
 	Vector resu;
 	Hashtable query;
 	Vector resetCheckBoxes,resetTextFields,resetComboBoxes;
+	/**
+	*constructor, initializes the whole form, with all its fields set to blank.
+	*@param nbChamps Number of fields (typed-in text search criterias).
+	*/
 	AdvancedSearchForm(int nbChamps){
 		super();
 		resetCheckBoxes=new Vector();
@@ -299,7 +315,6 @@ class AdvancedSearchForm extends JPanel{
 		cadreTree.setMaximumSize(new Dimension(100,100));
 		cadreTree.add(new JScrollPane(tst),"Center");
 		avance.add(cadreTree,"Center");
-		//TopicSelectionTree(Vector selectedTids,boolean childrenFollow,JComponent toActivate,int minimumRightsLevel){
 		center.add(avance,"South");
 		
 		JPanel bas=new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -382,17 +397,18 @@ class AdvancedSearchForm extends JPanel{
 			return this.name.equals(((Field)o).name);
 		}
 	}
-	
+	/**
+	*Class to interface the "Search" button with some EditableFields elements.
+	*/
 	class ValidateSearchForm implements Wuffable{
 		public void sayWuff(){
 			AdvancedSearchForm.this.search.setEnabled(AdvancedSearchForm.this.creaDate.isValid()&&AdvancedSearchForm.this.tst.getSelectedTopics().size()>0);
 		}
 	}
-	/*
-	query est ainsi définie :
-ufopX -> (string) operator for testing user extended attribute X (X = 0,1,2). Possible operators: =, !=, >=, <=, <, >
-uftermX -> (string) value to compare to user extended attribute X (X = 0,1,2) with operator ufopX (set to empty string to ignore)
-*/
+
+	/**
+	*Builds a search request Hashtable and calls the "search" RPC method.
+	*/
 	public void search(){
 		query=new Hashtable();
 		for(int i=0;i<this.fields.length;i++){

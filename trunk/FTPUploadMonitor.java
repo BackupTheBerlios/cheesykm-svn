@@ -1,9 +1,15 @@
 import com.enterprisedt.net.ftp.*;
 import javax.swing.*;
-
+/**
+*Used to display a progressBar while a FTP transfer is in progress.
+*/
 public class FTPUploadMonitor extends JDialog implements FTPProgressMonitor{
 	JProgressBar pb;
 	long totalSize;
+	/**
+	*Builds a new FTPUploadMonitor.
+	*@param totalSize total size of the transferred file.
+	*/
 	FTPUploadMonitor(long totalSize){
 		super(CheesyKM.api);
 		this.totalSize=totalSize;
@@ -20,15 +26,12 @@ public class FTPUploadMonitor extends JDialog implements FTPProgressMonitor{
 		this.setBounds(CheesyKM.api.getX()+((CheesyKM.api.getWidth()-maLargeur)/2),CheesyKM.api.getY()+((CheesyKM.api.getHeight()-maHauteur)/2),maLargeur,maHauteur);
 		this.validate();
 		this.setModal(true);
-		
-		
 	}
 	
 	public void bytesTransferred(long count){
 		if(pb.isIndeterminate()){
 			pb.setIndeterminate(false);
 		}
-		CheesyKM.echo("FTP:"+count);
 		pb.setValue(new Long(count).intValue());
 	}
 }

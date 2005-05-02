@@ -43,17 +43,22 @@ class TopicPane extends JPanel{
 			try{
 				document.insertString(document.getLength(),doc.toString(),document.getStyle("titre"));
 				document.insertString(document.getLength()," "+CheesyKM.getLabel("ed")+" "+doc.version,document.getStyle("ed"));
-				newLine(document);
-				double scoreSurCinq=(((double)doc.score)/100)*5.0;
-				Double scoreSurCinqD=new Double(scoreSurCinq);
-				int scoreSurCinqI=scoreSurCinqD.intValue();
-				for(int i=0;i<scoreSurCinqI;i++){
-					document.insertString(document.getLength()," ",document.getStyle("iconF"+(i+1)));
-					document.insertString(document.getLength(),"",document.getStyle("valeur"));
-				}
-				for(int i=scoreSurCinqI;i<5;i++){
-					document.insertString(document.getLength()," ",document.getStyle("iconC"+(i+1)));
-					document.insertString(document.getLength(),"",document.getStyle("valeur"));
+				
+				if(CheesyKM.easyKMConfig.get("eval").equals(new Integer(1))){
+					newLine(document);
+					double scoreSurCinq=(((double)doc.score)/100)*5.0;
+					Double scoreSurCinqD=new Double(scoreSurCinq);
+					int scoreSurCinqI=scoreSurCinqD.intValue();
+					for(int i=0;i<scoreSurCinqI;i++){
+						document.insertString(document.getLength()," ",document.getStyle("iconF"+(i+1)));
+						document.insertString(document.getLength(),"",document.getStyle("valeur"));
+					}
+					for(int i=scoreSurCinqI;i<5;i++){
+						document.insertString(document.getLength()," ",document.getStyle("iconC"+(i+1)));
+						document.insertString(document.getLength(),"",document.getStyle("valeur"));
+					}
+					newLine(document);
+					document.insertString(document.getLength()," ",document.getStyle("rateDocButton"));
 				}
 				
 				newLine(document);
@@ -125,7 +130,7 @@ class TopicPane extends JPanel{
 				document.insertString(document.getLength(),CheesyKM.getLabel("sentBy")+" : ",document.getStyle("propriete"));
 				document.insertString(document.getLength(),doc.user+" ",document.getStyle("valeurBleue"));
 				document.insertString(document.getLength(),CheesyKM.getLabel("at")+" "+doc.date.substring(0,10)+". ",document.getStyle("valeur"));
-				//newLine(document);
+				
 				
 				if(!doc.editdate.equals("")){
 					document.insertString(document.getLength(),CheesyKM.getLabel("modifiedAt"),document.getStyle("propriete"));
@@ -184,7 +189,6 @@ class TopicPane extends JPanel{
 			JScrollPane editorScrollPane = new JScrollPane(editor);
 			editorScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 			add(editorScrollPane,"Center");
-			//CheesyKM.echo(topic+" a sa page web");
 			
 		} else if(topic.getNodeType()=='F'){
 			FileTransferTopic ftt=(FileTransferTopic)topic;
@@ -319,6 +323,25 @@ class TopicPane extends JPanel{
 		wwwToClipBoardButton.setMaximumSize(new Dimension(120,19));
 		wwwToClipBoardButton.setPreferredSize(new Dimension(120,19));
 		StyleConstants.setComponent(s,wwwToClipBoardButton);
+		
+		//Bouton rateDoc
+		s = doc.addStyle("rateDocButton",regular);
+		StyleConstants.setFontSize(s,11);
+		StyleConstants.setAlignment(s,StyleConstants.ALIGN_LEFT);
+		JButton rateDocButton = new JButton();
+		rateDocButton.setIcon(CheesyKM.loadIcon("./ressources/etoile-foncee.png"));
+		rateDocButton.setToolTipText(CheesyKM.getLabel("rateDoc"));
+		rateDocButton.setText(CheesyKM.getLabel("rate"));
+		class rateDocButtonActionListener implements ActionListener {
+			public void actionPerformed(ActionEvent e){
+				new RateDocDialog((Doc)TopicPane.this.topic);
+			}
+		}
+		rateDocButton.addActionListener(new rateDocButtonActionListener());
+		rateDocButton.setFont(new Font("arial",Font.PLAIN,11));
+		rateDocButton.setMaximumSize(new Dimension(120,19));
+		rateDocButton.setPreferredSize(new Dimension(120,19));
+		StyleConstants.setComponent(s,rateDocButton);
 		
 		
 		//Bouton DL

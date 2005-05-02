@@ -96,15 +96,10 @@ public class CheesyKM{
 	/**Default number of search field in the advanced search form*/
 	public static int DEFAULTSEARCHFIELDNUMBER;
 	
-	
+	/**Maximal number of user-extended attributes*/
 	public static final int UFNUMBER=3;
 	
-	//pour la demo web :
-	/*
-	private static final String addresseWebservices=EASYKMROOT+"webservices.php";
-	private static final String KEYSTOREPATH="./ressources/ksweb";
-	private static final String KEYSTOREPASS="easykm";
-	*/
+	
 	
 	/**The configuration associated with this insatance of CheesyKM*/
 	static Config config;
@@ -154,19 +149,6 @@ public class CheesyKM{
 		//new main frame
 		api=new CheesyKMAPI();
 		new MemoryMonitor();
-		
-		
-		/*setLogin("sherve","sh");
-		Vector topicMatrix=getTopicMatrix();
-		tNames=(Hashtable)topicMatrix.get(0);
-		tRelations=(Hashtable)topicMatrix.get(1);
-		rootTopics=(Vector)topicMatrix.get(3);
-		JDialog d=new JDialog();
-		d.getContentPane().add(new JScrollPane(new AdvancedSearchForm(CheesyKM.DEFAULTSEARCHFIELDNUMBER)));
-		d.pack();
-		d.show();*/
-		
-		//CheesyKM.upload("/home/samuel/Desktop/Downloads/jedit42install.jar","jedit.jar");
 	}
 	
 	/**
@@ -182,7 +164,7 @@ public class CheesyKM{
 		} catch(Exception e) {echo(e);}
 		String path=url.getPath();
 		path=path.replace('\u002F',System.getProperty("file.separator").charAt(0));
-		path=path.substring(5,path.length()-23);//path of the jar
+		path=path.substring(5,path.length()-23);
 		path=toUnicode(path);
 		if(path.charAt(0)=='\\'){
 			path=path.substring(1);
@@ -233,13 +215,11 @@ public class CheesyKM{
 	*@return an ImageIcon from the specified image file.
 	*/
 	public static ImageIcon loadIcon(String location){
-		//echo("Try to load icon at location:"+location);
 		ClassLoader loader=CheesyKM.class.getClassLoader().getSystemClassLoader();
 		URL url=null;
 		try {
 			url=loader.getResource(location.substring(2));
 		} catch(Exception e) {echo(e);}
-		//echo("Found URL:"+url);
 		ImageIcon ic=new ImageIcon(Toolkit.getDefaultToolkit().createImage(url));
 		return ic;
 	}
@@ -259,7 +239,6 @@ public class CheesyKM{
 	*/
 	private static SecureXmlRpcClient client(){
 		try {
-			//echo("Path:"+KEYSTOREPATH+"  Pass:"+KEYSTOREPASS);
 			System.setProperty("javax.net.ssl.keyStore",KEYSTOREPATH);
 			System.setProperty("javax.net.ssl.keyStorePassword",KEYSTOREPASS);
 			System.setProperty("javax.net.ssl.trustStore",KEYSTOREPATH);
@@ -277,20 +256,17 @@ public class CheesyKM{
 	}
 
 	/**
-	*Calls the "getTopicMatrix" RPC method.
+	*Calls the "getTopicMatrix" RPC method, and the "getConfig" RPC method if "getTopicMatrix" succeeded.
 	*@return a Vector containing (in order) : <br>-a Hashtable (Tid -> topic name) (tNames)<br>-a Hashtable (Tid -> parent Tid )(1 si root)) (tRelations)<br>-a Vector of current users root Tid (tRoot).
 	*/
 	public static Vector getTopicMatrix(){
 		try{
-			//echo("client créé");
-			//System.setProperty("javax.net.debug","all");
 			Vector params=new Vector();
 			params.add(login);
 			params.add(pass);
 			Vector resu=(Vector)client().execute("getTopicMatrix",params);
 			if(resu!=null){
 				CheesyKM.easyKMConfig=(Hashtable)client().execute("getConfig",params);
-				//echo(easyKMConfig);
 			}
 			return resu;
 		}catch(MalformedURLException mue){
@@ -435,37 +411,6 @@ public class CheesyKM{
 		}
 	}
 	
-	
-	/*6 search
-	Pour effectuer une recherche dans la base (avec filtrage selon le profil).
-	Paramètres : (string) user, (string) password, (struct) query
-	query est ainsi définie :
-	
-	title -> struct { 
-	may -> array of (string) words that may be contained in this field
-	must -> array of (string) words that must be contained in this field
-	mustnot -> array of (string) words that must be contained in this field
-	phrases -> array of exact phrases that must be matched in this field
-	} as QExp
-	author -> struct QExp
-	kwords -> struct QExp
-	text -> struct QEXp (full text matches in description and attached file)
-	anywhere -> struct QExp (matches title or author or kwords or text)
-	
-	searchmode -> (string) is "boolean" (classical) 
-	types -> array of (string) types among "print", "image", "video", "sound", "act", "web", "note"
-	topics -> array of (string) root topic ids to search in recursively
-	since -> (string) equal to "ever" or a date in the form "YYYY-MM-DD" (filters docs SINCE last entry modification date)
-	creation -> (string) equal to "ever" or a date in the form "YYYY-MM-DD" (attached document or site creation date)
-	creation_op -> (string) one operator among ">", "<", "=" (for creation date comparison)
-	creation_mode -> (int) 0 to exclude undated documents, 1 to always include them
-	format -> (string) equal to "any" or one file extension
-	size -> (int) size to compare to, in bytes
-	size_op -> (string) comparison operator among ">", "<", "="
-	limit -> (int) maximum number of document returned
-	expired -> (int) should we include expired documents?
-	ufopX -> (string) operator for testing user extended attribute X (X = 0,1,2). Possible operators: =, !=, >=, <=, <, >
-	uftermX -> (string) value to compare to user extended attribute X (X = 0,1,2) with operator ufopX (set to empty string to ignore)*/
 	/**
 	*Calls the "search" RPC method, but like a simple search query (typed in the quickSearch toolbar)
 	*@param where Specifies where to search ("title","author","kwords","text" or "anywhere").
@@ -737,6 +682,10 @@ public class CheesyKM{
 		new Download(nomComplet,url,size);
 	}
 	
+	/**
+	*Returns the same result than the "getTopicMatrix" RPC method.
+	*@return Vector, same result than the "getTopicMatrix" RPC method.
+	*/
 	static Vector topicMatrix(){
 		Vector v=new Vector();
 		v.add(CheesyKM.getTNames());

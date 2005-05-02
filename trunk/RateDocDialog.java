@@ -3,9 +3,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
+/**
+*Displays a JSlider (0-100) in a JDialog.
+*/
 class RateDocDialog extends JDialog{
 	JSlider ratingS;
 	Doc doc;
+	/**
+	*Displays a JSlider (0-100) in a modal JDialog with OK/Cancel buttons. The RPC "rateDoc" method is called when the user clicks "OK".
+	*@param doc the document to rate.
+	*/
 	RateDocDialog(Doc doc){
 		super(CheesyKM.api);
 		this.doc=doc;
@@ -21,6 +28,11 @@ class RateDocDialog extends JDialog{
 		class OkiButtonListener implements ActionListener{
 			public void actionPerformed(ActionEvent e){
 				RateDocDialog.this.doc.score=CheesyKM.rateDoc(RateDocDialog.this.doc,RateDocDialog.this.ratingS.getValue());
+				int i=CheesyKM.api.getIndexForDisplayedTopic(RateDocDialog.this.doc.id);
+				if(i!=-1){
+					CheesyKM.api.hideTopic(i);
+					CheesyKM.api.displayTopic(RateDocDialog.this.doc);
+				}
 				RateDocDialog.this.dispose();
 			}
 		}
