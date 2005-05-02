@@ -54,6 +54,18 @@ class TopicPopupMenu extends JPopupMenu{
 				JMenuItem fermer=add(CheesyKM.getLabel("hideDocumentTab"));
 				fermer.addActionListener(new TopicPopupFermerListener());
 			}
+			
+			if(CheesyKM.easyKMConfig.get("eval").equals(new Integer(1))){
+				this.addSeparator();
+				class TopicPopupRateDoc implements ActionListener{
+					public void actionPerformed(ActionEvent e){
+						new RateDocDialog((Doc)topic);
+					}
+				}
+				JMenuItem rate=add(CheesyKM.getLabel("rateDoc"));
+				rate.addActionListener(new TopicPopupRateDoc());
+			}
+			
 			if(!((Doc)topic).url.equals("")){
 				this.addSeparator();
 				
@@ -150,7 +162,7 @@ class TopicPopupMenu extends JPopupMenu{
 				}
 			}
 			
-		} else if(topic.getNodeType()=='W'){
+		} else if(topic.getNodeType()=='W'||topic.getNodeType()=='A'){
 			class TopicPopupFermerListener implements ActionListener{
 				public void actionPerformed(ActionEvent e){
 					CheesyKM.api.hideTopic(CheesyKM.api.jtpD.getSelectedIndex());

@@ -927,4 +927,32 @@ public class CheesyKM{
 		return runner.status;
 		
 	}
+	
+	
+	
+	/**
+	*Calls the "rateDoc" RPC method.
+	*@param doc The Document to rate
+	*@param newRating the new rating for this doc.
+	*/
+	public static int rateDoc(Doc doc,int newRating){
+		try{
+			Vector params=new Vector();
+			params.add(login);
+			params.add(pass);
+			params.add(new Integer(doc.id));
+			params.add(new Integer(newRating));
+			Integer resu=(Integer)client().execute("rateDoc",params);
+			return resu.intValue();
+		}catch(MalformedURLException mue){
+			JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
+			return doc.score;
+		}catch(XmlRpcException xre){
+			JOptionPane.showMessageDialog(null, getLabel("error")+xre, getLabel("errorXMLRPC"), JOptionPane.ERROR_MESSAGE);
+			return doc.score;
+		}catch(IOException ioe){
+			JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorIO"), JOptionPane.ERROR_MESSAGE);
+			return doc.score;
+		}
+	}
 }
