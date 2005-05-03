@@ -1,7 +1,11 @@
 #!/bin/csh
 ./makeManifest
 cd ../trunk
-javac *.java
+echo "-classpath ">args
+ls -x -T 1 -w 1500 ../scripts/lib/*.jar | sed 's/\t /:/g' >> args
+echo "">>args
+javac @args *.java
+rm args
 jar cfm CheesyKM.jar ../scripts/cheesykm.manifest *.class ressources/*.gif ressources/*.png ressources/labels/*.properties
 mv CheesyKM.jar ../scripts/CheesyKM.jar
 cd ../scripts

@@ -81,10 +81,10 @@
     <packs>
         <pack name="Base" id="base" required="yes">
 	    <description/>
-            <file src="legal" targetdir="$INSTALL_PATH"/>
+            <fileset dir="legal" targetdir="$INSTALL_PATH/legal" excludes=".svn"/>
 	    <file src="bin" targetdir="$INSTALL_PATH" override="true"/>
-	    <file src="lib" targetdir="$INSTALL_PATH" override="true"/>
-	    <file src="keystores" targetdir="$INSTALL_PATH" override="true"/>
+	    <fileset dir="lib" targetdir="$INSTALL_PATH/lib" override="true" excludes=".svn"/>
+	    <fileset dir="keystores" targetdir="$INSTALL_PATH/keystores" override="true" excludes=".svn"/>
 	    <file src="EasyKMTreeIcon.ico" targetdir="$INSTALL_PATH" os="windows"/>
 	    <file src="izpack.ico" targetdir="$INSTALL_PATH" os="windows"/>
 	    <file src="EasyKMTreeIcon.png" targetdir="$INSTALL_PATH" os="unix"/>
