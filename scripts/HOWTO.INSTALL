@@ -1,0 +1,224 @@
+#CheesyKM HOWTO.INSTALL file, for linux
+
+Summary :
+
+Installation notes.
+1/Compile CheesyKM.
+2/Generate an installer for CheesyKM (smallest possible, without API docs an sources).
+3/Generate the javadoc for the CheesyKM API.
+4/Generate an installer for CheesyKM (largest possible, with API docs an sources).
+
+
+Installation notes.
+
+	CheesyKM shouldn't require lots of hardware (it has been developped on a cow-fast computer),
+but it still remains a java swing program, so don't break nerves on its speed. Java permits CheesyKM
+to be "compiled" and interpreted (executed) on various systems, with totally transparent cross-platform
+compatibility (i.e. write it on Linux, compile it on Windows, execute it on Mac) (...and your desktop
+is a mess, with all these computers). For now, compilation scripts for linux only are provided, but
+the principle is the same on all platforms. You should only need to generate an installer if you want
+to install CheesyKM (...i know) later, or on many computers, but you don't absolutel need it to execute
+CheesyKM on a computer.
+	
+
+1/Compile CheesyKM
+
+Requirements :
+	-J2SE SDK 1.4 or newer (INSTALLED !) (http://java.sun.com/j2se/index.jsp)
+	-The sources of CheesyKM (maybe you guessed it)
+	-Dependencies (place these jars in the cheesykm/lib directory):	
+		-edtftpj v1.4.8 or newer (http://www.enterprisedt.com/)
+		-Apache Xml-Rpc v2.0 or newer (the newer, the better) 
+			(http://ws.apache.org/xmlrpc/download.html)
+		-Apache commons-codec v1.3 or newer 
+			(http://jakarta.apache.org/commons/codec/index.html)
+	If newer version of these jars require other dependencies, simply put 
+	the dependencies jars in the cheesykm/lib directory
+
+Once all the dependencies are placed in the cheesykm/lib directory, ensure that the JSDK
+bins path environment variable is set (try "which javac"), and that CheesyKMs sources
+are in the cheesykm/trunk directory (*.java files). You should now have this
+minimal directories structure:
+
+cheesykm
+|-- scripts
+|   |-- HOWTO.INSTALL (Hi! it's me ^^)
+|   |-- compile
+|   |-- makeManifest
+|   |-- keystores
+|   |   |-- kslabo
+|   |   `-- ksweb
+|   |-- legal
+|   |   |-- APACHE_LICENSE.txt
+|   |   |-- COPYING.txt
+|   |   `-- ICONS-COPYRIGHT.txt
+|   `-- lib
+|       |-- commons-codec-1.3.jar (or later version)
+|       |-- edtftpj-1.4.8.jar (or later version)
+|   	`-- xmlrpc-2.0-beta.jar (or later version)
+`-- trunk
+    |-- *.java (lots of)
+    `-- ressources
+        |-- labels
+        |   |-- Labels.properties
+        |   `-- Labels_fr.properties
+	|-- *.gif
+        `-- *.png
+
+Finally, cd to cheesykm/scripts and run "./compile". If everything went well (hope...),
+the compiled CheesyKMs jar will be in the cheesykm/scripts/bin directory, cd to 
+cheesykm/scripts/bin and run "java -jar CheesyKM.jar".
+
+After compiling, you can move CheesyKMs files, but you have to keep this directory structure :
+
+CheesyKM
+|-- HOWTO.INSTALL (you wouln't delete me, would you ?)
+|-- Readme_eng.txt
+|-- Readme_fra.txt
+|-- bin
+|   `-- CheesyKM.jar
+|-- keystores
+|   |-- kslabo
+|   `-- ksweb
+|-- legal
+|   |-- APACHE_LICENSE.txt
+|   |-- COPYING.txt
+|   `-- ICONS-COPYRIGHT.txt
+`-- lib
+    |-- commons-codec-1.3.jar (or later version)
+    |-- edtftpj-1.4.8.jar (or later version)
+    `-- xmlrpc-2.0-beta.jar (or later version)
+
+And you still need a Java Virtual Machine (at least JRE v1.4.2 or newer) to execute CheesyKM.
+
+
+2/Generate an installer for CheesyKM (smallest possible, without API docs an sources).
+
+There's a script (install-nosrc.xml) intended to be used with IzPack (an excellent pure-java GPL installer)
+(http://www.izforge.com/izpack/).
+
+Requirements :
+	-A compiled version of CheesyKM (see chap.1 : Compile CheesyKM)
+	-IzPack v3.7.2 (or newer) INSTALLED ! (http://www.izforge.com/izpack/)
+	-The following files and directory structure :
+
+scripts
+|-- EasyKMTreeIcon.ico
+|-- EasyKMTreeIcon.png
+|-- ElikyaVertical.png
+|-- HOWTO.INSTALL
+|-- Readme_eng.txt
+|-- Readme_fra.txt
+|-- Unix_shortcut_specification.xml
+|-- Win_shortcut_specification.xml
+|-- bin
+|   `-- CheesyKM.jar
+|-- elikya.gif
+|-- install-nosrc.xml
+|-- izpack.ico
+|-- izpack_32.png
+|-- keystores
+|   |-- kslabo
+|   `-- ksweb
+|-- legal
+|   |-- APACHE_LICENSE.txt
+|   |-- COPYING.txt
+|   `-- ICONS-COPYRIGHT.txt
+|-- lib
+|   |-- commons-codec-1.3.jar (or later version)
+|   |-- edtftpj-1.4.8.jar (or later version)
+|   `-- xmlrpc-2.0-beta.jar (or later version)
+|-- makeInstaller-nosrc
+|-- packsLang.xml_eng
+`-- packsLang.xml_fra
+
+Once you have checked the existence of all these files, cd to scripts/ and launch
+"./makeInstaller-nosrc <path to IzPack>"
+where <path to IzPack> is the path to IzPack root folder installation. (~/IzPack by default).
+If everything went well, the file "scripts/CheesyKM-install.jar" has been created. You can
+execute this installer on any computer/any operating system that has a Java Virtual Machine
+(JRE 1.4 or later) installed, with the command "java -jar CheesyKM-install.jar".
+
+3/Generate the javadoc for the CheesyKM API.
+
+Requirements :
+	-J2SE SDK 1.4 or newer (INSTALLED !) (http://java.sun.com/j2se/index.jsp)
+	-CheesyKM sources. (*.java)
+	-The following files and directory structure :
+
+cheesykm
+|-- scripts
+|   |-- makeJavadoc
+|   |-- HOWTO.INSTALL
+|   |-- legal
+|   |   |-- APACHE_LICENSE.txt
+|   |   |-- COPYING.txt
+|   |   `-- ICONS-COPYRIGHT.txt
+|   `-- lib
+|       |-- commons-codec-1.3.jar (or later version)
+|       |-- edtftpj-1.4.8.jar (or later version)
+|   	`-- xmlrpc-2.0-beta.jar (or later version)
+`-- trunk
+    `-- *.java (lots of)
+
+Check that the path to your installed JSDK tools is registered in your environment vars.
+(try "javadoc", it should display the quick help af javadoc). Then cd to "cheesykm/scripts"
+and run "./makeJavadoc". It should create a documentation in the "cheesykm/scripts/docs" directory.
+Open the file "cheesykm/scripts/docs/index.html" with your favorite web browser.
+
+4/Generate an installer for CheesyKM (largest possible, with API docs an sources).
+
+There's a script (install.xml) intended to be used with IzPack (an excellent pure-java GPL installer)
+(http://www.izforge.com/izpack/).
+
+Requirements :
+	-A compiled version of CheesyKM (see chap.1 : Compile CheesyKM)
+	-The sources of CheesyKM
+	-A generated CheesyKM API javadoc (see chap.3 : Generate the javadoc for the CheesyKM API)
+	-IzPack v3.7.2 (or newer) INSTALLED ! (http://www.izforge.com/izpack/)
+	-The following files and directory structure :
+
+cheesykm
+|-- scripts
+|   |-- EasyKMTreeIcon.ico
+|   |-- EasyKMTreeIcon.png
+|   |-- ElikyaVertical.png
+|   |-- HOWTO.INSTALL
+|   |-- Readme_eng.txt
+|   |-- Readme_fra.txt
+|   |-- Unix_shortcut_specification.xml
+|   |-- Win_shortcut_specification.xml
+|   |-- bin
+|   |   `-- CheesyKM.jar
+|   |-- docs
+|   |   |-- *.html
+|   |   |-- resources
+|   |   |   `-- inherit.gif
+|   |   `-- stylesheet.css
+|   |-- elikya.gif
+|   |-- install.xml
+|   |-- izpack.ico
+|   |-- izpack_32.png
+|   |-- keystores
+|   |   |-- kslabo
+|   |   `-- ksweb
+|   |-- legal
+|   |   |-- APACHE_LICENSE.txt
+|   |   |-- COPYING.txt
+|   |   `-- ICONS-COPYRIGHT.txt
+|   |-- lib
+|   |   |-- commons-codec-1.3.jar (or later version)
+|   |   |-- edtftpj-1.4.8.jar (or later version)
+|   |   `-- xmlrpc-2.0-beta.jar (or later version)
+|   |-- makeInstaller
+|   |-- packsLang.xml_eng
+|   `-- packsLang.xml_fra
+`-- trunk
+    `-- *.java
+
+Once you have checked the existence of all these files, cd to scripts/ and launch
+"./makeInstaller <path to IzPack>"
+where <path to IzPack> is the path to IzPack root folder installation. (~/IzPack by default).
+If everything went well, the file "scripts/CheesyKM-install.jar" has been created. You can
+execute this installer on any computer/any operating system that has a Java Virtual Machine
+(JRE 1.4 or later) installed, with the command "java -jar CheesyKM-install.jar".

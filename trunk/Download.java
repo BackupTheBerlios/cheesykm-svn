@@ -14,6 +14,7 @@ class Download extends Thread{
 	long size;
 	
 	boolean stop;
+	ProgressBarMonitor pbm;
 	/**
 	*Creates and starts a new Download Thread.
 	*/
@@ -32,7 +33,7 @@ class Download extends Thread{
 	*/
 	public void run(){
 		try{	
-			ProgressBarMonitor pbm=new ProgressBarMonitor(new Long(size).intValue(),nomComplet,this);
+			pbm=new ProgressBarMonitor(new Long(size).intValue(),nomComplet,this);
 			File fichierDest=new File(nomComplet);
 			if(!fichierDest.exists())fichierDest.createNewFile();
 			URL urlFic=new URL(url);
@@ -75,6 +76,11 @@ class Download extends Thread{
 			}
 		} catch(Exception e){
 			JOptionPane.showMessageDialog(null, CheesyKM.getLabel("error")+e, CheesyKM.getLabel("errorWhileDownloading")+nomComplet, JOptionPane.ERROR_MESSAGE);
+			pbm.setValue(new Long(size).intValue());
+			File f=new File(nomComplet);
+			f.delete();
+			f=null;
+			JOptionPane.showMessageDialog(CheesyKM.api,CheesyKM.getLabel("downloadOf")+nomComplet+CheesyKM.getLabel("hasBeenCanceled"),CheesyKM.getLabel("downloadCanceled"), JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 	}

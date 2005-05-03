@@ -12,7 +12,7 @@ class TopicSelectionTreeCellRenderer implements TreeCellRenderer{
 		SelectionTopic topic=(SelectionTopic)((DefaultMutableTreeNode)node).getUserObject();
 		JLabel defaultLabel=(JLabel)new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree,node,sel,expanded,leaf,row,hasFocus);
 		defaultLabel.setIcon(CheesyKM.loadIcon("./ressources/mgreytopic.png"));
-		JPanel cell=new JPanel(new FlowLayout(FlowLayout.CENTER,1,0));
+		JPanel cell=new JPanel(new FlowLayout(FlowLayout.CENTER,0,0));
 		JCheckBox cb=new JCheckBox();
 		
 		if(!leaf){

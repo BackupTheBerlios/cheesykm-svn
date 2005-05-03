@@ -1,0 +1,3 @@
+#!/bin/csh
+mkdir -p docs
+javadoc ../trunk/*.java -d docs -package -breakiterator

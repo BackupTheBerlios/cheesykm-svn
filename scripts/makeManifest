@@ -1,0 +1,8 @@
+#!/bin/csh
+echo "Main-Class: CheesyKM">cheesykm.manifest
+echo -n "Class-Path: ">>cheesykm.manifest
+mkdir -p bin
+cd bin
+ls -x -w 1500 ../lib/*.jar >> ../cheesykm.manifest
+echo "">>../cheesykm.manifest
+cd ..

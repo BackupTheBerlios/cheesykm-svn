@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<langpack>
+    <str id="base" txt="Package de base"/>
+    <str id="base.description" txt="Package de base, contient le programme principal."/>
+    <str id="sources" txt="Sources CheesyKM"/>
+    <str id="sources.description" txt="Contient les sources de CheesyKM."/>
+    <str id="apachesources" txt="Sources Apache Xml-Rpc"/>
+    <str id="apachesources.description" txt="Contient les sources (modifiées) de l'API Apache Xml-Rpc"/>
+    <str id="docs" txt="Documentation CheesyKM"/>
+    <str id="docs.description" txt="Documentation du projet CheesyKM (javadoc)"/>
+</langpack>

@@ -1,0 +1,16 @@
+#!/bin/csh
+if ( $#argv == 1 ) then
+	if( -d $argv[1] ) then
+			if( -f $argv[1]/bin/compile && -x $argv[1]/bin/compile ) then
+				$argv[1]/bin/compile install.xml -b . -o CheesyKM-install.jar -k standard
+			else
+				echo "ERROR : Izpack compile script not found in $argv[1]/bin/"
+				echo "usage : makeInstaller [izPackInstallPath]"
+			endif
+	else	
+		echo "ERROR : "$argv[1]" is not a directory"
+		echo "usage : makeInstaller [izPackInstallPath]"
+	endif
+else
+	echo "usage : makeInstaller [izPackInstallPath]"
+endif

@@ -77,6 +77,8 @@ class Config{
 			CheesyKM.FTPUSERNAME=fe.readLine();
 			fe.readLine();
 			CheesyKM.DEFAULTSEARCHFIELDNUMBER=Integer.parseInt(fe.readLine());
+			fe.readLine();
+			CheesyKM.USEJAVALAF=fe.readLine().equals("true");
 			fe.close();
 			
 		} catch(Exception e){
@@ -197,6 +199,10 @@ class Config{
 			bw.write("[default search fields number]");
 			bw.newLine();
 			bw.write(new Integer(CheesyKM.DEFAULTSEARCHFIELDNUMBER).toString());
+			bw.newLine();
+			bw.write("[Use JAVA Look and Feel ? (true/false)]");
+			bw.newLine();
+			if(CheesyKM.USEJAVALAF) bw.write("true"); else bw.write("false");
 			bw.flush();
 		} catch(Exception e){
 			JOptionPane.showMessageDialog(null, CheesyKM.getLabel("errorSavingConfig"), CheesyKM.getLabel("error"), JOptionPane.ERROR_MESSAGE);
@@ -328,7 +334,7 @@ class Config{
 		IntegerValue docsInMem,defaultSearchFields;
 		OpenFileNameValue browserPath;
 		BooleanValue useLocalBrowser;
-		BooleanValue expandSearchResults;
+		BooleanValue expandSearchResults,useJavaLaf;
 		StringValue ftpHost,ftpPass,ftpUserName;
 		/**
 		*Creates a new ConfigPanel.<br>
@@ -352,6 +358,8 @@ class Config{
 			addEditableField(expandSearchResults);
 			defaultSearchFields=new IntegerValue(CheesyKM.getLabel("defaultSearchFields"),CheesyKM.DEFAULTSEARCHFIELDNUMBER);
 			addEditableField(defaultSearchFields,true);
+			useJavaLaf=new BooleanValue(CheesyKM.getLabel("useJavaLaf"),CheesyKM.USEJAVALAF);
+			addEditableField(useJavaLaf);
 			if(avance){
 				easyKM=new StringValue(CheesyKM.getLabel("easyKMRoot"),CheesyKM.EASYKMROOT);
 				addEditableField(easyKM,true);
@@ -383,6 +391,7 @@ class Config{
 				CheesyKM.NOMBREDENOUVEAUTES=Integer.parseInt(nombreNouveautes.tf.getText());
 				CheesyKM.REMEMBERLASTLOGIN=rememberLastLogin.value.isSelected();
 				CheesyKM.MULTIPLETABSDOCS=useManyTabs.value.isSelected();
+				CheesyKM.USEJAVALAF=useJavaLaf.value.isSelected();
 				CheesyKM.MAXDOCTABSTITLESIZE=Integer.parseInt(titlesSize.tf.getText());
 				CheesyKM.DEFAULTACTIONCLICKCOUNT=Integer.parseInt(clics.tf.getText());
 				CheesyKM.EXPANDSEARCHRESULT=expandSearchResults.value.isSelected();
@@ -424,12 +433,14 @@ class Config{
 					JOptionPane.showMessageDialog(null,  CheesyKM.getLabel("butWhereDidYouPutTheBrowser"),  CheesyKM.getLabel("fileNotFound"), JOptionPane.ERROR_MESSAGE);
 					return false;
 				} else {
-					if(!CheesyKM.KEYSTOREPASS.equals(ksPass.tf.getText())||!CheesyKM.KEYSTOREPATH.equals(ksPath.fileName.getText()))
+					if((CheesyKM.USEJAVALAF&&!useJavaLaf.value.isSelected())||(!CheesyKM.USEJAVALAF&&useJavaLaf.value.isSelected())||!CheesyKM.KEYSTOREPASS.equals(ksPass.tf.getText())||!CheesyKM.KEYSTOREPATH.equals(ksPath.fileName.getText()))
 				JOptionPane.showMessageDialog(null,  CheesyKM.getLabel("changesWillBeEffectiveLater"), CheesyKM.getLabel("modifiedSSLParameters"), JOptionPane.INFORMATION_MESSAGE);
 			
 					return true;
 				}
 			} else {
+				if((CheesyKM.USEJAVALAF&&!useJavaLaf.value.isSelected())||(!CheesyKM.USEJAVALAF&&useJavaLaf.value.isSelected()))
+				JOptionPane.showMessageDialog(null,  CheesyKM.getLabel("changesWillBeEffectiveLater"), CheesyKM.getLabel("modifiedSSLParameters"), JOptionPane.INFORMATION_MESSAGE);
 				return true;
 			}
 			
@@ -476,6 +487,7 @@ class Config{
 		CheesyKM.FTPHOST="lab.elikya.com";
 		CheesyKM.FTPPASS="anonymous";
 		CheesyKM.FTPUSERNAME="anonymous";
+		CheesyKM.USEJAVALAF=false;
 	}
 	
 	/**

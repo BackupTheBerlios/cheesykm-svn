@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+  <programGroup defaultName="Elikya/CheesyKM" location="applications"/>
+   <shortcut
+     name="CheesyKM"
+     programGroup="yes"
+     desktop="yes"
+     applications="yes"
+     startMenu="no"
+     startup="no"
+     target="java"
+     commandLine="-jar &quot;$INSTALL_PATH/bin/CheesyKM.jar&quot; -classpath &quot;$INSTALL_PATH/lib/Xml-Rpc.jar&quot;"
+     initialState="noShow"
+     iconFile="$INSTALL_PATH/EasyKMTreeIcon.png"
+     iconIndex="0"
+     workingDirectory="$INSTALL_PATH/bin"
+     type="Application"
+     encoding="UTF-8"
+     description="CheesyKM">
+   </shortcut>
+   <shortcut
+     name="Uninstall CheesyKM"
+     programGroup="yes"
+     desktop="yes"
+     applications="yes"
+     startMenu="no"
+     startup="no"
+     target="java"
+     commandLine="-jar &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
+     initialState="noShow"
+     iconFile="$INSTALL_PATH/izpack_32.png"
+     iconIndex="0"
+     workingDirectory="$INSTALL_PATH/Uninstaller"
+     type="Application"
+     encoding="UTF-8"
+     description="Uninstall CheesyKM">
+   </shortcut>
+</shortcuts>

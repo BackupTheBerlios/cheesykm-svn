@@ -1,0 +1,8 @@
+#!/bin/csh
+./makeManifest
+cd ../trunk
+javac *.java
+jar cfm CheesyKM.jar ../scripts/cheesykm.manifest *.class ressources/*.gif ressources/*.png ressources/labels/*.properties
+mv CheesyKM.jar ../scripts/CheesyKM.jar
+cd ../scripts
+mv CheesyKM.jar bin

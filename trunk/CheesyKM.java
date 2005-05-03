@@ -95,6 +95,9 @@ public class CheesyKM{
 	public static String FTPPASS;
 	/**Default number of search field in the advanced search form*/
 	public static int DEFAULTSEARCHFIELDNUMBER;
+	/**use java L&F ?*/
+	public static boolean USEJAVALAF;
+	
 	
 	/**Maximal number of user-extended attributes*/
 	public static final int UFNUMBER=3;
@@ -121,6 +124,13 @@ public class CheesyKM{
 		//Load a global configuration
 		config=new Config();
 		config.loadConfig();
+		
+		if(!USEJAVALAF){
+			try{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch(Exception e){echo(e);}
+		}
+		
 		/*
 		EASYKMROOT="https://www.easy-km.net/demo/";
 		KEYSTOREPATH="./ressources/ksweb";
@@ -129,7 +139,7 @@ public class CheesyKM{
 		//Set XmlRpc global parameters
 		//XmlRpc.setDebug(true);
 		XmlRpc.setEncoding("UTF8");
-		XmlRpc.setInputEncoding("UTF-8");
+		XmlRpc.setDefaultInputEncoding("UTF8");
 		
 		//the MinML parser is used by default by XmlRpc, uncomment this to use another parser (xerces, for example)
 		//Parser has to be a SAX implementation
@@ -762,7 +772,7 @@ public class CheesyKM{
 			}
 			public void run(){
 				try{
-					echo("FTP UPLOAD FILE:"+localFilename+" AS REMOTE:"+remoteFilename);
+					//echo("FTP UPLOAD FILE:"+localFilename+" AS REMOTE:"+remoteFilename);
 					FTPClient ftpClient=new FTPClient();
 					ftpClient.setProgressMonitor(monitor);
 					ftpClient.setRemoteHost(CheesyKM.FTPHOST);
@@ -771,9 +781,9 @@ public class CheesyKM{
 					ftpClient.login(CheesyKM.FTPUSERNAME,CheesyKM.FTPPASS);
 					ftpClient.setType(FTPTransferType.BINARY);
 					ftpClient.chdir("incoming");
-					echo("put start");
+					//echo("put start");
 					ftpClient.put(localFilename,remoteFilename);
-					echo("put end");
+					//echo("put end");
 					ftpClient.quit();
 					success=true;
 					monitor.dispose();
