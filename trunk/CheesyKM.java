@@ -181,9 +181,11 @@ public class CheesyKM{
 		}
 		StringTokenizer stk=new StringTokenizer(path,System.getProperty("file.separator"),true);
 		String resu=new String();
-		for(int i=0;i<stk.countTokens()+1;i++){
+		int tokens=stk.countTokens();
+		for(int i=0;i<tokens-4;i++){
 			resu=resu+stk.nextToken();
 		}
+		//echo("URL:"+url+"\nPATH:"+path+"\nRESU:"+resu);
 		return resu;
 	}
 	
@@ -914,4 +916,5 @@ public class CheesyKM{
 			return doc.score;
 		}
 	}
+	
 }

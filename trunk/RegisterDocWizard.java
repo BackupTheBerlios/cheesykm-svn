@@ -287,6 +287,7 @@ class RegisterDocWizard extends JDialog{
 	private void registerDoc(boolean edit){
 		Hashtable metadata=new Hashtable();
 		metadata.put("docid",new Integer(this.docID));
+		this.topics.addAll(tst.getSelectedTopics());
 		metadata.put("topics",tst.getSelectedTopics());
 		metadata.put("description",panel2.getValues().get(0));
 		metadata.put("author",panel1.getValues().get(1));
@@ -377,6 +378,7 @@ class RegisterDocWizard extends JDialog{
 					}
 					JOptionPane.showMessageDialog(CheesyKM.api,CheesyKM.getLabel("docSucessfullyRegistered")+"\n"+CheesyKM.getLabel("docHasBeenIndexed"),CheesyKM.getLabel("success"),JOptionPane.INFORMATION_MESSAGE);
 				} else {
+					ok=true;
 					JOptionPane.showMessageDialog(CheesyKM.api,CheesyKM.getLabel("docSucessfullyRegistered"),CheesyKM.getLabel("success"),JOptionPane.INFORMATION_MESSAGE);
 				}
 				
@@ -421,16 +423,15 @@ class RegisterDocWizard extends JDialog{
 				JOptionPane.showMessageDialog(CheesyKM.api,CheesyKM.getLabel("errorWhileEditing"),CheesyKM.getLabel("error"),JOptionPane.ERROR_MESSAGE);
 			} else {
 				ok=true;
-				if(ok){
-					Vector toUpdate=new Vector();
-					for(int i=0;i<this.topics.size();i++){
-						toUpdate.add(new Integer(this.topics.get(i).toString().substring(1)));
-					}
-					if(docID!=0)
-						CheesyKM.api.modifiedTopics(toUpdate,this.docID);
-				}
 				JOptionPane.showMessageDialog(CheesyKM.api,CheesyKM.getLabel("docSucessfullyEdited"),CheesyKM.getLabel("success"),JOptionPane.INFORMATION_MESSAGE);
 			}
+		}
+		if(ok){
+			Vector toUpdate=new Vector();
+			for(int i=0;i<this.topics.size();i++){
+				toUpdate.add(new Integer(this.topics.get(i).toString().substring(1)));
+			}
+			CheesyKM.api.modifiedTopics(toUpdate,this.docID);
 		}
 		
 	}

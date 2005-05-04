@@ -662,7 +662,9 @@ class CheesyKMAPI extends JFrame{
 			((Topic)((DefaultMutableTreeNode)thematique.topics.get(topics.get(i))).getUserObject()).decharger();
 		}
 		int i=this.getIndexForDisplayedTopic(docID);
-		if(i!=-1) this.hideTopic(i);
+		if(i!=-1){
+			this.hideTopic(i);
+		}
 		if(CheesyKM.api.jtpG.getTabCount()==3) CheesyKM.api.jtpG.removeTabAt(2);    
 	}
 }
