@@ -12,7 +12,7 @@ class TopicSelectionTreeCellRenderer implements TreeCellRenderer{
 		SelectionTopic topic=(SelectionTopic)((DefaultMutableTreeNode)node).getUserObject();
 		JLabel defaultLabel=(JLabel)new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree,node,sel,expanded,leaf,row,hasFocus);
 		defaultLabel.setIcon(CheesyKM.loadIcon("./ressources/mgreytopic.png"));
-		JPanel cell=new JPanel(new FlowLayout(FlowLayout.CENTER,0,0));
+		JPanel cell=new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
 		JCheckBox cb=new JCheckBox();
 		
 		if(!leaf){
@@ -48,7 +48,7 @@ class TopicSelectionTreeCellRenderer implements TreeCellRenderer{
 		cell.setBackground(tree.getBackground());
 		cb.setSelected(topic.selected);
 		cb.setMaximumSize(new Dimension(16,16));
-		cb.setPreferredSize(new Dimension(16,16));
+		cb.setPreferredSize(new Dimension(18,16));
 		
 		
 		if(!(topic.rights>=((TopicSelectionTree)tree).minimumRightsLevel)){
