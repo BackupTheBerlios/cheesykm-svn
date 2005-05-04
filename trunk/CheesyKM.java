@@ -815,18 +815,7 @@ public class CheesyKM{
 	*@param doc the doc to delete.
 	*/
 	public static void deleteDoc(Doc doc){
-		if(JOptionPane.showConfirmDialog(CheesyKM.api,CheesyKM.getLabel("doYouReallyWannaDelete")+"\n"+doc.title, CheesyKM.getLabel("confirmDelete"), JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-			if(deleteDocRPC(doc)){
-				JOptionPane.showMessageDialog(null, getLabel("docDeleted"), getLabel("success"), JOptionPane.INFORMATION_MESSAGE);
-				//doc.getParent().getNode().remove(doc.getNode());
-				
-				CheesyKM.api.thematique.repaint();
-				if(CheesyKM.api.isAffiche(doc)!=-1)
-					CheesyKM.api.hideTopic(doc);
-			} else {
-				JOptionPane.showMessageDialog(null, getLabel("errorDeleting"), getLabel("error"), JOptionPane.ERROR_MESSAGE);
-			}
-		}
+		new DeleteDoc(doc);
 	}
 	
 	/**
@@ -846,13 +835,8 @@ public class CheesyKM{
 			}
 			public void run(){
 				try{	
-					
-					//status=((Integer)((Hashtable)client().execute("deleteDocs",params)).get(new Integer(doc.id))).intValue()>0;
 					Hashtable resu=(Hashtable)client().execute("deleteDocs",params);
 					status=Integer.parseInt(resu.get("Doc "+doc.id).toString())>0;
-					//status=true;
-					
-					
 					if(status){
 						Vector toUpdate=new Vector();
 						for(int i=0;i<doc.topicList.size();i++){
@@ -873,8 +857,6 @@ public class CheesyKM{
 				pbd.dispose();
 			}
 		}
-		
-		
 		Vector params=new Vector();
 		params.add(login);
 		params.add(pass);
@@ -886,10 +868,57 @@ public class CheesyKM{
 		Runner runner=new Runner(params,pbd);
 		pbd.show();
 		return runner.status;
-		
 	}
 	
-	
+	/**
+	*Calls the "rollbackDoc" RPC method.
+	*@param doc the doc to rollback.
+	*@return <code>true</code> if the Doc has successfully been rollbackd, <code>false</code> else.
+	*/
+	public static synchronized boolean rollbackDocRPC(final Doc doc){
+		class Runner extends Thread{
+			boolean status;
+			Vector params;
+			ProgBarDialog pbd;
+			Runner(Vector params,ProgBarDialog pbd){
+				this.params=params;
+				this.pbd=pbd;
+				this.start();
+			}
+			public void run(){
+				try{	
+					Integer resu=(Integer)client().execute("rollbackDoc",params);
+					status=(resu==null);
+					if(status){
+						Vector toUpdate=new Vector();
+						for(int i=0;i<doc.topicList.size();i++){
+							toUpdate.add(new Integer(doc.topicList.get(i).toString().substring(1)));
+						}
+						api.modifiedTopics(toUpdate,doc.id);
+					}
+				}catch(MalformedURLException mue){
+					JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
+					status=false;
+				}catch(XmlRpcException xre){
+					JOptionPane.showMessageDialog(null, getLabel("error")+xre, getLabel("errorXMLRPC"), JOptionPane.ERROR_MESSAGE);
+					status=false;
+				}catch(IOException ioe){
+					JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorIO"), JOptionPane.ERROR_MESSAGE);
+					status=false;
+				}
+				pbd.dispose();
+			}
+		}
+		Vector params=new Vector();
+		params.add(login);
+		params.add(pass);
+		params.add(new Integer(doc.id));
+		ProgBarDialog pbd=new ProgBarDialog(api);
+		pbd.setModal(true);
+		Runner runner=new Runner(params,pbd);
+		pbd.show();
+		return runner.status;
+	}
 	
 	/**
 	*Calls the "rateDoc" RPC method.
