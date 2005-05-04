@@ -888,7 +888,7 @@ public class CheesyKM{
 			public void run(){
 				try{	
 					Integer resu=(Integer)client().execute("rollbackDoc",params);
-					status=(resu==null);
+					status=resu.intValue()>0;
 					if(status){
 						Vector toUpdate=new Vector();
 						for(int i=0;i<doc.topicList.size();i++){
