@@ -646,8 +646,13 @@ public class CheesyKM{
 				JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorIO"), JOptionPane.ERROR_MESSAGE);
 			}
 		} else {
-			
-			String nomFic=FileChooserDialog.showChooser(api,getLabel("saveFileAs"),new FiltreFics("."+d.format),true,d.title+"."+d.format);
+			String titleValid=new String();
+			for(int i=0;i<d.title.length();i++){
+				if(Character.isLetterOrDigit(d.title.charAt(i))||Character.isSpaceChar(d.title.charAt(i))){
+					titleValid=titleValid+d.title.charAt(i);
+				}
+			}
+			String nomFic=FileChooserDialog.showChooser(api,getLabel("saveFileAs"),new FiltreFics("."+d.format),true,titleValid+"."+d.format);
 			if(nomFic!=null){
 				String nomComplet=nomFic;
 				if(!nomComplet.endsWith("."+d.format)) nomComplet=nomComplet+"."+d.format;
