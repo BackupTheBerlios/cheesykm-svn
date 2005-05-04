@@ -14,7 +14,7 @@ class RegisterDocWizard extends JDialog{
 	EditableFieldGroup panel1,panel2,panel3,panel4;
 	TopicSelectionTree tst;
 	JSlider ratingS;
-	JButton previous,next;
+	JButton previous,next,cancel;
 	Hashtable uf;
 	ProgBarDialog pbd;
 	/**
@@ -100,8 +100,20 @@ class RegisterDocWizard extends JDialog{
 		previous.setEnabled(false);
 		next=new JButton(CheesyKM.getLabel("nextStep"));
 		next.setEnabled(doc!=null);
-		JButton cancel=new JButton(CheesyKM.getLabel("cancel"));
+		cancel=new JButton(CheesyKM.getLabel("cancel"));
 		next.setIcon(CheesyKM.loadIcon("./ressources/VCRForward.gif"));
+		this.getRootPane().setDefaultButton(next);
+		KeyStroke escape = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
+		Action escapeAction = new AbstractAction(){
+			public void actionPerformed(ActionEvent e){
+				if(JOptionPane.showConfirmDialog(RegisterDocWizard.this,CheesyKM.getLabel("cancelRegister"), CheesyKM.getLabel("cancel")+" ?", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+					RegisterDocWizard.this.dispose();
+				}
+			}
+		};
+		this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
+		this.getRootPane().getActionMap().put("ESCAPE", escapeAction);
+		
 		previous.setIcon(CheesyKM.loadIcon("./ressources/VCRBack.gif"));
 		cancel.setIcon(CheesyKM.loadIcon("./ressources/Delete20.gif"));
 		
@@ -172,7 +184,13 @@ class RegisterDocWizard extends JDialog{
 		mainPanel.add(createPanel(1));
 		gc.add(south,"South");
 		this.pack();
-		this.setTitle(CheesyKM.getLabel("registerDoc"));
+		if(this.docID==0){
+			this.setTitle(CheesyKM.getLabel("registerNewDoc"));
+		} else if(edit){
+			this.setTitle(CheesyKM.getLabel("editDocument"));
+		} else {
+			this.setTitle(CheesyKM.getLabel("updateThisDoc"));
+		}
 		this.validate();
 		this.setModal(true);
 		

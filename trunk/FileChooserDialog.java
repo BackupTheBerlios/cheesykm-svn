@@ -21,6 +21,7 @@ class FileChooserDialog {
 		if(nomSuggere!=null)jfc.setSelectedFile(new File(nomSuggere));
 		int resu;
 		if(enregistrer){
+			jfc.setDialogTitle(CheesyKM.getLabel("saveFileAs"));
 			resu=jfc.showSaveDialog(parent);
 		} else {
 			resu=jfc.showOpenDialog(parent);

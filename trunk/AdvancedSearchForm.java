@@ -116,7 +116,14 @@ class AdvancedSearchForm extends JPanel{
 		for(int i=0;i<nbChamps;i++){
 			JPanel champ=new JPanel(new BorderLayout());
 			champ.add(new JComboBox(conditions),"West");
-			champ.add(new JTextField(),"Center");
+			JTextField tfWhat=new JTextField();
+			class LaunchSearchListener implements ActionListener{
+				public void actionPerformed(ActionEvent e){
+					search();
+				}
+			}
+			tfWhat.addActionListener(new LaunchSearchListener());
+			champ.add(tfWhat,"Center");
 			JComboBox cbb=new JComboBox(fields);
 			champ.add(cbb,"East");
 			champs.add(champ);
@@ -131,7 +138,14 @@ class AdvancedSearchForm extends JPanel{
 				AdvancedSearchForm.this.nbChamps++;
 				JPanel champ=new JPanel(new BorderLayout());
 				champ.add(new JComboBox(AdvancedSearchForm.this.conditions),"West");
-				champ.add(new JTextField(),"Center");
+				JTextField tfWhat=new JTextField();
+				class LaunchSearchListener implements ActionListener{
+					public void actionPerformed(ActionEvent e){
+						search();
+					}
+				}
+				tfWhat.addActionListener(new LaunchSearchListener());
+				champ.add(tfWhat,"Center");
 				champ.add(new JComboBox(AdvancedSearchForm.this.fields),"East");
 				AdvancedSearchForm.this.champs.add(champ);
 				AdvancedSearchForm.this.documentChamps.add(champ);
@@ -410,6 +424,7 @@ class AdvancedSearchForm extends JPanel{
 	*Builds a search request Hashtable and calls the "search" RPC method.
 	*/
 	public void search(){
+		if(!this.search.isEnabled()) return;
 		query=new Hashtable();
 		for(int i=0;i<this.fields.length;i++){
 			Hashtable qExp=new Hashtable();

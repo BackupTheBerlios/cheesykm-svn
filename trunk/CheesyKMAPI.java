@@ -73,9 +73,12 @@ class CheesyKMAPI extends JFrame{
 		
 		JMenuBar menuBar=new JMenuBar();
 		JMenu menuConnexion=new JMenu(CheesyKM.getLabel("connection"));
-		menuDeconnecter=new JMenuItem(CheesyKM.getLabel("disconnect"));
+		menuConnexion.setMnemonic(KeyEvent.VK_C);
+		menuDeconnecter=new JMenuItem(CheesyKM.getLabel("disconnect"),KeyEvent.VK_D);
+		menuDeconnecter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,ActionEvent.CTRL_MASK));
 		menuDeconnecter.setEnabled(false);
-		JMenuItem menuExit=new JMenuItem(CheesyKM.getLabel("quit"));
+		JMenuItem menuExit=new JMenuItem(CheesyKM.getLabel("quit"),KeyEvent.VK_Q);
+		menuExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,ActionEvent.CTRL_MASK));
 		
 		
 		class frameListener extends WindowAdapter{
@@ -130,17 +133,25 @@ class CheesyKMAPI extends JFrame{
 		
 		
 		menuDocument=new JMenu(CheesyKM.getLabel("document"));
+		menuDocument.setMnemonic(KeyEvent.VK_D);
 		menuDocument.setEnabled(false);
-		menuVoirDocument=new JMenuItem(CheesyKM.getLabel("seeDocument"));
+		
+		menuVoirDocument=new JMenuItem(CheesyKM.getLabel("seeDocument"),KeyEvent.VK_I);
 		menuVoirDocument.setEnabled(false);
-		menuTelechargerDocument=new JMenuItem(CheesyKM.getLabel("downloadDocument"));
+		menuVoirDocument.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,ActionEvent.CTRL_MASK));
+		menuTelechargerDocument=new JMenuItem(CheesyKM.getLabel("downloadDocument"),KeyEvent.VK_L);
+		menuTelechargerDocument.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK));
 		menuTelechargerDocument.setEnabled(false);
-		menuDeposerDocument=new JMenuItem(CheesyKM.getLabel("registerNewDoc"));
-		menuMettreAJourDocument=new JMenuItem(CheesyKM.getLabel("updateThisDoc"));
+		menuDeposerDocument=new JMenuItem(CheesyKM.getLabel("registerNewDoc"),KeyEvent.VK_N);
+		menuDeposerDocument.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,ActionEvent.CTRL_MASK));
+		menuMettreAJourDocument=new JMenuItem(CheesyKM.getLabel("updateThisDoc"),KeyEvent.VK_V);
+		menuMettreAJourDocument.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,ActionEvent.CTRL_MASK));
 		menuMettreAJourDocument.setEnabled(false);
-		menuModifierDocument=new JMenuItem(CheesyKM.getLabel("editDocument"));
+		menuModifierDocument=new JMenuItem(CheesyKM.getLabel("editDocument"),KeyEvent.VK_E);
+		menuModifierDocument.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,ActionEvent.CTRL_MASK));
 		menuModifierDocument.setEnabled(false);
-		menuSupprimerDocument=new JMenuItem(CheesyKM.getLabel("deleteDocument"));
+		menuSupprimerDocument=new JMenuItem(CheesyKM.getLabel("deleteDocument"),KeyEvent.VK_T);
+		menuSupprimerDocument.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE,ActionEvent.CTRL_MASK));
 		menuSupprimerDocument.setEnabled(false);
 		
 		class MenuVoirDocumentListener implements ActionListener{
@@ -187,6 +198,7 @@ class CheesyKMAPI extends JFrame{
 		
 		menuDocument.add(menuVoirDocument);
 		menuDocument.add(menuTelechargerDocument);
+		menuDocument.addSeparator();
 		menuDocument.add(menuMettreAJourDocument);
 		menuDocument.add(menuModifierDocument);
 		menuDocument.add(menuSupprimerDocument);
@@ -195,10 +207,13 @@ class CheesyKMAPI extends JFrame{
 		menuBar.add(menuDocument);
 		
 		menuWeb=new JMenu(CheesyKM.getLabel("webSite"));
+		menuWeb.setMnemonic(KeyEvent.VK_W);
 		menuWeb.setEnabled(false);
-		menuVoirSiteWeb=new JMenuItem(CheesyKM.getLabel("visitSite"));
+		menuVoirSiteWeb=new JMenuItem(CheesyKM.getLabel("visitSite"),KeyEvent.VK_S);
+		menuVoirSiteWeb.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,ActionEvent.CTRL_MASK));
 		menuVoirSiteWeb.setEnabled(false);
-		menuCopierAdresseWeb=new JMenuItem(CheesyKM.getLabel("copySiteURL"));
+		menuCopierAdresseWeb=new JMenuItem(CheesyKM.getLabel("copySiteURL"),KeyEvent.VK_U);
+		menuCopierAdresseWeb.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U,ActionEvent.CTRL_MASK));
 		menuCopierAdresseWeb.setEnabled(false);
 		class MenuVoirSiteWebListener implements ActionListener{
 			public void actionPerformed(ActionEvent ae){
@@ -219,10 +234,15 @@ class CheesyKMAPI extends JFrame{
 		
 		
 		menuOnglet=new JMenu(CheesyKM.getLabel("tabs"));
+		menuOnglet.setMnemonic(KeyEvent.VK_T);
 		menuOnglet.setEnabled(false);
-		menuFermerOnglet=new JMenuItem(CheesyKM.getLabel("closeTab"));
+		
+		
+		menuFermerOnglet=new JMenuItem(CheesyKM.getLabel("closeTab"),KeyEvent.VK_O);
+		menuFermerOnglet.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K,ActionEvent.ALT_MASK));
 		menuFermerOnglet.setEnabled(false);
-		menuFermerTousLesOnglets=new JMenuItem(CheesyKM.getLabel("closeAllTabs"));
+		menuFermerTousLesOnglets=new JMenuItem(CheesyKM.getLabel("closeAllTabs"),KeyEvent.VK_L);
+		menuFermerTousLesOnglets.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,ActionEvent.ALT_MASK));
 		menuFermerTousLesOnglets.setEnabled(false);
 		class MenuFermerOngletListener implements ActionListener{
 			public void actionPerformed(ActionEvent ae){
@@ -245,6 +265,7 @@ class CheesyKMAPI extends JFrame{
 		menuBar.add(menuOnglet);
 		
 		JMenu menuConfig=new JMenu(CheesyKM.getLabel("configuration"));
+		menuConfig.setMnemonic(KeyEvent.VK_O);
 		JMenuItem menuConfigItem=new JMenuItem(CheesyKM.getLabel("viewConfig"));
 		class MenuConfigListener implements ActionListener {
 			public void actionPerformed(ActionEvent e){
@@ -252,6 +273,7 @@ class CheesyKMAPI extends JFrame{
 			}
 		}
 		menuConfigItem.addActionListener(new MenuConfigListener());
+		menuConfigItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,ActionEvent.ALT_MASK));
 		menuConfig.add(menuConfigItem);
 		menuBar.add(menuConfig);
 		
@@ -264,12 +286,12 @@ class CheesyKMAPI extends JFrame{
 		jtbStop=new JButton(CheesyKM.loadIcon("./ressources/UnPlug.gif"));
 		jtbStop.addActionListener(new menuDeconnecterListener());
 		jtbStop.setEnabled(false);
-		jtbStop.setToolTipText(CheesyKM.getLabel("disconnect"));
+		jtbStop.setToolTipText(CheesyKM.getLabel("disconnect")+" (Ctrl+D)");
 		jtb.add(jtbStop);
 
 		jtbQuitter=new JButton(CheesyKM.loadIcon("./ressources/Delete.gif"));
 		jtbQuitter.addActionListener(new menuExitListener());
-		jtbQuitter.setToolTipText(CheesyKM.getLabel("quit"));
+		jtbQuitter.setToolTipText(CheesyKM.getLabel("quit")+" (Ctrl+Q)");
 		jtb.add(jtbQuitter);
 		
 		jtb.addSeparator();
@@ -277,31 +299,31 @@ class CheesyKMAPI extends JFrame{
 		jtbVoirDocument=new JButton(CheesyKM.loadIcon("./ressources/Sheet.gif"));
 		jtbVoirDocument.addActionListener(new MenuVoirDocumentListener());
 		jtbVoirDocument.setEnabled(false);
-		jtbVoirDocument.setToolTipText(CheesyKM.getLabel("seeDocument"));
+		jtbVoirDocument.setToolTipText(CheesyKM.getLabel("seeDocument")+" (Ctrl+O)");
 		jtb.add(jtbVoirDocument);
 		
 		jtbTelechargerDocument=new JButton(CheesyKM.loadIcon("./ressources/DocToFolder.gif"));
 		jtbTelechargerDocument.addActionListener(new MenuTelechargerDocumentListener());
 		jtbTelechargerDocument.setEnabled(false);
-		jtbTelechargerDocument.setToolTipText(CheesyKM.getLabel("downloadDocument"));
+		jtbTelechargerDocument.setToolTipText(CheesyKM.getLabel("downloadDocument")+" (Ctrl+S)");
 		jtb.add(jtbTelechargerDocument);
 		
 		jtbMettreAJourDocument=new JButton(CheesyKM.loadIcon("./ressources/PlusPlus.gif"));
 		jtbMettreAJourDocument.addActionListener(new MenuMettreAJourDocumentListener());
 		jtbMettreAJourDocument.setEnabled(false);
-		jtbMettreAJourDocument.setToolTipText(CheesyKM.getLabel("updateThisDoc"));
+		jtbMettreAJourDocument.setToolTipText(CheesyKM.getLabel("updateThisDoc")+" (Ctrl+R)");
 		jtb.add(jtbMettreAJourDocument);
 		
 		jtbModifierDocument=new JButton(CheesyKM.loadIcon("./ressources/EditComp.gif"));
 		jtbModifierDocument.addActionListener(new MenuModifierDocumentListener());
 		jtbModifierDocument.setEnabled(false);
-		jtbModifierDocument.setToolTipText(CheesyKM.getLabel("editDocument"));
+		jtbModifierDocument.setToolTipText(CheesyKM.getLabel("editDocument")+" (Ctrl+E)");
 		jtb.add(jtbModifierDocument);
 		
 		jtbSupprimerDocument=new JButton(CheesyKM.loadIcon("./ressources/DeleteSheet.gif"));
 		jtbSupprimerDocument.addActionListener(new MenuSupprimerDocumentListener());
 		jtbSupprimerDocument.setEnabled(false);
-		jtbSupprimerDocument.setToolTipText(CheesyKM.getLabel("deleteDocument"));
+		jtbSupprimerDocument.setToolTipText(CheesyKM.getLabel("deleteDocument")+" (Ctrl+Delete)");
 		jtb.add(jtbSupprimerDocument);
 		
 		jtb.addSeparator();
@@ -309,13 +331,13 @@ class CheesyKMAPI extends JFrame{
 		jtbVoirSiteWeb=new JButton(CheesyKM.loadIcon("./ressources/web32.png"));
 		jtbVoirSiteWeb.addActionListener(new MenuVoirSiteWebListener());
 		jtbVoirSiteWeb.setEnabled(false);
-		jtbVoirSiteWeb.setToolTipText(CheesyKM.getLabel("visitSite"));
+		jtbVoirSiteWeb.setToolTipText(CheesyKM.getLabel("visitSite")+" (Ctrl+W)");
 		jtb.add(jtbVoirSiteWeb);
 		
 		jtbCopierAddresseWeb=new JButton(CheesyKM.loadIcon("./ressources/Copy0.gif"));
 		jtbCopierAddresseWeb.addActionListener(new MenuCopierAdresseWebListener());
 		jtbCopierAddresseWeb.setEnabled(false);
-		jtbCopierAddresseWeb.setToolTipText(CheesyKM.getLabel("copySiteURL"));
+		jtbCopierAddresseWeb.setToolTipText(CheesyKM.getLabel("copySiteURL")+" (Ctrl+U)");
 		jtb.add(jtbCopierAddresseWeb);
 		
 		jtb.addSeparator();
@@ -323,20 +345,20 @@ class CheesyKMAPI extends JFrame{
 		jtbFermerOnglet=new JButton(CheesyKM.loadIcon("./ressources/NewProj.gif"));
 		jtbFermerOnglet.addActionListener(new MenuFermerOngletListener());
 		jtbFermerOnglet.setEnabled(false);
-		jtbFermerOnglet.setToolTipText(CheesyKM.getLabel("closeTab"));
+		jtbFermerOnglet.setToolTipText(CheesyKM.getLabel("closeTab")+" (Alt+K)");
 		jtb.add(jtbFermerOnglet);
 		
 		jtbFermerTousLesOnglets=new JButton(CheesyKM.loadIcon("./ressources/Folder2bliz.gif"));
 		jtbFermerTousLesOnglets.addActionListener(new MenuFermerTousLesOngletsListener());
 		jtbFermerTousLesOnglets.setEnabled(false);
-		jtbFermerTousLesOnglets.setToolTipText(CheesyKM.getLabel("closeAllTabs"));
+		jtbFermerTousLesOnglets.setToolTipText(CheesyKM.getLabel("closeAllTabs")+" (Alt+L)");
 		jtb.add(jtbFermerTousLesOnglets);
 		
 		jtb.addSeparator();
 		
 		JButton jtbConfig=new JButton(CheesyKM.loadIcon("./ressources/Hammer.gif"));
 		jtbConfig.addActionListener(new MenuConfigListener());
-		jtbConfig.setToolTipText(CheesyKM.getLabel("viewConfig"));
+		jtbConfig.setToolTipText(CheesyKM.getLabel("viewConfig")+" (Alt+P)");
 		jtb.add(jtbConfig);
 		jtb.setBorderPainted(false);
 		jtb.setFloatable(true);
