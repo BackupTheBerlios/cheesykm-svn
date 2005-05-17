@@ -27,7 +27,9 @@ public class CheesyKM{
 	/**Login name, <code>null</code> if no session is currently open*/
 	static String login=null;
 	/**session password, null if no session is currently open*/
-	private static String pass=null;
+	static String pass=null;
+	/**maximum right level that the current user has on all accessible topics*/
+	static int maximumRightLevel=0;
 	/**{@link Topic}s that are loaded in memory*/
 	static Vector topicsInMem;
 	/**{@link Doc}s that are loaded in memory*/
@@ -159,6 +161,7 @@ public class CheesyKM{
 		//new main frame
 		api=new CheesyKMAPI();
 		new MemoryMonitor();
+		
 	}
 	
 	/**
@@ -555,6 +558,7 @@ public class CheesyKM{
 	public static void deconnecter(){
 		setLogin(null,null);
 		tNames=null;
+		maximumRightLevel=0;
 		tRelations=null;
 		tRights=null;
 		rootTopics=null;
@@ -723,6 +727,15 @@ public class CheesyKM{
 	}
 	
 	/**
+	*@param date date to convert
+	*@return "yyyy-MM-dd" date.
+	*/
+	public static String dateToEasyKM(Date date){
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+		return dateToEasyKM(sdf.format(date));
+	}
+	
+	/**
 	*Returns the date x month beefore today as a "yyyy-MM-dd" String.
 	*@return the date x month beefore today as a "yyyy-MM-dd" String.
 	*/
@@ -756,8 +769,13 @@ public class CheesyKM{
 	*@return "dd-MM-yyyy" date.
 	*/
 	public static String dateFromEasyKM(String date){
+		if(date==null)return "";
 		if(date.equals("")) return "";
 		return date.substring(8,10)+"-"+date.substring(5,7)+"-"+date.substring(0,4);
+	}
+	
+	public static boolean upload(String localFilename,String remoteFilename){
+		return upload(localFilename,remoteFilename,true);
 	}
 	
 	/**
@@ -766,7 +784,7 @@ public class CheesyKM{
 	*@param remoteFilename name of the file on the remote FTP server. (will be "/incoming/remoteFilename").
 	*@return <code>true</code> if the uipload successed, <code>false</code> else.
 	*/
-	public static boolean upload(String localFilename,String remoteFilename){
+	public static boolean upload(String localFilename,String remoteFilename,boolean showProgBar){
 		
 		class Runner extends Thread{
 			FTPUploadMonitor monitor;
@@ -793,24 +811,31 @@ public class CheesyKM{
 					//echo("put end");
 					ftpClient.quit();
 					success=true;
-					monitor.dispose();
+					if(monitor!=null)monitor.dispose();
 				} catch(IOException ioe){
 					success=false;
 					JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorIO"), JOptionPane.ERROR_MESSAGE);
-					monitor.dispose();
+					if(monitor!=null)monitor.dispose();
 				} catch(FTPException ioe){
 					success=false;
 					JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorFTP"), JOptionPane.ERROR_MESSAGE);
-					monitor.dispose();
+					if(monitor!=null)monitor.dispose();
 				}
+			}
+			public boolean success(){
+				while(this.isAlive()){
+					try{Thread.sleep(100);}catch(InterruptedException e){}
+				}
+				return success;
 			}
 			
 		}
-		FTPUploadMonitor monitor=new FTPUploadMonitor(new File(localFilename).length());
+		FTPUploadMonitor monitor=null;
+		if(showProgBar) monitor=new FTPUploadMonitor(new File(localFilename).length());
 		Runner runner=new Runner(monitor,localFilename,remoteFilename);
 		runner.start();
-		monitor.show();
-		return runner.success;
+		if(monitor!=null)monitor.show();
+		return runner.success();
 		
 	}
 		
@@ -927,7 +952,7 @@ public class CheesyKM{
 	
 	/**
 	*Calls the "rateDoc" RPC method.
-	*@param doc The Document to rate
+	*@param doc The Document to rate.
 	*@param newRating the new rating for this doc.
 	*/
 	public static int rateDoc(Doc doc,int newRating){
@@ -948,6 +973,39 @@ public class CheesyKM{
 		}catch(IOException ioe){
 			JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorIO"), JOptionPane.ERROR_MESSAGE);
 			return doc.score;
+		}
+	}
+	
+	/**
+	*Calls the "addTopic" RPC method.
+	*@param parentTid the tid of the parent of the topic to create, as a String ("TXX").
+	*@param name name of the topic to create.
+	*/
+	public synchronized static String createTopic(String parentTid,String name){
+		echo("CREATING TOPIC:"+name+" IN PARENT TID:"+parentTid);
+		try{
+			Vector params=new Vector();
+			params.add(login);
+			params.add(pass);
+			params.add(parentTid);
+			params.add(name);
+			Object resu=client().execute("addTopic",params);
+			if(String.class.isInstance(resu)){
+				echo("SUCCESS:"+resu.toString());
+				return resu.toString();
+			} else {
+				echo("ECHEC");
+				return "ERROR";
+			}
+		}catch(MalformedURLException mue){
+			JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}catch(XmlRpcException xre){
+			JOptionPane.showMessageDialog(null, getLabel("error")+xre, getLabel("errorXMLRPC"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}catch(IOException ioe){
+			JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorIO"), JOptionPane.ERROR_MESSAGE);
+			return null;
 		}
 	}
 	

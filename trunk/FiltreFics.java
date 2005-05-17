@@ -14,7 +14,10 @@ public class FiltreFics extends javax.swing.filechooser.FileFilter{
 	public FiltreFics(String extension){
 		this.extension=extension;
 	}
-	
+	/**
+	*Called by the JFileChooser, checks if a file has to be displayed or not.
+	*@param f the File to check.
+	*/
 	public boolean accept(File f) {
 	    if (f.isDirectory()) {
 		return true;
@@ -23,6 +26,9 @@ public class FiltreFics extends javax.swing.filechooser.FileFilter{
 		return nomfic.endsWith(this.extension);
 	}
 	
+	/**
+	*Called by some Look & Feel.
+	*/
 	public String getDescription() {
 		 return "*"+this.extension;
 	}

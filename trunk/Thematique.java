@@ -171,17 +171,21 @@ class Thematique extends JTree {
 	/**
 	*Returns the path for a Topic in this Tree.
 	*@param tid Topic ID as an <code>int</code>.
-	*@return Treepath for this Topic.
+	*@return Treepath for this Topic, or null if not found.
 	*/
 	public TreePath getPathForTopic(int tid){
 		DefaultMutableTreeNode t=(DefaultMutableTreeNode)topics.get(new Integer(tid));
-		return new TreePath(t.getPath());
+		if(t!=null){
+			return new TreePath(t.getPath());
+		} else {
+			return null;
+		}
 	}
 	
 	/**
 	*Returns the path for a Topic in this Tree.
 	*@param tid Topic ID as a String ("TXX").
-	*@return Treepath for this Topic.
+	*@return Treepath for this Topic, or null if not found.
 	*/
 	public TreePath getPathForTopic(String tid){
 		return getPathForTopic(Integer.parseInt(tid.substring(1)));

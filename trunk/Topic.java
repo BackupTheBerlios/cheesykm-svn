@@ -52,7 +52,10 @@ class Topic{
 	*Updates this Topics tree node.
 	*@param node DefaultMutableTreeNode, Topics tree node.
 	*/
-	public void setNode(DefaultMutableTreeNode node){myNode=node;}
+	public void setNode(DefaultMutableTreeNode node){
+		myNode=node;
+		node.setUserObject(this);
+	}
 	
 	/**
 	*Updates this Topics type ('T'=topic;'P'=topicPlus;'D'=document;'W'=WebPage:'F'=Filetransfert).

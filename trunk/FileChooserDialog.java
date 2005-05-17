@@ -16,7 +16,22 @@ class FileChooserDialog {
 	*@return String representation of the full path to the selected file.
 	*/
 	public static String showChooser(JFrame parent,String title,FileFilter filtre,boolean enregistrer,String nomSuggere){
+		return showChooser(parent,title,filtre,enregistrer,nomSuggere,false);
+	}
+	
+	/**
+	*Shows a file chooser dialog and returns a String representation of the selected file.
+	*@param parent Dialogs parent Frame.
+	*@param title Title of the Dialog.
+	*@param filtre FileFilter to apply to the displayed files. (see {@link FiltreFics})
+	*@param enregistrer <code>true</code> to show a "Save" dialog, <code>false</code> to show a "Open" dialog.
+	*@param nomSuggere Suggested file name.
+	*@param foldersToo <code>true</code> to allow folder selection.
+	*@return String representation of the full path to the selected file.
+	*/
+	public static String showChooser(JFrame parent,String title,FileFilter filtre,boolean enregistrer,String nomSuggere,boolean foldersToo){
 		JFileChooser jfc=new JFileChooser();
+		if(foldersToo)jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		if(filtre!=null)jfc.addChoosableFileFilter(filtre);
 		if(nomSuggere!=null)jfc.setSelectedFile(new File(nomSuggere));
 		int resu;

@@ -34,6 +34,7 @@ class CheesyKMAPI extends JFrame{
 	JMenuItem menuTelechargerDocument;
 	JButton jtbTelechargerDocument;
 	JMenuItem menuDeposerDocument;
+	JMenuItem menuImporterDossier;
 	JMenuItem menuMettreAJourDocument;
 	JButton jtbMettreAJourDocument;
 	JMenuItem menuModifierDocument;
@@ -144,6 +145,7 @@ class CheesyKMAPI extends JFrame{
 		menuTelechargerDocument.setEnabled(false);
 		menuDeposerDocument=new JMenuItem(CheesyKM.getLabel("registerNewDoc"),KeyEvent.VK_N);
 		menuDeposerDocument.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,ActionEvent.CTRL_MASK));
+		menuImporterDossier=new JMenuItem(CheesyKM.getLabel("importFolders"),KeyEvent.VK_S);
 		menuMettreAJourDocument=new JMenuItem(CheesyKM.getLabel("updateThisDoc"),KeyEvent.VK_V);
 		menuMettreAJourDocument.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,ActionEvent.CTRL_MASK));
 		menuMettreAJourDocument.setEnabled(false);
@@ -175,6 +177,13 @@ class CheesyKMAPI extends JFrame{
 		}
 		menuDeposerDocument.addActionListener(new MenuDeposerDocumentListener());
 		
+		class MenuImporterDossierListener implements ActionListener{
+			public void actionPerformed(ActionEvent ae){
+				new ImportFiles();
+			}
+		}
+		menuImporterDossier.addActionListener(new MenuImporterDossierListener());
+		
 		class MenuMettreAJourDocumentListener implements ActionListener{
 			public void actionPerformed(ActionEvent ae){
 				new RegisterDocWizard((Doc)getDisplayedTopic());
@@ -203,7 +212,8 @@ class CheesyKMAPI extends JFrame{
 		menuDocument.add(menuModifierDocument);
 		menuDocument.add(menuSupprimerDocument);
 		menuDocument.addSeparator();
-		menuDocument.add(menuDeposerDocument);
+		//menuDocument.add(menuDeposerDocument);
+		//menuDocument.add(menuImporterDossier);
 		menuBar.add(menuDocument);
 		
 		menuWeb=new JMenu(CheesyKM.getLabel("webSite"));
@@ -475,6 +485,13 @@ class CheesyKMAPI extends JFrame{
 	*Updates the GUI at disconnect, and shows the login prompt.
 	*/
 	void deconnecter(){
+		deconnecter(false);
+	}
+	/**
+	*Updates the GUI at disconnect, and shows the login prompt.
+	*/
+	void deconnecter(boolean relog){
+		if(!relog)
 		setTitle(CheesyKM.getLabel("titleDisconnected"));
 		qstb.setEnabled(false);
 		menuDeconnecter.setEnabled(false);
@@ -482,9 +499,14 @@ class CheesyKMAPI extends JFrame{
 		jtbStop.setEnabled(false);
 		jtpG.removeAll();
 		hideAllTopics();
-		login=new Login(this);
-		
+		String user=null;
+		String pass=null;
+		if(relog){
+			user=CheesyKM.login;
+			pass=CheesyKM.pass;
+		}
 		CheesyKM.deconnecter();
+		login=new Login(this,relog,user,pass);
 	}
 	
 	/**
@@ -527,10 +549,14 @@ class CheesyKMAPI extends JFrame{
 		thematique=new Thematique();
 		JScrollPane scrollThematique = new JScrollPane(thematique);
 		this.jtpG.addTab(CheesyKM.getLabel("topics"),null,scrollThematique,CheesyKM.getLabel("topicTreeView"));
-		
-		
-		
-		
+
+		if(CheesyKM.maximumRightLevel<Topic.RIGHT_RW){
+			menuDocument.remove(menuDeposerDocument);
+			menuDocument.remove(menuImporterDossier);
+		} else {
+			menuDocument.add(menuDeposerDocument);
+			menuDocument.add(menuImporterDossier);
+		}
 		
 	}
 	/**

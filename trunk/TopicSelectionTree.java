@@ -92,6 +92,7 @@ class TopicSelectionTree extends Thematique{
 	*/
 	public void expandPathToTopics(Vector tids){
 		for(int i=0;i<tids.size();i++){
+			if(this.getPathForTopic(tids.get(i).toString())!=null)
 			this.expandPath(this.getPathForTopic(tids.get(i).toString()).getParentPath());
 		}
 	}
@@ -110,6 +111,25 @@ class TopicSelectionTree extends Thematique{
 	*/
 	public Vector getSelectedTopics(){
 		return ((SelectionTopic)((DefaultMutableTreeNode)this.getModel().getRoot()).getUserObject()).getSelectedChildren();
+	}
+	
+	/**
+	*Sets the selected topics.
+	*@param toSelect the selected topics as a Vector of topic IDs. These IDs are Strings ("TXX").
+	*/
+	public void setSelectedTopics(Vector toSelect){
+		Enumeration keys=topics.keys();
+		while(keys.hasMoreElements()){
+			Integer key=(Integer)keys.nextElement();
+			SelectionTopic t=(SelectionTopic)((DefaultMutableTreeNode)topics.get(key)).getUserObject();
+			if(toSelect.contains("T"+key)){
+				t.selected=true;
+			} else {
+				t.selected=false;
+			}
+		}
+		expandPathToTopics(toSelect);
+		repaint();
 	}
 	
 }

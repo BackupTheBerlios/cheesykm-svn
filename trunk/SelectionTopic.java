@@ -1,11 +1,17 @@
 import java.util.*;
 import javax.swing.tree.*;
+import java.io.*;
 /**
 *'Special' Topic for the TopicSelectionTree.<br>
 *Just like Topic, with attributes and methods added to manage selections.
 */
 class SelectionTopic extends Topic{
 	boolean selected;
+	boolean created=false;
+	String name=null;
+	File fileForNewTopic=null;
+	ImportFiles.Node nodeForNewTopic=null;
+	public static int COUNT=-2;
 	/**
 	*Default constructor.
 	*/
@@ -19,6 +25,19 @@ class SelectionTopic extends Topic{
 	*/
 	SelectionTopic(int i){
 		super(i);
+	}
+	
+	SelectionTopic(boolean created,String name,int rights){
+		this(COUNT--);
+		this.setNode(new DefaultMutableTreeNode());
+		this.setNodeType('T');
+		this.name=name;
+		this.created=true;
+		this.rights=rights;
+	}
+	
+	SelectionTopic(boolean created,String name){
+		this(created,name,Topic.RIGHT_RWM);
 	}
 	
 	/**
@@ -80,5 +99,13 @@ class SelectionTopic extends Topic{
 			resu.addAll(((SelectionTopic)((DefaultMutableTreeNode)children.nextElement()).getUserObject()).getSelectedChildren());
 		}
 		return resu;
+	}
+	
+	public String toString(){
+		if(this.name==null){
+			return super.toString();
+		} else {
+			return name;
+		}
 	}
 }

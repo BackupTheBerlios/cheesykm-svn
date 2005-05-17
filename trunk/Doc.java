@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.tree.*;
-
+import java.io.*;
 /**
 *Represents a document.<br>
 *A document is made of:<br>
@@ -36,11 +36,47 @@ public class Doc extends Topic{
 	public Hashtable uf;
 	public Vector topicList;
 	public int visits,size,downloads, score, version;
+	public static int newDocBatchCount=-5;
 	
 	Topic parent;
 	
+	/**
+	*New doc, with docID=-2.
+	*/
 	Doc(){
 		super(-2);
+	}
+	
+	/**
+	*Creates a new Doc from a file, getting attributes from this file.
+	*@param f the File to get some attributes from.
+	*/
+	Doc(File f){
+		this(f,null);
+	}
+	
+	/**
+	*Creates a new Doc from a file in a topic, getting attributes from this file.
+	*@param f the File to get some attributes from.
+	*@param topic The tid of the topic of this Doc, as a String ("TXX").
+	*/
+	Doc(File f,String topic){
+		super(newDocBatchCount--);
+		if(f.getName().length()>5){
+			title=f.getName().substring(0,f.getName().length()-4);
+		} else {
+			title=f.getName();
+		}
+		file=f.getPath();
+		creadate=CheesyKM.dateToEasyKM(new Date(f.lastModified()));
+		//CheesyKM.echo("LASTMODIFIED:"+f.lastModified()+"|CREADATE:"+creadate);
+		score=80;
+		//ADD OTHER FILE-EXTRACTED INFOS HERE
+		Vector topics=new Vector();
+		if(topic!=null){
+			topics.add(topic);
+		}
+		topicList=topics;
 	}
 	
 	/**

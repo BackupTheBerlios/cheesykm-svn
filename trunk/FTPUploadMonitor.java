@@ -27,7 +27,9 @@ public class FTPUploadMonitor extends JDialog implements FTPProgressMonitor{
 		this.validate();
 		this.setModal(true);
 	}
-	
+	/**
+	*Called by the FTPClient to monitor a file transfer.
+	*/
 	public void bytesTransferred(long count){
 		if(pb.isIndeterminate()){
 			pb.setIndeterminate(false);

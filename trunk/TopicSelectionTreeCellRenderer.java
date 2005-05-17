@@ -55,8 +55,17 @@ class TopicSelectionTreeCellRenderer implements TreeCellRenderer{
 			cb.setEnabled(false);
 			defaultLabel.setIcon(CheesyKM.loadIcon("./ressources/mgreytopic.png"));
 			defaultLabel.setForeground(Color.lightGray);
+			cb.setForeground(defaultLabel.getBackground());
+			cb.setBackground(defaultLabel.getBackground());
 		}
 		
+		if(topic.created){
+			defaultLabel.setBackground(Color.orange);
+			defaultLabel.setForeground(Color.orange);
+			if(topic.rights==-5){
+				defaultLabel.setIcon(CheesyKM.loadIcon("./ressources/Copy16.gif"));
+			}
+		}
 		
 		cell.add(cb);
 		cell.add(defaultLabel);
