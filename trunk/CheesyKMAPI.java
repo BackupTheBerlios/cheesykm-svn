@@ -625,6 +625,7 @@ class CheesyKMAPI extends JFrame{
 			i++;
 		}
 		jtpD.removeTabAt(index);
+		System.gc();
 	}
 	
 	
