@@ -96,6 +96,11 @@ class IntegerValue extends EditableField{
 	}
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
+		if(b){
+			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+		} else {
+			this.setToolTipText("");
+		}
 		if(this.hasToBeSet&&tf.getText().length()==0){
 			tf.setBackground(Color.red);
 		} else {
@@ -140,6 +145,11 @@ class StringValue extends EditableField{
 	}
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
+		if(b){
+			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+		} else {
+			this.setToolTipText("");
+		}
 		if(this.hasToBeSet&&tf.getText().length()==0){
 			tf.setBackground(Color.red);
 		} else {
@@ -185,6 +195,11 @@ class PasswordValue extends EditableField{
 	}
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
+		if(b){
+			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+		} else {
+			this.setToolTipText("");
+		}
 		if(this.hasToBeSet&&tf.getPassword().length==0){
 			tf.setBackground(Color.red);
 		} else {
@@ -211,6 +226,11 @@ class BooleanValue extends EditableField{
 	}
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
+		if(b){
+			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+		} else {
+			this.setToolTipText("");
+		}
 	}
 }
 /**
@@ -233,6 +253,11 @@ class DropDownListValue extends EditableField{
 	}
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
+		if(b){
+			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+		} else {
+			this.setToolTipText("");
+		}
 	}
 }
 /**
@@ -297,6 +322,11 @@ class OpenFileNameValue extends EditableField{
 	}
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
+		if(b){
+			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+		} else {
+			this.setToolTipText("");
+		}
 		if(this.hasToBeSet&&fileName.getText().length()==0){
 			fileName.setBackground(Color.red);
 		} else {
@@ -351,6 +381,11 @@ class DateValue extends EditableField{
 	}
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
+		if(b){
+			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+		} else {
+			this.setToolTipText("");
+		}
 		if(this.hasToBeSet&&tf.getText().length()==0){
 			tf.setBackground(Color.red);
 		} else {
@@ -398,6 +433,11 @@ class BigStringValue extends EditableField{
 	}
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
+		if(b){
+			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+		} else {
+			this.setToolTipText("");
+		}
 		if(this.hasToBeSet&&tf.getText().length()==0){
 			tf.setBackground(Color.red);
 		} else {

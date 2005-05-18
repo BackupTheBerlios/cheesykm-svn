@@ -156,8 +156,8 @@ public class CheesyKM{
 		//some inits
 		topicsInMem=new Vector();
 		docsInMem=new Vector();
-		
-		
+		ToolTipManager.sharedInstance().setInitialDelay(2000);
+		ToolTipManager.sharedInstance().setDismissDelay(5000);
 		//new main frame
 		api=new CheesyKMAPI();
 		new MemoryMonitor();
@@ -982,7 +982,7 @@ public class CheesyKM{
 	*@param name name of the topic to create.
 	*/
 	public synchronized static String createTopic(String parentTid,String name){
-		echo("CREATING TOPIC:"+name+" IN PARENT TID:"+parentTid);
+		//echo("CREATING TOPIC:"+name+" IN PARENT TID:"+parentTid);
 		try{
 			Vector params=new Vector();
 			params.add(login);
@@ -991,10 +991,10 @@ public class CheesyKM{
 			params.add(name);
 			Object resu=client().execute("addTopic",params);
 			if(String.class.isInstance(resu)){
-				echo("SUCCESS:"+resu.toString());
+				//echo("SUCCESS:"+resu.toString());
 				return resu.toString();
 			} else {
-				echo("ECHEC");
+				//echo("ECHEC");
 				return "ERROR";
 			}
 		}catch(MalformedURLException mue){

@@ -85,7 +85,13 @@ class TopicSelectionTree extends Thematique{
 		this.addMouseListener(ml[ml.length-1]);
 		
 	}
-	
+	/**
+	*Overrides JTrees getToolTipText method.<br>
+	*Called by the ToolTipManager.
+	*/
+	public String getToolTipText(MouseEvent e) {
+		return CheesyKM.getLabel("toolTipCheckTopics");
+	}
 	/**
 	*Expand the path to some Topics in this tree (so that they become visible).
 	*@param tids Vector of TopicIDs as Strings ("TXX").
@@ -97,13 +103,7 @@ class TopicSelectionTree extends Thematique{
 		}
 	}
 	
-	/**
-	*Overrides Thematiques getToolTipText method.<br>
-	*Called by the ToolTipManager.
-	*/
-	public String getToolTipText(MouseEvent e) {
-		return null;
-	}
+	
 	
 	/**
 	*Returns the selected topics as a Vector of topic IDs. These IDs are Strings ("TXX").

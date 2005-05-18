@@ -38,17 +38,21 @@ class ImportFiles extends JDialog{
 			} else {
 				//importer une arborescence de dossiers/fichiers.
 				includeHiddenFiles=new JCheckBox(CheesyKM.getLabel("includeHiddenFiles"));
-				
+				includeHiddenFiles.setToolTipText(CheesyKM.getLabel("toolTipIncludeHidden"));
 				createTopicsInOneTopic=new JRadioButton(CheesyKM.getLabel("createTopicsInOneTopic"));
+				createTopicsInOneTopic.setToolTipText(CheesyKM.getLabel("toolTipInSameTopic"));
 				createTopicsInOneTopicN=new JRadioButton(CheesyKM.getLabel("createTopicsInOneTopicN"));
+				createTopicsInOneTopicN.setToolTipText(CheesyKM.getLabel("toolTipNInSameTopic"));
 				createTopicsInOneTopic.setSelected(true);
 				ButtonGroup createInOneGroup=new ButtonGroup();
 				createInOneGroup.add(createTopicsInOneTopic);
 				createInOneGroup.add(createTopicsInOneTopicN);
 				
 				registerInOneTopic=new JRadioButton(CheesyKM.getLabel("registerInOneTopic"));
+				registerInOneTopic.setToolTipText(CheesyKM.getLabel("toolTipInSameDoc"));
 				registerInOneTopic.setSelected(true);
 				registerInOneTopicN=new JRadioButton(CheesyKM.getLabel("registerInOneTopicN"));
+				registerInOneTopicN.setToolTipText(CheesyKM.getLabel("toolTipNInSameDoc"));
 				ButtonGroup registerInOneGroup=new ButtonGroup();
 				registerInOneGroup.add(registerInOneTopic);
 				registerInOneGroup.add(registerInOneTopicN);
@@ -58,7 +62,9 @@ class ImportFiles extends JDialog{
 				createTopicsPanel.setBorder(BorderFactory.createTitledBorder(CheesyKM.getLabel("topicsOptions")));
 				JPanel createTopicsPanelHaut=new JPanel(new FlowLayout(FlowLayout.LEFT,5,0));
 				createTopics=new JRadioButton(CheesyKM.getLabel("createTopicsForDirs"));
+				createTopics.setToolTipText(CheesyKM.getLabel("toolTipCreate"));
 				createTopicsN=new JRadioButton(CheesyKM.getLabel("createTopicsForDirsN"));
+				createTopicsN.setToolTipText(CheesyKM.getLabel("toolTipNCreate"));
 				createTopics.setSelected(true);
 				class createTopicActionListener implements ActionListener{
 					public void actionPerformed(ActionEvent e) {
@@ -96,8 +102,10 @@ class ImportFiles extends JDialog{
 				tst=new TopicSelectionTree(new Vector(),false,null,Topic.RIGHT_RWM);
 				topicSelPanel.add(new JScrollPane(tst),"Center");
 				confirm=new JRadioButton(CheesyKM.getLabel("confirmEachDoc"));
+				confirm.setToolTipText(CheesyKM.getLabel("toolTipAsk"));
 				confirm.setSelected(true);
 				confirmN=new JRadioButton(CheesyKM.getLabel("confirmEachDocN"));
+				confirmN.setToolTipText(CheesyKM.getLabel("toolTipNAsk"));
 				JPanel confirmPanel=new JPanel(new FlowLayout(FlowLayout.LEFT,5,0));
 				confirmPanel.setBorder(BorderFactory.createTitledBorder(CheesyKM.getLabel("confirmOption")));
 				confirmPanel.add(confirm);
@@ -313,6 +321,7 @@ class ImportFiles extends JDialog{
 		resu.setCellRenderer(new FileTreeCellRenderer());
 		resu.setRootVisible(false);
 		dtsm.setSelectionPath(new TreePath(racine.getPath()));
+		resu.setToolTipText(CheesyKM.getLabel("toolTipSelectFolder"));
 		return resu;
 	}
 	

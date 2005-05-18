@@ -262,6 +262,7 @@ class RegisterDocWizard extends JDialog{
 		DateValue creaDateD=new DateValue(CheesyKM.getLabel("creaDate")+" :",creadate);
 		panel1.addEditableField(creaDateD);
 		JButton todayB=new JButton(CheesyKM.getLabel("today"));
+		todayB.setToolTipText(CheesyKM.getLabel("toolTipToday"));
 		class TodayBListener implements ActionListener{
 			JTextField tf;
 			TodayBListener(JTextField tf){this.tf=tf;}
