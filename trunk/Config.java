@@ -79,6 +79,10 @@ class Config{
 			CheesyKM.DEFAULTSEARCHFIELDNUMBER=Integer.parseInt(fe.readLine());
 			fe.readLine();
 			CheesyKM.USEJAVALAF=fe.readLine().equals("true");
+			fe.readLine();
+			CheesyKM.WATCHEDFOLDER=fe.readLine();
+			fe.readLine();
+			CheesyKM.USEFOLDERWATCHING=fe.readLine().equals("true");
 			fe.close();
 			
 		} catch(Exception e){
@@ -203,6 +207,14 @@ class Config{
 			bw.write("[Use JAVA Look and Feel ? (true/false)]");
 			bw.newLine();
 			if(CheesyKM.USEJAVALAF) bw.write("true"); else bw.write("false");
+			bw.newLine();
+			bw.write("[Folder to watch for]");
+			bw.newLine();
+			bw.write(CheesyKM.WATCHEDFOLDER);
+			bw.newLine();
+			bw.write("[Use folder watching ? (true/false)]");
+			bw.newLine();
+			if(CheesyKM.USEFOLDERWATCHING) bw.write("true"); else bw.write("false");
 			bw.flush();
 		} catch(Exception e){
 			JOptionPane.showMessageDialog(null, CheesyKM.getLabel("errorSavingConfig"), CheesyKM.getLabel("error"), JOptionPane.ERROR_MESSAGE);
@@ -333,8 +345,9 @@ class Config{
 		StringValue ksPass;
 		IntegerValue docsInMem,defaultSearchFields;
 		OpenFileNameValue browserPath;
+		OpenFolderNameValue watchedFolder;
 		BooleanValue useLocalBrowser;
-		BooleanValue expandSearchResults,useJavaLaf;
+		BooleanValue expandSearchResults,useJavaLaf,useFolderWatching;
 		StringValue ftpHost,ftpPass,ftpUserName;
 		/**
 		*Creates a new ConfigPanel.<br>
@@ -360,6 +373,10 @@ class Config{
 			addEditableField(defaultSearchFields,true);
 			useJavaLaf=new BooleanValue(CheesyKM.getLabel("useJavaLaf"),CheesyKM.USEJAVALAF);
 			addEditableField(useJavaLaf);
+			useFolderWatching=new BooleanValue(CheesyKM.getLabel("useFolderWatching"),CheesyKM.USEFOLDERWATCHING);
+			addEditableField(useFolderWatching);
+			watchedFolder=new OpenFolderNameValue(CheesyKM.getLabel("watchedFolder"),CheesyKM.WATCHEDFOLDER);
+			addEditableField(watchedFolder,true);
 			if(avance){
 				easyKM=new StringValue(CheesyKM.getLabel("easyKMRoot"),CheesyKM.EASYKMROOT);
 				addEditableField(easyKM,true);
@@ -396,6 +413,9 @@ class Config{
 				CheesyKM.DEFAULTACTIONCLICKCOUNT=Integer.parseInt(clics.tf.getText());
 				CheesyKM.EXPANDSEARCHRESULT=expandSearchResults.value.isSelected();
 				CheesyKM.DEFAULTSEARCHFIELDNUMBER=((Integer)defaultSearchFields.value()).intValue();
+				CheesyKM.WATCHEDFOLDER=watchedFolder.fileName.getText();
+				CheesyKM.USEFOLDERWATCHING=useFolderWatching.value.isSelected();
+				if(CheesyKM.watchFolder!=null&&CheesyKM.USEFOLDERWATCHING&&CheesyKM.login!=null)CheesyKM.watchFolder.start();
 				if(this.avance){
 					CheesyKM.EASYKMROOT=easyKM.tf.getText();
 					CheesyKM.KEYSTOREPATH=ksPath.fileName.getText();
@@ -488,6 +508,15 @@ class Config{
 		CheesyKM.FTPPASS="anonymous";
 		CheesyKM.FTPUSERNAME="anonymous";
 		CheesyKM.USEJAVALAF=false;
+		CheesyKM.USEFOLDERWATCHING=true;
+		CheesyKM.WATCHEDFOLDER=System.getProperty("user.home")+System.getProperty("file.separator")+"ImportCheesyKM";
+		if(!new File(CheesyKM.WATCHEDFOLDER).exists()){
+			new File(CheesyKM.WATCHEDFOLDER).mkdir();
+		} else if(!new File(CheesyKM.WATCHEDFOLDER).isDirectory()){
+			new File(CheesyKM.WATCHEDFOLDER).delete();
+			new File(CheesyKM.WATCHEDFOLDER).mkdir();
+		}
+		if(CheesyKM.watchFolder!=null&&CheesyKM.login!=null)CheesyKM.watchFolder.start();
 	}
 	
 	/**

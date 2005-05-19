@@ -335,6 +335,81 @@ class OpenFileNameValue extends EditableField{
 	}
 }
 /**
+*Displays a label, a file path in a textfield, and a "browse..." button.
+*/
+class OpenFolderNameValue extends EditableField{
+	public JTextField fileName;
+	OpenFolderNameValue(String title,String value){
+		super(new FlowLayout(FlowLayout.LEFT));
+		add(new JLabel(title));
+		fileName=new JTextField();
+		fileName.setColumns(20);
+		fileName.setText(value);
+		fileName.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if(OpenFolderNameValue.this.hasToBeSet&&OpenFolderNameValue.this.fileName.getText().length()==0){
+					OpenFolderNameValue.this.fileName.setBackground(Color.red);
+				} else {
+					OpenFolderNameValue.this.fileName.setBackground(new JTextField().getBackground());
+				}
+				if(OpenFolderNameValue.this.efg!=null)
+					OpenFolderNameValue.this.efg.sayWuff();
+			}
+		});
+		add(fileName);
+		JButton browse=new JButton("...");
+		class BrowseButtonListener implements ActionListener {
+			JTextField fileName;
+			BrowseButtonListener(JTextField tf){
+				this.fileName=tf;
+			}
+			public void actionPerformed(ActionEvent e){
+				fileName.setText(FileChooserDialog.showChooser(CheesyKM.api,CheesyKM.getLabel("open"),null,false,"",true,true));
+				if(OpenFolderNameValue.this.efg!=null)
+					OpenFolderNameValue.this.efg.sayWuff();
+			}
+		}
+		browse.addActionListener(new BrowseButtonListener(fileName));
+		add(browse);
+	}
+	
+	public boolean isValid(){
+		if(fileName.getText().length()==0&&hasToBeSet){
+			fileName.setBackground(Color.red);
+			return false;
+		} else if(fileName.getText().length()==0&&!hasToBeSet){
+			fileName.setBackground(new JTextField().getBackground());
+			return true;
+		} else {
+			boolean resu=new File(fileName.getText()).exists();
+			if(resu) resu=new File(fileName.getText()).isDirectory();
+			if(!resu){
+				fileName.setBackground(Color.red);
+			} else {
+				fileName.setBackground(new JTextField().getBackground());
+			}
+			return resu;
+		}
+	}
+	public Object value(){
+		return fileName.getText();
+	}
+	public void setHasToBeSet(boolean b){
+		this.hasToBeSet=b;
+		if(b){
+			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+		} else {
+			this.setToolTipText("");
+		}
+		if(this.hasToBeSet&&fileName.getText().length()==0){
+			fileName.setBackground(Color.red);
+		} else {
+			fileName.setBackground(new JTextField().getBackground());
+		}
+	}
+}
+
+/**
 *Displays a date field, {@link CheesyKM#isDate(String)} is called to check if the date is valid.
 */
 class DateValue extends EditableField{

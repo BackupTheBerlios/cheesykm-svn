@@ -24,11 +24,19 @@ class ImportFiles extends JDialog{
 	*Shows a {@link FileChooserDialog}, and the Import folders options dialog if the user chose a folder.
 	*/
 	ImportFiles(){
+		this(null);
+	}
+	/**
+	*Shows the Import folders options dialog.
+	*@param rootPath the path of the folder to import.
+	*/
+	ImportFiles(String rootPath){
 		super(CheesyKM.api);
+		this.rootPath=rootPath;
 		nodesByNegTids=new Hashtable();
 		nodesByFiles=new Hashtable();
 		docsByFile=new Hashtable();
-		rootPath=FileChooserDialog.showChooser(CheesyKM.api,CheesyKM.getLabel("open"),null,false,"",true);
+		if(rootPath==null)rootPath=FileChooserDialog.showChooser(CheesyKM.api,CheesyKM.getLabel("open"),null,false,"",true,true);
 		if(rootPath!=null){
 			File rootFile=new File(rootPath);
 			topicSelPanel=new JPanel(new BorderLayout());

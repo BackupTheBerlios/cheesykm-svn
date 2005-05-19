@@ -44,6 +44,8 @@ public class CheesyKM{
 	static Vector rootTopics;
 	/**EasyKM configuration Hashtable */
 	static Hashtable easyKMConfig;
+	/**Watch folder thread*/
+	static WatchFolder watchFolder;
 	
 	/**EasyKM Root URL*/
 	public static String EASYKMROOT;
@@ -99,7 +101,10 @@ public class CheesyKM{
 	public static int DEFAULTSEARCHFIELDNUMBER;
 	/**use java L&F ?*/
 	public static boolean USEJAVALAF;
-	
+	/**Folder to watch the content for and auto-import*/
+	public static String WATCHEDFOLDER;
+	/**Use auto-import ?*/
+	public static boolean USEFOLDERWATCHING;
 	
 	/**Maximal number of user-extended attributes*/
 	public static final int UFNUMBER=3;
@@ -161,6 +166,7 @@ public class CheesyKM{
 		//new main frame
 		api=new CheesyKMAPI();
 		new MemoryMonitor();
+		watchFolder=new WatchFolder();
 		
 	}
 	

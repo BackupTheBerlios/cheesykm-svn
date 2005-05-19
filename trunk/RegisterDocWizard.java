@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import java.io.*;
 /**
 *JDialog with all the fields necessary to register/edit/update a document.
 */
@@ -28,6 +29,10 @@ class RegisterDocWizard extends JDialog{
 	*/
 	RegisterDocWizard(Doc doc){
 		this(doc,new Vector(),false,true,false);
+	}
+	
+	RegisterDocWizard(File f,Vector topics,boolean show){
+		this(new Doc(f),topics,false,show,false);
 	}
 	
 	RegisterDocWizard(boolean show,boolean batch,Doc doc){
@@ -116,8 +121,14 @@ class RegisterDocWizard extends JDialog{
 					}
 			}
 		}
-		for(int i=0;i<inTids.size();i++){
-			this.topics.add("T"+inTids.get(i).toString());
+		if(inTids!=null){
+			for(int i=0;i<inTids.size();i++){
+				if(Integer.class.isInstance(inTids.get(i))){
+					this.topics.add("T"+inTids.get(i).toString());
+				} else {
+					this.topics.add(inTids.get(i));
+				}
+			}
 		}
 		
 		if(show){
@@ -430,7 +441,7 @@ class RegisterDocWizard extends JDialog{
 							if(pbd!=null) pbd.dispose();
 						}
 					}
-					pbd=new ProgBarDialog(this);
+					pbd=new ProgBarDialog(CheesyKM.api);
 					pbd.setModal(true);
 					Runner runner=new Runner(metadata,pbd);
 					pbd.show();
@@ -499,7 +510,7 @@ class RegisterDocWizard extends JDialog{
 					if(pbd!=null) pbd.dispose();
 				}
 			}
-			pbd=new ProgBarDialog(this);
+			pbd=new ProgBarDialog(CheesyKM.api);
 			pbd.setModal(true);
 			Runner runner=new Runner(metadata,pbd);
 			pbd.show();

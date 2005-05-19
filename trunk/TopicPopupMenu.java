@@ -196,7 +196,7 @@ class TopicPopupMenu extends JPopupMenu{
 					public void actionPerformed(ActionEvent e){
 						Vector tids=new Vector();
 						tids.add(new Integer(topic.id));
-						new RegisterDocWizard(null,tids,false);
+						new RegisterDocWizard((Doc)null,tids,false);
 					}
 				}
 				JMenuItem deposerDocIci=add(CheesyKM.getLabel("registerADocHere"));

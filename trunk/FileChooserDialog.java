@@ -16,7 +16,7 @@ class FileChooserDialog {
 	*@return String representation of the full path to the selected file.
 	*/
 	public static String showChooser(JFrame parent,String title,FileFilter filtre,boolean enregistrer,String nomSuggere){
-		return showChooser(parent,title,filtre,enregistrer,nomSuggere,false);
+		return showChooser(parent,title,filtre,enregistrer,nomSuggere,false,false);
 	}
 	
 	/**
@@ -29,9 +29,10 @@ class FileChooserDialog {
 	*@param foldersToo <code>true</code> to allow folder selection.
 	*@return String representation of the full path to the selected file.
 	*/
-	public static String showChooser(JFrame parent,String title,FileFilter filtre,boolean enregistrer,String nomSuggere,boolean foldersToo){
+	public static String showChooser(JFrame parent,String title,FileFilter filtre,boolean enregistrer,String nomSuggere,boolean foldersToo,boolean onlyFolders){
 		JFileChooser jfc=new JFileChooser();
 		if(foldersToo)jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		if(onlyFolders)jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		if(filtre!=null)jfc.addChoosableFileFilter(filtre);
 		if(nomSuggere!=null)jfc.setSelectedFile(new File(nomSuggere));
 		int resu;

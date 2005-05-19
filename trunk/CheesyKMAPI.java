@@ -505,6 +505,7 @@ class CheesyKMAPI extends JFrame{
 			user=CheesyKM.login;
 			pass=CheesyKM.pass;
 		}
+		CheesyKM.watchFolder.kill();
 		CheesyKM.deconnecter();
 		login=new Login(this,relog,user,pass);
 	}
@@ -558,6 +559,9 @@ class CheesyKMAPI extends JFrame{
 			menuDocument.add(menuDeposerDocument);
 			menuDocument.add(menuImporterDossier);
 		}
+		
+		CheesyKM.watchFolder=new WatchFolder();
+		CheesyKM.watchFolder.start();
 		
 	}
 	/**

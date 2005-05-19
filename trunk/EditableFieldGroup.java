@@ -54,11 +54,12 @@ public class EditableFieldGroup extends JPanel implements Wuffable{
 	*/
 	boolean fieldsAreValid(){
 		Enumeration e=fields.elements();
+		boolean resu=true;
 		while(e.hasMoreElements()){
-			if(!(((EditableField)e.nextElement()).isValid())) return false;
+			if(!(((EditableField)e.nextElement()).isValid())) resu=false;
 			//CheesyKM.echo("VALID");
 		}
-		return true;
+		return resu;
 	}
 	/**
 	*Called by the members (fields) of this group to tell this EditableFieldGroup that they became valid or invalid. It permits to enable or disable the JComponent attaches to this Group.
