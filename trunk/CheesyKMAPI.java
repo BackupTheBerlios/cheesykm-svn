@@ -535,7 +535,7 @@ class CheesyKMAPI extends JFrame{
 		JPanel leftPanel=new JPanel(new BorderLayout());
 		
 		JButton reloadNews=new JButton(CheesyKM.getLabel("reloadNews"));
-		reloadNews.setToolTipText(CheesyKM.getLabel("toolTipReloadNews"));
+		if(CheesyKM.SHOWTOOLTIPS)reloadNews.setToolTipText(CheesyKM.getLabel("toolTipReloadNews"));
 		class reloadNewsButtonListener implements ActionListener{
 			public void actionPerformed(ActionEvent e){
 				((JPanel)CheesyKM.api.jtpG.getComponent(0)).remove(1);

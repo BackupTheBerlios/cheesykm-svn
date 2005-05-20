@@ -90,7 +90,11 @@ class TopicSelectionTree extends Thematique{
 	*Called by the ToolTipManager.
 	*/
 	public String getToolTipText(MouseEvent e) {
-		return CheesyKM.getLabel("toolTipCheckTopics");
+		if(CheesyKM.SHOWTOOLTIPS){
+			return CheesyKM.getLabel("toolTipCheckTopics");
+		} else {
+			return null;
+		}
 	}
 	/**
 	*Expand the path to some Topics in this tree (so that they become visible).

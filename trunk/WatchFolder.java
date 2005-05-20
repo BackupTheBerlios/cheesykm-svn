@@ -4,24 +4,36 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-
+/**
+*Thread for the auto-import watching folder content feature.<br>
+*When something is added into {@link CheesyKM#WATCHEDFOLDER}, CheesyKM proposes to import these files, with various options, including a silent auto-import.
+*/
 public class WatchFolder extends Thread{
+	/**Content of the watched folder 1 (one) second ago*/
 	Vector lastFiles=new Vector();
+	/**Should this feature run ?*/
 	boolean shouldRun=true;
+	/**Is the silent auto-import activated ?*/
 	boolean autoImport=false;
-	JCheckBox autoAdd,showDialogOnImport;
-	Vector topics=null;
+	private JCheckBox autoAdd,showDialogOnImport;
+	private Vector topics=null;
+	/**
+	*Default constructor, does not start() this Thread.
+	*/
 	WatchFolder(){
 	}
-	
+	/**
+	*Scans {@link CheesyKM#WATCHEDFOLDER} every second and checks it for content changes.
+	*/
 	public void run(){
 		shouldRun=true;
-		while(CheesyKM.USEFOLDERWATCHING&&shouldRun){
+		while(CheesyKM.USEFOLDERWATCHING&&shouldRun&&CheesyKM.maximumRightLevel>=Topic.RIGHT_RW){
 			try{sleep(1000);}catch(InterruptedException ie){CheesyKM.echo(ie);}
 			File folder=new File(CheesyKM.WATCHEDFOLDER);
 			File[] files=folder.listFiles();
 			Vector actualFiles=new Vector();
 			for(int i=0;i<files.length;i++){
+				if(files[i].getAbsolutePath().indexOf(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"SuccessFully Imported")==-1&&files[i].getAbsolutePath().indexOf(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"Not Imported")==-1)
 				actualFiles.add(files[i]);
 			}
 			if(lastFiles.size()!=actualFiles.size()||!lastFiles.containsAll(actualFiles)){
@@ -31,7 +43,9 @@ public class WatchFolder extends Thread{
 			lastFiles=actualFiles;
 		}
 	}
-	
+	/**
+	*Stop this Thread.
+	*/
 	public void kill(){
 		shouldRun=false;
 	}
@@ -47,11 +61,11 @@ public class WatchFolder extends Thread{
 				options.setLayout(new BoxLayout(options,BoxLayout.Y_AXIS));
 				JPanel autoAddP=new JPanel(new FlowLayout(FlowLayout.LEFT));
 				autoAdd=new JCheckBox(CheesyKM.getLabel("doNotShowAnymore"));
-				autoAdd.setToolTipText(CheesyKM.getLabel("toolTipDoNotShow"));
+				if(CheesyKM.SHOWTOOLTIPS)autoAdd.setToolTipText(CheesyKM.getLabel("toolTipDoNotShow"));
 				autoAddP.add(autoAdd);
 				JPanel showDialogOnImportP=new JPanel(new FlowLayout(FlowLayout.LEFT));
 				showDialogOnImport=new JCheckBox(CheesyKM.getLabel("showDialogOnImport"));
-				showDialogOnImport.setToolTipText(CheesyKM.getLabel("toolTipShowDialogOnImport"));
+				if(CheesyKM.SHOWTOOLTIPS)showDialogOnImport.setToolTipText(CheesyKM.getLabel("toolTipShowDialogOnImport"));
 				showDialogOnImport.setSelected(true);
 				showDialogOnImportP.add(showDialogOnImport);
 				JPanel labelP=new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -99,7 +113,7 @@ public class WatchFolder extends Thread{
 		}
 	}
 	
-	void makeImport(){
+	private void makeImport(){
 		if(topics==null&&!this.showDialogOnImport.isSelected()){
 			JDialog selTopics=new JDialog(CheesyKM.api);
 			JButton oki=new JButton(CheesyKM.getLabel("okidoki"));
@@ -147,28 +161,44 @@ public class WatchFolder extends Thread{
 		if(!this.showDialogOnImport.isSelected()&&this.topics==null){
 			
 		} else {
-			CheesyKM.echo("MAKE IMPORT");
+			//CheesyKM.echo("MAKE IMPORT");
 			File folder=new File(CheesyKM.WATCHEDFOLDER);
 			File[] files=folder.listFiles();
+			if(!new File(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"SuccessFully Imported").exists())new File(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"SuccessFully Imported").mkdirs();
+			if(!new File(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"Not Imported").exists())new File(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"Not Imported").mkdirs();
 			for(int i=0;i<files.length;i++){
-				File file=files[i];
-				CheesyKM.echo("start of import:"+file);
-				if(file.isFile()){
-					if(this.showDialogOnImport.isSelected()){
-						new RegisterDocWizard(file,topics,true);
-					} else {
-						new RegisterDocWizard(file,topics,false).registerDoc(false);
+				if(files[i].getAbsolutePath().indexOf(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"SuccessFully Imported")==-1&&files[i].getAbsolutePath().indexOf(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"Not Imported")==-1){
+					File file=files[i];
+					//CheesyKM.echo("start of import:"+file);
+					if(file.isFile()){
+						RegisterDocWizard rdw=null;
+						if(this.showDialogOnImport.isSelected()){
+							rdw=new RegisterDocWizard(file,topics,true);
+						} else {
+							rdw=new RegisterDocWizard(file,topics,false);
+							rdw.registerDoc(false);
+						}
+						if(rdw.ok){
+							File newLocation=new File(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"SuccessFully Imported"+System.getProperty("file.separator")+file.getName());
+							file.renameTo(newLocation);
+						} else {
+							File newLocation=new File(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"Not Imported"+System.getProperty("file.separator")+file.getName());
+							file.renameTo(newLocation);
+						}
+					} else if(file.isDirectory()){
+						new ImportFiles(file.getAbsolutePath());
+						File newLocation=new File(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"SuccessFully Imported"+System.getProperty("file.separator")+file.getName());
+						file.renameTo(newLocation);
 					}
-					file.delete();
-				} else if(file.isDirectory()){
-					new ImportFiles(file.getAbsolutePath());
-					deleteFolder(file);
 				}
-				
 			}
 		}
 	}
 	
+	/**
+	*Deletes a folder and its whole content.
+	*@param folder the folder to delete.
+	*/
 	public void deleteFolder(File folder){
 		File[] sub=folder.listFiles();
 		for(int i=0;i<sub.length;i++){

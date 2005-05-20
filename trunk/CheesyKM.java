@@ -105,7 +105,8 @@ public class CheesyKM{
 	public static String WATCHEDFOLDER;
 	/**Use auto-import ?*/
 	public static boolean USEFOLDERWATCHING;
-	
+	/**Show help tooltips ?*/
+	public static boolean SHOWTOOLTIPS;
 	/**Maximal number of user-extended attributes*/
 	public static final int UFNUMBER=3;
 	

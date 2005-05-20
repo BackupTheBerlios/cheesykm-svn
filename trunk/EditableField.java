@@ -97,7 +97,7 @@ class IntegerValue extends EditableField{
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
 		if(b){
-			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+			if(CheesyKM.SHOWTOOLTIPS)this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
 		} else {
 			this.setToolTipText("");
 		}
@@ -146,7 +146,7 @@ class StringValue extends EditableField{
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
 		if(b){
-			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+			if(CheesyKM.SHOWTOOLTIPS)this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
 		} else {
 			this.setToolTipText("");
 		}
@@ -196,7 +196,7 @@ class PasswordValue extends EditableField{
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
 		if(b){
-			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+			if(CheesyKM.SHOWTOOLTIPS)this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
 		} else {
 			this.setToolTipText("");
 		}
@@ -227,7 +227,7 @@ class BooleanValue extends EditableField{
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
 		if(b){
-			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+			if(CheesyKM.SHOWTOOLTIPS)this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
 		} else {
 			this.setToolTipText("");
 		}
@@ -254,7 +254,7 @@ class DropDownListValue extends EditableField{
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
 		if(b){
-			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+			if(CheesyKM.SHOWTOOLTIPS)this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
 		} else {
 			this.setToolTipText("");
 		}
@@ -290,7 +290,9 @@ class OpenFileNameValue extends EditableField{
 				this.fileName=tf;
 			}
 			public void actionPerformed(ActionEvent e){
+				String before=new String(fileName.getText());
 				fileName.setText(FileChooserDialog.showChooser(CheesyKM.api,CheesyKM.getLabel("selectFile"),null,false,null));
+				if(fileName.getText().equals(""))fileName.setText(before);
 				if(OpenFileNameValue.this.efg!=null)
 					OpenFileNameValue.this.efg.sayWuff();
 			}
@@ -323,7 +325,7 @@ class OpenFileNameValue extends EditableField{
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
 		if(b){
-			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+			if(CheesyKM.SHOWTOOLTIPS)this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
 		} else {
 			this.setToolTipText("");
 		}
@@ -364,7 +366,9 @@ class OpenFolderNameValue extends EditableField{
 				this.fileName=tf;
 			}
 			public void actionPerformed(ActionEvent e){
+				String before=new String(fileName.getText());
 				fileName.setText(FileChooserDialog.showChooser(CheesyKM.api,CheesyKM.getLabel("open"),null,false,"",true,true));
+				if(fileName.getText().equals(""))fileName.setText(before);
 				if(OpenFolderNameValue.this.efg!=null)
 					OpenFolderNameValue.this.efg.sayWuff();
 			}
@@ -397,7 +401,7 @@ class OpenFolderNameValue extends EditableField{
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
 		if(b){
-			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+			if(CheesyKM.SHOWTOOLTIPS)this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
 		} else {
 			this.setToolTipText("");
 		}
@@ -457,7 +461,7 @@ class DateValue extends EditableField{
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
 		if(b){
-			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+			if(CheesyKM.SHOWTOOLTIPS)this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
 		} else {
 			this.setToolTipText("");
 		}
@@ -509,7 +513,7 @@ class BigStringValue extends EditableField{
 	public void setHasToBeSet(boolean b){
 		this.hasToBeSet=b;
 		if(b){
-			this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
+			if(CheesyKM.SHOWTOOLTIPS)this.setToolTipText(CheesyKM.getLabel("toolTipThisFieldHasToBeSet"));
 		} else {
 			this.setToolTipText("");
 		}

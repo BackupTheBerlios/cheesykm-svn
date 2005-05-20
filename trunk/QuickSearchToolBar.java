@@ -28,9 +28,9 @@ class QuickSearchToolBar extends JToolBar{
 		this.setLayout(new BorderLayout());
 		
 		where=new JComboBox(fields);
-		where.setToolTipText(CheesyKM.getLabel("toolTipQSBarWhere"));
+		if(CheesyKM.SHOWTOOLTIPS)where.setToolTipText(CheesyKM.getLabel("toolTipQSBarWhere"));
 		what=new JTextField();
-		what.setToolTipText(CheesyKM.getLabel("toolTipQSBarWhat"));
+		if(CheesyKM.SHOWTOOLTIPS)what.setToolTipText(CheesyKM.getLabel("toolTipQSBarWhat"));
 		what.addFocusListener(new FocusAdapter(){
 			public void focusGained(FocusEvent e){
 				((JTextComponent)(e.getComponent())).selectAll();
@@ -66,7 +66,7 @@ class QuickSearchToolBar extends JToolBar{
 			}
 		}
 		goForIt=new JButton(CheesyKM.getLabel("quickSearch"));
-		goForIt.setToolTipText(CheesyKM.getLabel("toolTipQSBar"));
+		if(CheesyKM.SHOWTOOLTIPS)goForIt.setToolTipText(CheesyKM.getLabel("toolTipQSBar"));
 		goForIt.addActionListener(new GoForItListener(what,where));
 		what.addActionListener(new GoForItListener(what,where));
 		
@@ -77,7 +77,7 @@ class QuickSearchToolBar extends JToolBar{
 			}
 		}
 		advancedSearch=new JButton(CheesyKM.getLabel("advancedSearch"));
-		advancedSearch.setToolTipText(CheesyKM.getLabel("toolTipASBar"));
+		if(CheesyKM.SHOWTOOLTIPS)advancedSearch.setToolTipText(CheesyKM.getLabel("toolTipASBar"));
 		advancedSearch.addActionListener(new AdvancedSearchListener());
 		advancedSearch.setEnabled(false);
 		JPanel east=new JPanel(new FlowLayout(FlowLayout.LEFT,5,0));
