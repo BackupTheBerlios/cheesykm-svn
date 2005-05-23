@@ -106,6 +106,8 @@ class Config{
 			CheesyKM.USEFOLDERWATCHING=fe.readLine().equals("true");
 			fe.readLine();
 			CheesyKM.SHOWTOOLTIPS=fe.readLine().equals("true");
+			fe.readLine();
+			CheesyKM.VERTICAL=fe.readLine().equals("true");
 			fe.close();
 			
 		} catch(Exception e){
@@ -242,6 +244,10 @@ class Config{
 			bw.write("[Show tooltips ? (true/false)]");
 			bw.newLine();
 			if(CheesyKM.SHOWTOOLTIPS) bw.write("true"); else bw.write("false");
+			bw.newLine();
+			bw.write("[Vertical split ? (true/false)]");
+			bw.newLine();
+			if(CheesyKM.VERTICAL) bw.write("true"); else bw.write("false");
 			bw.flush();
 		} catch(Exception e){
 			JOptionPane.showMessageDialog(null, CheesyKM.getLabel("errorSavingConfig"), CheesyKM.getLabel("error"), JOptionPane.ERROR_MESSAGE);
@@ -374,7 +380,7 @@ class Config{
 		OpenFileNameValue browserPath;
 		OpenFolderNameValue watchedFolder;
 		BooleanValue useLocalBrowser;
-		BooleanValue expandSearchResults,useJavaLaf,useFolderWatching,showToolTips;
+		BooleanValue expandSearchResults,useJavaLaf,useFolderWatching,showToolTips,vertical;
 		StringValue ftpHost,ftpPass,ftpUserName;
 		/**
 		*Creates a new ConfigPanel.<br>
@@ -406,6 +412,8 @@ class Config{
 			addEditableField(watchedFolder,true);
 			showToolTips=new BooleanValue(CheesyKM.getLabel("showToolTips"),CheesyKM.SHOWTOOLTIPS);
 			addEditableField(showToolTips);
+			vertical=new BooleanValue(CheesyKM.getLabel("verticalSplit"),CheesyKM.VERTICAL);
+			addEditableField(vertical);
 			if(avance){
 				easyKM=new StringValue(CheesyKM.getLabel("easyKMRoot"),CheesyKM.EASYKMROOT);
 				addEditableField(easyKM,true);
@@ -445,6 +453,7 @@ class Config{
 				CheesyKM.WATCHEDFOLDER=watchedFolder.fileName.getText();
 				CheesyKM.USEFOLDERWATCHING=useFolderWatching.value.isSelected();
 				CheesyKM.SHOWTOOLTIPS=showToolTips.value.isSelected();
+				CheesyKM.VERTICAL=vertical.value.isSelected();
 				if(CheesyKM.USEFOLDERWATCHING){
 					new File(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"SuccessFully Imported").mkdir();
 					new File(CheesyKM.WATCHEDFOLDER+System.getProperty("file.separator")+"Not Imported").mkdir();
@@ -491,13 +500,13 @@ class Config{
 					JOptionPane.showMessageDialog(null,  CheesyKM.getLabel("butWhereDidYouPutTheBrowser"),  CheesyKM.getLabel("fileNotFound"), JOptionPane.ERROR_MESSAGE);
 					return false;
 				} else {
-					if((CheesyKM.USEJAVALAF&&!useJavaLaf.value.isSelected())||(!CheesyKM.USEJAVALAF&&useJavaLaf.value.isSelected())||!CheesyKM.KEYSTOREPASS.equals(ksPass.tf.getText())||!CheesyKM.KEYSTOREPATH.equals(ksPath.fileName.getText())||(CheesyKM.SHOWTOOLTIPS&&!showToolTips.value.isSelected())||(!CheesyKM.SHOWTOOLTIPS&&showToolTips.value.isSelected()))
+					if((CheesyKM.USEJAVALAF&&!useJavaLaf.value.isSelected())||(!CheesyKM.USEJAVALAF&&useJavaLaf.value.isSelected())||!CheesyKM.KEYSTOREPASS.equals(ksPass.tf.getText())||!CheesyKM.KEYSTOREPATH.equals(ksPath.fileName.getText())||(CheesyKM.SHOWTOOLTIPS&&!showToolTips.value.isSelected())||(!CheesyKM.SHOWTOOLTIPS&&showToolTips.value.isSelected())||(CheesyKM.VERTICAL&&!vertical.value.isSelected())||(!CheesyKM.VERTICAL&&vertical.value.isSelected()))
 				JOptionPane.showMessageDialog(null,  CheesyKM.getLabel("changesWillBeEffectiveLater"), CheesyKM.getLabel("modifiedSSLParameters"), JOptionPane.INFORMATION_MESSAGE);
 			
 					return true;
 				}
 			} else {
-				if((CheesyKM.USEJAVALAF&&!useJavaLaf.value.isSelected())||(!CheesyKM.USEJAVALAF&&useJavaLaf.value.isSelected())||(CheesyKM.SHOWTOOLTIPS&&!showToolTips.value.isSelected())||(!CheesyKM.SHOWTOOLTIPS&&showToolTips.value.isSelected()))
+				if((CheesyKM.USEJAVALAF&&!useJavaLaf.value.isSelected())||(!CheesyKM.USEJAVALAF&&useJavaLaf.value.isSelected())||(CheesyKM.SHOWTOOLTIPS&&!showToolTips.value.isSelected())||(!CheesyKM.SHOWTOOLTIPS&&showToolTips.value.isSelected())||(CheesyKM.VERTICAL&&!vertical.value.isSelected())||(!CheesyKM.VERTICAL&&vertical.value.isSelected()))
 				JOptionPane.showMessageDialog(null,  CheesyKM.getLabel("changesWillBeEffectiveLater"), CheesyKM.getLabel("modifiedSSLParameters"), JOptionPane.INFORMATION_MESSAGE);
 				return true;
 			}
@@ -562,6 +571,7 @@ class Config{
 			CheesyKM.watchFolder.start();
 		}
 		CheesyKM.SHOWTOOLTIPS=true;
+		CheesyKM.VERTICAL=false;
 	}
 	
 	/**

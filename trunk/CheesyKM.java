@@ -130,7 +130,8 @@ public class CheesyKM{
 	public static boolean SHOWTOOLTIPS;
 	/**Maximal number of user-extended attributes*/
 	public static final int UFNUMBER=3;
-	
+	/**Vertical split of the main frame ?*/
+	public static boolean VERTICAL;
 	
 	
 	/**The configuration associated with this insatance of CheesyKM*/

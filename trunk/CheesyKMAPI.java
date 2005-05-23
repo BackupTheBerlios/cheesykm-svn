@@ -424,9 +424,9 @@ class CheesyKMAPI extends JFrame{
 		jtpD=new JTabbedPane();
 		jtpD.addMouseListener(new JTPDMouseListener());
 		jtpD.addChangeListener(new JTPDChangeListener());
-		
-		
-		JSplitPane jsp=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,jtpG,jtpD);
+		int split=JSplitPane.HORIZONTAL_SPLIT;
+		if(CheesyKM.VERTICAL)split=JSplitPane.VERTICAL_SPLIT;
+		JSplitPane jsp=new JSplitPane(split,jtpG,jtpD);
 		jsp.setDividerSize(5);
 		jsp.setContinuousLayout(true);
 		
