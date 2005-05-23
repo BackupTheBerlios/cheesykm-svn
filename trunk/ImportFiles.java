@@ -53,11 +53,12 @@ class ImportFiles extends JDialog{
 	*/
 	ImportFiles(String rootPath){
 		super(CheesyKM.api);
-		this.rootPath=rootPath;
+		
 		nodesByNegTids=new Hashtable();
 		nodesByFiles=new Hashtable();
 		docsByFile=new Hashtable();
 		if(rootPath==null)rootPath=FileChooserDialog.showChooser(CheesyKM.api,CheesyKM.getLabel("open"),null,false,"",true,true);
+		this.rootPath=rootPath;
 		if(rootPath!=null){
 			File rootFile=new File(rootPath);
 			topicSelPanel=new JPanel(new BorderLayout());
