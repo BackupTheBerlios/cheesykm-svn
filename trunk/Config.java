@@ -319,8 +319,10 @@ class Config{
 		bDefault.setIcon(CheesyKM.loadIcon("./ressources/RotCWLeft.gif"));
 		class BDefaultActionListener implements ActionListener {
 			JDialog d;
-			BDefaultActionListener(JDialog d){
+			JCheckBox bavance;
+			BDefaultActionListener(JDialog d,JCheckBox bavance){
 				this.d=d;
+				this.bavance=bavance;
 			}
 			public void actionPerformed(ActionEvent e){
 				if(JOptionPane.showConfirmDialog(d,CheesyKM.getLabel("reallyUseDefault"), CheesyKM.getLabel("confirm"), JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
@@ -332,13 +334,14 @@ class Config{
 					d.pack();
 					d.setLocation(CheesyKM.api.getX()+((CheesyKM.api.getWidth()-d.getWidth())/2),CheesyKM.api.getY()+((CheesyKM.api.getHeight()-d.getHeight())/2));
 					d.validate();
+					bavance.setSelected(true);
 				} else {
 					
 				}
 				
 			}
 		}
-		bDefault.addActionListener(new BDefaultActionListener(config));
+		bDefault.addActionListener(new BDefaultActionListener(config,bAvance));
 		sud.add(bDefault);
 		//sud.add(new JLabel(" "));
 		JButton bAnnuler=new JButton(CheesyKM.getLabel("cancel"));
