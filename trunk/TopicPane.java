@@ -52,7 +52,7 @@ class TopicPane extends JPanel{
 			class TPMouseListener extends MouseAdapter{
 				public void mouseClicked(MouseEvent e){
 					if(e.getButton()==MouseEvent.BUTTON3){
-						new TopicPopupMenu(e.getComponent(),e.getX(),e.getY(),TopicPane.this.topic,false);
+						new TopicPopupMenu(e.getComponent(),e.getX(),e.getY(),TopicPane.this.topic,false,!SearchResultTopic.class.isInstance(TopicPane.this.topic));
 					}
 				}
 			}

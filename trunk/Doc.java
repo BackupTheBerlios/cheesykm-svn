@@ -201,10 +201,15 @@ public class Doc extends Topic{
 		return 'D';
 	}
 	/**
-	*Checks if the current user is the owner of this Doc.
-	*@return <code>true</code> if the cuurent registered this Doc, <code>false</code> else;
+	*Checks if the current user is the owner of this Doc OR if he has RWM rights on this docs topic.
+	*@return <code>true</code> if the current user registered this Doc OR if he has RWM rights on this docs topic., <code>false</code> else;
 	*/
 	public boolean isOwner(){
-		return this.userid.equals(CheesyKM.login);
+		if(this.userid.equals(CheesyKM.login)) return true;
+		for(int i=0;i<this.topicList.size();i++){
+			if(((Integer)CheesyKM.tRights.get(this.topicList.get(i))).intValue()>=Topic.RIGHT_RWM)
+				return true;
+		}
+		return false;
 	}
 }

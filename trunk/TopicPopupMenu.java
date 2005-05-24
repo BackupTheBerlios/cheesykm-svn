@@ -126,35 +126,7 @@ class TopicPopupMenu extends JPopupMenu{
 				fileView.addActionListener(new TopicPopupFileViewListener());
 			}
 			
-			if(overNouveaute){
-				if(((Doc)topic).getParent().rights>=Topic.RIGHT_RWM||((Doc)topic).isOwner()){
-					this.addSeparator();
-					class TopicPopupUpdateDocListener implements ActionListener{
-						public void actionPerformed(ActionEvent e){
-							new RegisterDocWizard((Doc)topic);
-						}
-					}
-					JMenuItem updateDoc=add(CheesyKM.getLabel("updateThisDoc"));
-					updateDoc.addActionListener(new TopicPopupUpdateDocListener());
-				
-					class TopicPopupEditDocListener implements ActionListener{
-						public void actionPerformed(ActionEvent e){
-							new RegisterDocWizard((Doc)topic,true);
-						}
-					}
-					JMenuItem editDoc=add(CheesyKM.getLabel("editDocument"));
-					editDoc.addActionListener(new TopicPopupEditDocListener());
-				
-				
-					class TopicPopupDeleteDocListener implements ActionListener{
-						public void actionPerformed(ActionEvent e){
-							CheesyKM.deleteDoc((Doc)topic);
-						}
-					}
-					JMenuItem deleteDoc=add(CheesyKM.getLabel("deleteDocument"));
-					deleteDoc.addActionListener(new TopicPopupDeleteDocListener());
-				}
-			} else {
+			//if(overNouveaute){
 				if(((Doc)topic).isOwner()){
 					this.addSeparator();
 					class TopicPopupUpdateDocListener implements ActionListener{
@@ -173,6 +145,7 @@ class TopicPopupMenu extends JPopupMenu{
 					JMenuItem editDoc=add(CheesyKM.getLabel("editDocument"));
 					editDoc.addActionListener(new TopicPopupEditDocListener());
 				
+				
 					class TopicPopupDeleteDocListener implements ActionListener{
 						public void actionPerformed(ActionEvent e){
 							CheesyKM.deleteDoc((Doc)topic);
@@ -181,7 +154,34 @@ class TopicPopupMenu extends JPopupMenu{
 					JMenuItem deleteDoc=add(CheesyKM.getLabel("deleteDocument"));
 					deleteDoc.addActionListener(new TopicPopupDeleteDocListener());
 				}
-			}
+			/*} else {
+				if(((Doc)topic).getParent().rights>=Topic.RIGHT_RWM||((Doc)topic).isOwner()){
+					this.addSeparator();
+					class TopicPopupUpdateDocListener implements ActionListener{
+						public void actionPerformed(ActionEvent e){
+							new RegisterDocWizard((Doc)topic);
+						}
+					}
+					JMenuItem updateDoc=add(CheesyKM.getLabel("updateThisDoc"));
+					updateDoc.addActionListener(new TopicPopupUpdateDocListener());
+				
+					class TopicPopupEditDocListener implements ActionListener{
+						public void actionPerformed(ActionEvent e){
+							new RegisterDocWizard((Doc)topic,true);
+						}
+					}
+					JMenuItem editDoc=add(CheesyKM.getLabel("editDocument"));
+					editDoc.addActionListener(new TopicPopupEditDocListener());
+				
+					class TopicPopupDeleteDocListener implements ActionListener{
+						public void actionPerformed(ActionEvent e){
+							CheesyKM.deleteDoc((Doc)topic);
+						}
+					}
+					JMenuItem deleteDoc=add(CheesyKM.getLabel("deleteDocument"));
+					deleteDoc.addActionListener(new TopicPopupDeleteDocListener());
+				}
+			}*/
 			
 		} else if(topic.getNodeType()=='W'||topic.getNodeType()=='A'){
 			class TopicPopupFermerListener implements ActionListener{

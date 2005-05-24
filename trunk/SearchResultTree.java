@@ -132,7 +132,7 @@ class SearchResultTree extends JTree {
 						DefaultMutableTreeNode node=(DefaultMutableTreeNode)selPath.getLastPathComponent();
 						Topic topic=(Topic)node.getUserObject();
 						SearchResultTree.this.setSelectionPath(selPath);
-						new TopicPopupMenu(e.getComponent(),e.getX(),e.getY(),topic,true);
+						new TopicPopupMenu(e.getComponent(),e.getX(),e.getY(),topic,true,false);
 					}
 				}
 			};
