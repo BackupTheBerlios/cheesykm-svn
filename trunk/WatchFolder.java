@@ -172,7 +172,8 @@ public class WatchFolder extends Thread{
 			tstP.setPreferredSize(new Dimension(300,300));
 			selTopics.getContentPane().add(tstP,"Center");
 			selTopics.getContentPane().add(bas,"South");
-			selTopics.setTitle(CheesyKM.getLabel("selectTopics"));
+			selTopics.setTitle(CheesyKM.getLabel("autoImportOptions"));
+			selTopics.getContentPane().add(new JLabel(CheesyKM.getLabel("selectTopics")),"North");
 			selTopics.setModal(true);
 			selTopics.setResizable(false);
 			selTopics.pack();
