@@ -304,6 +304,7 @@ class CheesyKMAPI extends JFrame{
 			}
 		}
 		menuConfigItem.addActionListener(new MenuConfigListener());
+		menuConfigItem.setMnemonic(KeyEvent.VK_F);
 		menuConfigItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,ActionEvent.ALT_MASK));
 		menuConfig.add(menuConfigItem);
 		menuBar.add(menuConfig);
