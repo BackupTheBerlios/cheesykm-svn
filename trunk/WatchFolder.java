@@ -167,6 +167,7 @@ public class WatchFolder extends Thread{
 			}
 			oki.addActionListener(new OkiListener(selTopics,tst));
 			bas.add(oki);
+			oki.setSelected(false);
 			bas.add(annuler);
 			JScrollPane tstP=new JScrollPane(tst);
 			tstP.setPreferredSize(new Dimension(300,300));
