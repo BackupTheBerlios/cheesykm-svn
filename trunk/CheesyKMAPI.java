@@ -238,7 +238,7 @@ class CheesyKMAPI extends JFrame{
 		menuBar.add(menuDocument);
 		
 		menuWeb=new JMenu(CheesyKM.getLabel("webSite"));
-		menuWeb.setMnemonic(KeyEvent.VK_W);
+		menuWeb.setMnemonic(KeyEvent.VK_I);
 		menuWeb.setEnabled(false);
 		menuVoirSiteWeb=new JMenuItem(CheesyKM.getLabel("visitSite"),KeyEvent.VK_S);
 		menuVoirSiteWeb.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,ActionEvent.CTRL_MASK));
