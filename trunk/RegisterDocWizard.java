@@ -244,17 +244,19 @@ class RegisterDocWizard extends JDialog{
 			south.add(previous);
 			south.add(next);
 			south.add(cancel);
-			initPanels(edit);
-			mainPanel.add(createPanel(1));
-			gc.add(south,"South");
-			this.pack();
 			if(this.docID==0||batch){
 				this.setTitle(CheesyKM.getLabel("registerNewDoc"));
 			} else if(edit){
 				this.setTitle(CheesyKM.getLabel("editDocument"));
 			} else {
 				this.setTitle(CheesyKM.getLabel("updateThisDoc"));
+				this.file="";
 			}
+			initPanels(edit);
+			mainPanel.add(createPanel(1));
+			gc.add(south,"South");
+			this.pack();
+			
 			this.validate();
 			this.setModal(true);
 			

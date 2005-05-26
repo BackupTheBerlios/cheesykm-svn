@@ -384,7 +384,8 @@ class Config{
 		OpenFolderNameValue watchedFolder;
 		BooleanValue useLocalBrowser;
 		BooleanValue expandSearchResults,useJavaLaf,useFolderWatching,showToolTips,vertical;
-		StringValue ftpHost,ftpPass,ftpUserName;
+		StringValue ftpHost,ftpUserName;
+		PasswordValue ftpPass;
 		/**
 		*Creates a new ConfigPanel.<br>
 		*The accessible application settings won't be the same if the advanced mode is switched.
@@ -432,7 +433,7 @@ class Config{
 				addEditableField(useLocalBrowser);
 				ftpHost=new StringValue(CheesyKM.getLabel("FTPHost"),CheesyKM.FTPHOST);
 				addEditableField(ftpHost,true);
-				ftpPass=new StringValue(CheesyKM.getLabel("FTPPass"),CheesyKM.FTPPASS);
+				ftpPass=new PasswordValue(CheesyKM.getLabel("FTPPass"),CheesyKM.FTPPASS);
 				addEditableField(ftpPass,true);
 				ftpUserName=new StringValue(CheesyKM.getLabel("FTPUserName"),CheesyKM.FTPUSERNAME);
 				addEditableField(ftpUserName,true);
