@@ -82,7 +82,7 @@ class JTPDChangeListener implements ChangeListener{
 			CheesyKM.api.jtbVoirDocument.setEnabled(!d.file.equals(""));
 			CheesyKM.api.jtbTelechargerDocument.setEnabled(!d.file.equals(""));
 			if(!d.file.equals("")){
-				CheesyKM.api.jtbVoirDocument.setIcon(CheesyKM.loadIcon("./ressources/"+d.ftype+"32.png"));
+				CheesyKM.api.jtbVoirDocument.setIcon(CheesyKM.loadTypeIcon(d.ftype,true));
 				CheesyKM.api.jtbVoirDocument.setToolTipText(CheesyKM.getLabel("seeDocument")+" : "+d.format+" - "+d.getFSize());
 				CheesyKM.api.jtbTelechargerDocument.setToolTipText(CheesyKM.getLabel("downloadDocument")+" : "+d.format+" - "+d.getFSize());
 			} else {

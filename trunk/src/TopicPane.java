@@ -391,7 +391,7 @@ class TopicPane extends JPanel{
 		JButton viewFileButton = new JButton();
 		
 		
-		viewFileButton.setIcon(CheesyKM.loadIcon("./ressources/m"+((Doc)this.topic).ftype+".png"));
+		viewFileButton.setIcon(CheesyKM.loadTypeIcon(((Doc)this.topic).ftype)); //mini
 		
 		
 		viewFileButton.setText(CheesyKM.getLabel("display"));

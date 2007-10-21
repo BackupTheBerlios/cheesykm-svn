@@ -42,7 +42,6 @@ class Config{
 	*If there's a problem during that process, the default config is loaded, and the user is warned about it.
 	*/
 	public void loadConfig(){
-		String ligne=new String();
 		BufferedReader fe=null;
 		try{
 			fe=new BufferedReader(new FileReader(nomFichierDeConf));
@@ -112,7 +111,7 @@ class Config{
 			
 		} catch(Exception e){
 			JOptionPane.showMessageDialog(null, CheesyKM.getLabel("loadingDefaultConfig"), CheesyKM.getLabel("information"), JOptionPane.INFORMATION_MESSAGE);
-			this.loadDefaultConfig();
+			Config.loadDefaultConfig();
 			this.saveConfig();
 		}
 	}
@@ -527,9 +526,9 @@ class Config{
 				JOptionPane.showMessageDialog(null,  CheesyKM.getLabel("changesWillBeEffectiveLater"),CheesyKM.getLabel("modifiedSSLParameters"), JOptionPane.INFORMATION_MESSAGE);
 		}
 			
-		CheesyKM.EASYKMROOT="https://lab.elikya.com/EasyKM/";//racine d'EasyKM
-		CheesyKM.KEYSTOREPATH=CheesyKM.getInstallationPath()+System.getProperty("file.separator")+"keystores"+System.getProperty("file.separator")+"kslabo";
-		CheesyKM.KEYSTOREPASS="lechsogr";
+		CheesyKM.EASYKMROOT="https://www.easy-km.net/demo/";//racine d'EasyKM
+		CheesyKM.KEYSTOREPATH=CheesyKM.getInstallationPath()+System.getProperty("file.separator")+"keystores"+System.getProperty("file.separator")+"ksweb";
+		CheesyKM.KEYSTOREPASS="easykm";
 		CheesyKM.INITHEIGHT=768;
 		CheesyKM.INITWIDTH=1024;
 		CheesyKM.INITX=0;
@@ -555,7 +554,7 @@ class Config{
 		CheesyKM.USERLOCALWEBBROWSERTODLFILES=true;//utiliser ou non le navigateur local pour voir les fichiers;
 		CheesyKM.NOMBREDENOUVEAUTES=10;//Nombre de nouveautés à afficher dans la liste des nouveautés
 		CheesyKM.EXPANDSEARCHRESULT=true;
-		CheesyKM.FTPHOST="lab.elikya.com";
+		CheesyKM.FTPHOST="www.elikya.net";
 		CheesyKM.FTPPASS="anonymous";
 		CheesyKM.FTPUSERNAME="anonymous";
 		CheesyKM.USEJAVALAF=false;

@@ -129,7 +129,7 @@ class Login extends JDialog{
 			this.pbd=new ProgBarDialog(this);
 			Thread t=new Thread(showFrame);
 			t.start();
-			pbd.show();
+			pbd.setVisible(true);
 			if(topicMatrix==null){
 				CheesyKM.setLogin(null,null);
 				pw.setText("");
@@ -159,7 +159,7 @@ class Login extends JDialog{
 	private Runnable showFrame = new Runnable() {
 		public void run() {
 			topicMatrix=CheesyKM.getTopicMatrix();
-			pbd.hide();
+			pbd.setVisible(false);
 		}
 	};
 }

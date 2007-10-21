@@ -62,7 +62,7 @@ public class TopicTreeCellRenderer extends DefaultTreeCellRenderer {
 		if(type=='D'){
 			//"print", "image", "video", "sound", "act", "web", "note"
 			Doc doc=(Doc)topic;
-			setIcon(CheesyKM.loadIcon("./ressources/m"+doc.ftype+".png"));
+			setIcon(CheesyKM.loadTypeIcon(doc.ftype));//mini
 		} else {
 			if(expanded){
 				if(type=='T'){

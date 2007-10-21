@@ -148,9 +148,6 @@ public class CheesyKM{
 		//Initialize a set of Strings (ResourceBundle) with the current Locale
 		labels=ResourceBundle.getBundle("ressources.labels.Labels",Locale.getDefault());
 		
-		//Seems to be a bug with fonts on some VMs if not called
-		Object fonts[]=GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-		
 		//Load a global configuration
 		config=new Config();
 		config.loadConfig();
@@ -158,7 +155,7 @@ public class CheesyKM{
 		if(!USEJAVALAF){
 			try{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			} catch(Exception e){echo(e);}
+			} catch(Exception e){e.printStackTrace();}
 		}
 		
 		/*
@@ -259,7 +256,7 @@ public class CheesyKM{
 	*@return an ImageIcon from the specified image file.
 	*/
 	public static ImageIcon loadIcon(String location){
-		ClassLoader loader=CheesyKM.class.getClassLoader().getSystemClassLoader();
+		ClassLoader loader=ClassLoader.getSystemClassLoader();
 		URL url=null;
 		try {
 			url=loader.getResource(location.substring(2));
@@ -267,6 +264,37 @@ public class CheesyKM{
 		ImageIcon ic=new ImageIcon(Toolkit.getDefaultToolkit().createImage(url));
 		return ic;
 	}
+	
+	/**
+	 * Returns the appropriate ImageIcon for the filetype ftype
+	 * @param ftype
+	 * @return an ImageIcon representing the ftype
+	 */
+	public static ImageIcon loadTypeIcon(String ftype, boolean big){
+		ClassLoader loader=ClassLoader.getSystemClassLoader();
+		URL url=null;
+		if (!big) { ftype = "m"+ftype; } 
+		String iconpath = "ressources/"+ftype+".png"; 
+		try {
+			url=loader.getResource(iconpath);
+		} catch(Exception e) {echo(e);}
+		if (url == null){
+			System.err.println("unknown type: "+ftype);
+			return loadTypeIcon("unknown",big);
+		}
+		else {
+			return new ImageIcon(Toolkit.getDefaultToolkit().createImage(url));
+		}
+		
+	}
+	
+	public static ImageIcon loadTypeIcon(String ftype){
+		return loadTypeIcon(ftype, false);
+	}
+
+	
+	
+	
 	/**
 	*Updates the identifier and password of the current session, these parameters are used by the RPC calls during the whole session.
 	*@param nlogin String user identifier.
@@ -293,9 +321,6 @@ public class CheesyKM{
 		}catch(MalformedURLException mue){
 			JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
 			return null;
-		}catch(IOException mue){
-			JOptionPane.showMessageDialog(null, getLabel("error")+mue, getLabel("errorInWSURL"), JOptionPane.ERROR_MESSAGE);
-			return null;
 		}
 	}
 
@@ -320,6 +345,7 @@ public class CheesyKM{
 			JOptionPane.showMessageDialog(null, getLabel("error")+xre, getLabel("errorXMLRPC"), JOptionPane.ERROR_MESSAGE);
 			return null;
 		}catch(IOException ioe){
+			System.out.print("\nerror:\n"+ioe);
 			JOptionPane.showMessageDialog(null, getLabel("error")+ioe, getLabel("errorIO"), JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
