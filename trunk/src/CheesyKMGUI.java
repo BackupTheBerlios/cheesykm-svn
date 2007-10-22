@@ -30,7 +30,7 @@ import java.lang.reflect.*;
 *Application main Frame.<br>
 *Contains the two tabbed panes, the two toolbars, and a menuBar
 */
-class CheesyKMAPI extends JFrame{
+class CheesyKMGUI extends JFrame{
 	/**{@link Login} prompt dialog*/
 	Login login;
 	/**Topic tree view ({@link Thematique})*/
@@ -86,7 +86,7 @@ class CheesyKMAPI extends JFrame{
 	/**
 	*Creates a new main frame, with empty tabbedpanes, and shows a modal {@link Login} prompt.
 	*/
-	public CheesyKMAPI() {
+	public CheesyKMGUI() {
 		Container cp=(Container)this.getContentPane();
 		cp.setLayout(new BorderLayout());
 		setBounds(CheesyKM.INITX,CheesyKM.INITY,CheesyKM.INITWIDTH,CheesyKM.INITHEIGHT);
@@ -105,7 +105,7 @@ class CheesyKMAPI extends JFrame{
 		
 		class frameListener extends WindowAdapter{
 			public void windowClosing(WindowEvent e){
-				if(JOptionPane.showConfirmDialog(CheesyKMAPI.this,CheesyKM.getLabel("doYouReallyWannaLeaveMe"), CheesyKM.getLabel("confirmQuit"), JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+				if(JOptionPane.showConfirmDialog(CheesyKMGUI.this,CheesyKM.getLabel("doYouReallyWannaLeaveMe"), CheesyKM.getLabel("confirmQuit"), JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
 					CheesyKM.INITHEIGHT=CheesyKM.api.getHeight();
 					CheesyKM.INITWIDTH=CheesyKM.api.getWidth();
 					CheesyKM.INITX=CheesyKM.api.getX();
@@ -123,7 +123,7 @@ class CheesyKMAPI extends JFrame{
 		
 		class menuExitListener implements ActionListener{
 			public void actionPerformed(ActionEvent ae){
-				if(JOptionPane.showConfirmDialog(CheesyKMAPI.this,CheesyKM.getLabel("doYouReallyWannaLeaveMe"), CheesyKM.getLabel("confirmQuit"), JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+				if(JOptionPane.showConfirmDialog(CheesyKMGUI.this,CheesyKM.getLabel("doYouReallyWannaLeaveMe"), CheesyKM.getLabel("confirmQuit"), JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
 					CheesyKM.INITHEIGHT=CheesyKM.api.getHeight();
 					CheesyKM.INITWIDTH=CheesyKM.api.getWidth();
 					CheesyKM.INITX=CheesyKM.api.getX();
@@ -140,7 +140,7 @@ class CheesyKMAPI extends JFrame{
 		
 		class menuDeconnecterListener implements ActionListener{
 			public void actionPerformed(ActionEvent ae){
-				int confirm=JOptionPane.showConfirmDialog(CheesyKMAPI.this,CheesyKM.getLabel("doYouReallyWannaPlugOut"), CheesyKM.getLabel("confirmDisconnect"), JOptionPane.YES_NO_OPTION);
+				int confirm=JOptionPane.showConfirmDialog(CheesyKMGUI.this,CheesyKM.getLabel("doYouReallyWannaPlugOut"), CheesyKM.getLabel("confirmDisconnect"), JOptionPane.YES_NO_OPTION);
 				if(confirm==JOptionPane.YES_OPTION){
 					deconnecter();
 				}
@@ -277,16 +277,16 @@ class CheesyKMAPI extends JFrame{
 		menuFermerTousLesOnglets.setEnabled(false);
 		class MenuFermerOngletListener implements ActionListener{
 			public void actionPerformed(ActionEvent ae){
-				CheesyKMAPI.this.hideTopic(CheesyKMAPI.this.getDisplayedTopic());
-				((JTPDChangeListener)(CheesyKMAPI.this.jtpD.getChangeListeners()[0])).stateChanged(null);
+				CheesyKMGUI.this.hideTopic(CheesyKMGUI.this.getDisplayedTopic());
+				((JTPDChangeListener)(CheesyKMGUI.this.jtpD.getChangeListeners()[0])).stateChanged(null);
 			}
 		}
 		menuFermerOnglet.addActionListener(new MenuFermerOngletListener());
 		
 		class MenuFermerTousLesOngletsListener implements ActionListener{
 			public void actionPerformed(ActionEvent ae){
-				CheesyKMAPI.this.hideAllTopics();
-				((JTPDChangeListener)(CheesyKMAPI.this.jtpD.getChangeListeners()[0])).stateChanged(null);
+				CheesyKMGUI.this.hideAllTopics();
+				((JTPDChangeListener)(CheesyKMGUI.this.jtpD.getChangeListeners()[0])).stateChanged(null);
 			}
 		}
 		menuFermerTousLesOnglets.addActionListener(new MenuFermerTousLesOngletsListener());
@@ -637,8 +637,8 @@ class CheesyKMAPI extends JFrame{
 	*Removes a Topics tab from the right TabbedPane.<br>
 	*If a tab is removed from the TabbedPane, the matching menu item will be removed from the "Tabs" menu.
 	*@param index index in the right TabbedPane of the tab to remove.
-	*@see CheesyKMAPI#getIndexForDisplayedTopic(int)
-	*@see CheesyKMAPI#isAffiche(Topic)
+	*@see CheesyKMGUI#getIndexForDisplayedTopic(int)
+	*@see CheesyKMGUI#isAffiche(Topic)
 	*/
 	public void hideTopic(int index){
 		String cle=""+((TopicPane)jtpD.getComponent(index)).topic.getNodeType()+((TopicPane)jtpD.getComponent(index)).topic.id;

@@ -27,7 +27,7 @@ import javax.swing.text.*;
 
 /**
 *Login prompt dialog.<br>
-*Checks if the identifier and password are OK and calls {@link CheesyKMAPI#initAtLogon()}, shows an error dialog else.
+*Checks if the identifier and password are OK and calls {@link CheesyKMGUI#initAtLogon()}, shows an error dialog else.
 */
 class Login extends JDialog{
 	private ProgBarDialog pbd;
@@ -140,7 +140,7 @@ class Login extends JDialog{
 				id.requestFocus();
 			} else {
 				this.dispose();
-				((CheesyKMAPI)(this.getParent())).menuDeconnecter.setEnabled(true);
+				((CheesyKMGUI)(this.getParent())).menuDeconnecter.setEnabled(true);
 				CheesyKM.tRelations=(Hashtable)topicMatrix.get(1);
 				CheesyKM.setTNames((Hashtable)topicMatrix.get(0));
 				CheesyKM.tRights=(Hashtable)topicMatrix.get(2);
@@ -150,7 +150,7 @@ class Login extends JDialog{
 					if(right>CheesyKM.maximumRightLevel) CheesyKM.maximumRightLevel=right;
 				}
 				CheesyKM.rootTopics=(Vector)topicMatrix.get(3);
-				((CheesyKMAPI)(this.getParent())).initAtLogon();
+				((CheesyKMGUI)(this.getParent())).initAtLogon();
 				CheesyKM.LASTLOGIN=CheesyKM.login;
 			}
 		}

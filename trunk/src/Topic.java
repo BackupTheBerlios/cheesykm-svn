@@ -137,7 +137,7 @@ class Topic{
 				((Topic)docs.get(i)).setNode(n);
 				((Topic)docs.get(i)).setNodeType('D');
 				synchronized(CheesyKM.api.thematique){
-				((DefaultTreeModel)CheesyKMAPI.thematique.getModel()).insertNodeInto(n,myNode,myNode.getChildCount());
+				((DefaultTreeModel)CheesyKMGUI.thematique.getModel()).insertNodeInto(n,myNode,myNode.getChildCount());
 				}
 				docsNodes.add(n);
 				CheesyKM.docsInMem.add(n);
@@ -171,7 +171,7 @@ class Topic{
 		this.hasBeenCount=false;
 		this.isCounting=false;
 		for(int i=0;i<this.docsNodes.size();i++){
-			((DefaultTreeModel)CheesyKMAPI.thematique.getModel()).removeNodeFromParent((MutableTreeNode)docsNodes.get(i));
+			((DefaultTreeModel)CheesyKMGUI.thematique.getModel()).removeNodeFromParent((MutableTreeNode)docsNodes.get(i));
 			CheesyKM.docsInMem.remove(docsNodes.get(i));
 		}
 		this.docsNodes=new Vector();
@@ -200,7 +200,7 @@ class Topic{
 				tChild.dechargerTypeT();
 			} else {
 				CheesyKM.docsInMem.remove(nChild);
-				((DefaultTreeModel)CheesyKMAPI.thematique.getModel()).removeNodeFromParent(nChild);
+				((DefaultTreeModel)CheesyKMGUI.thematique.getModel()).removeNodeFromParent(nChild);
 			}
 		}
 		this.docsNodes=new Vector();

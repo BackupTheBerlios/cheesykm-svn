@@ -43,8 +43,8 @@ import com.enterprisedt.net.ftp.*;
 *keytool -import -alias labo -file ~/cacert.crtf -keystore kslabo<br>
 */
 public class CheesyKM{
-	/**The {@link CheesyKMAPI}*/
-	static CheesyKMAPI api;
+	/**The {@link CheesyKMGUI}*/
+	static CheesyKMGUI api;
 	/**Login name, <code>null</code> if no session is currently open*/
 	static String login=null;
 	/**session password, null if no session is currently open*/
@@ -141,7 +141,7 @@ public class CheesyKM{
 	
 	
 	/**
-	*Main method, gets a global configuration, and initializes a CheesyKMAPI (main frame).
+	*Main method, gets a global configuration, and initializes a CheesyKMGUI (main frame).
 	*Sets XmlRpcs global parameters too.
 	*/
 	public static void main(String[] args){
@@ -184,7 +184,7 @@ public class CheesyKM{
 		ToolTipManager.sharedInstance().setInitialDelay(2000);
 		ToolTipManager.sharedInstance().setDismissDelay(5000);
 		//new main frame
-		api=new CheesyKMAPI();
+		api=new CheesyKMGUI();
 		new MemoryMonitor();
 		watchFolder=new WatchFolder();
 		
